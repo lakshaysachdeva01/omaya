@@ -1,0 +1,452 @@
+<% 
+// Function to convert a YouTube URL (watch or short form) into an embeddable URL
+function convertToEmbedUrl(url) {
+    let videoId = "";
+    if (url.includes("youtu.be")) {
+        // Handle short URL format (e.g., https://youtu.be/Tjxx80uYyUQ)
+        videoId = url.split("youtu.be/")[1]?.split("?")[0];
+    } else if (url.includes("youtube.com/watch")) {
+        // Handle full URL format (e.g., https://www.youtube.com/watch?v=Tjxx80uYyUQ)
+        videoId = url.split("v=")[1]?.split("&")[0];
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+}
+
+const imageBase = typeof S3_BASE_URL !== 'undefined' && S3_BASE_URL 
+  ? S3_BASE_URL.replace(/\/$/, '') + '/' 
+  : (typeof process !== 'undefined' && process.env && process.env.S3_BASE_URL 
+    ? process.env.S3_BASE_URL.replace(/\/$/, '') + '/' 
+    : '');
+
+const bannerType = blogDetails?.bannertype || blogDetails?.banner?.bannerType || '';
+const bannerImage = blogDetails?.uploadBanner || blogDetails?.coverImage || blogDetails?.banner?.image || '';
+const bannerVideo = blogDetails?.youtubeVideoLink || blogDetails?.banner?.video || '';
+
+// Format date for display
+let postDay = '';
+let postMonth = '';
+if (blogDetails?.postDate) {
+  const dateParts = blogDetails.postDate.split(' ');
+  postDay = dateParts[0] || '';
+  postMonth = dateParts[1] || '';
+}
+
+// Get first description from array if it's an array, otherwise use as string
+let firstDescription = '';
+if (Array.isArray(blogDetails?.description) && blogDetails.description.length > 0) {
+  firstDescription = blogDetails.description[0].description || '';
+} else if (typeof blogDetails?.description === 'string') {
+  firstDescription = blogDetails.description;
+}
+
+// Use description array if it exists, otherwise fall back to multipleDescriptions
+const descriptionsToRender = Array.isArray(blogDetails?.description) && blogDetails.description.length > 1
+  ? blogDetails.description.slice(1) // Skip first one as it's already shown above
+  : (blogDetails?.multipleDescriptions || []);
+%>
+
+	<!-- Start main-content -->
+	<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+		<div class="auto-container">
+			<div class="title-outer text-center">
+				<h1 class="title">Post</h1>
+				<ul class="page-breadcrumb">
+					<li><a href="/">Home</a></li>
+					<li>Post</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+<!-- end main-content -->
+
+<!--Blog Details Start-->
+<section class="blog-details">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-8 col-lg-7">
+        <div class="blog-details__left">
+          <!-- Blog Image with Date Overlay -->
+          <div class="blog-details__img">
+            <% if (bannerType === "VIDEO" && bannerVideo && bannerVideo !== "") { %>
+              <iframe width="100%" height="433" src="<%= convertToEmbedUrl(bannerVideo) %>"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+              </iframe>
+            <% } else if ((bannerType === "IMAGE" || !bannerType) && bannerImage) { %>
+              <img src="<%= imageBase + bannerImage %>" alt="<%= blogDetails.postTitle || blogDetails.title || '' %>">
+            <% } %>
+            <% if (postDay && postMonth) { %>
+              <div class="blog-details__date">
+                <span class="day"><%= postDay %></span>
+                <span class="month"><%= postMonth %></span>
+              </div>
+            <% } %>
+          </div>
+
+          <!-- Blog Content -->
+          <div class="blog-details__content">
+            <h3 class="blog-details__title"><%= blogDetails.postTitle || blogDetails.title || '' %></h3>
+            
+            <!-- First Description -->
+            <% if (firstDescription) { %>
+              <div class="blog-details__text-2 blog-description">
+                <%- (firstDescription || '').replace(/<span[^>]*>/g, '').replace(/<\/span>/g, '').replace(/\n/g, '<br>') %>
+              </div>
+            <% } %>
+
+            <!-- Additional Descriptions -->
+            <% if (descriptionsToRender && descriptionsToRender.length > 0) { %>
+              <% descriptionsToRender.forEach(item => { %>
+                <div class="single-description">
+                  <!-- Description Text -->
+                  <div class="blog-details__text-2 item-description">
+                    <%- (item.description || '').replace(/<span[^>]*>/g, '').replace(/<\/span>/g, '').replace(/\n/g, '<br>') %>
+                  </div>
+
+                  <!-- Instagram Embed -->
+                  <% if (item.instagram) { %>
+                    <div class="instagram-embed" style="justify-content: center; display: flex;">
+                      <%- item.instagram %>
+                    </div>
+                    <script>
+                      // Load Instagram's embed.js if not already loaded
+                      if (!window.instgrm) {
+                        const script = document.createElement('script');
+                        script.src = 'https://www.instagram.com/embed.js';
+                        script.async = true;
+                        document.body.appendChild(script);
+                      }
+                    </script>
+                  <% } %>
+
+                  <!-- Facebook Embed -->
+                  <% if (item.facebook) { %>
+                    <div class="facebook-embed" style="justify-content: center; display: flex;">
+                      <div class="fb-video" data-href="<%= item.facebook %>" data-width="540" data-show-text="false"
+                        data-allowfullscreen="true"></div>
+                    </div>
+                    <div id="fb-root"></div>
+                    <script>
+                      (function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s); js.id = id;
+                        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0";
+                        js.async = true;
+                        fjs.parentNode.insertBefore(js, fjs);
+                      }(document, 'script', 'facebook-jssdk'));
+                    </script>
+                  <% } %>
+
+                  <!-- Single Image -->
+                  <% if (item?.singleImage?.image) { %>
+                    <div class="popup-trigger" data-type="image" data-src="<%= imageBase + item.singleImage.image %>" style="margin-top: 10px; margin-bottom: 10px; cursor: pointer;">
+                      <img src="<%= imageBase + item.singleImage.image %>"
+                        style="height: auto; width: 100%;"
+                        alt="<%- item.singleImage.altTag || 'Image' %>">
+                    </div>
+                  <% } %>
+
+                  <!-- Multiple Images Grid -->
+                  <% if (item?.multipleImages?.length > 0) {
+                    let imageCount = item.multipleImages.length;
+                    let gridColumns = imageCount === 1 ? '1fr' :
+                    imageCount === 2 ? 'repeat(2, 1fr)' :
+                    imageCount === 3 ? 'repeat(2, 1fr)' :
+                    imageCount === 4 ? 'repeat(2, 1fr)' :
+                    imageCount === 5 ? 'repeat(2, 1fr)' :
+                    'repeat(auto-fill, minmax(200px, 1fr))';
+                  %>
+                    <div class="multiple-images <%= 
+                      imageCount === 1 ? 'single-image' :
+                      imageCount === 2 ? 'two-images' :
+                      imageCount === 3 ? 'three-images' :
+                      imageCount === 4 ? 'four-images' :
+                      imageCount === 5 ? 'five-images' :
+                      'grid-layout' 
+                    %>"
+                      style="display: grid; gap: 15px; grid-template-columns: <%= gridColumns %>; align-items: stretch;">
+
+                      <% item.multipleImages.forEach((image, index) => { %>
+                        <div class="popup-trigger" data-type="image" data-src="<%= imageBase + image %>" style="position: relative; 
+                          <%= imageCount > 1 ? 'height: 250px; overflow: hidden;' : '' %>; cursor: pointer;">
+                          <img src="<%= imageBase + image %>" alt=""
+                            style="width: 100%; <%= imageCount > 1 ? 'height: 100%; object-fit: cover;' : 'height: auto;' %>; border-radius: 8px; margin-bottom: 20px;">
+                        </div>
+                      <% }) %>
+                    </div>
+                  <% } %>
+
+                  <!-- YouTube Video -->
+                  <% if (item?.youtube && item?.youtube !== "") { 
+                    const embedUrl = convertToEmbedUrl(item.youtube); 
+                    if (embedUrl) { %>
+                      <iframe width="100%" height="433" style="border-radius: 20px; margin:25px 0"
+                        src="<%= embedUrl %>" title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                      </iframe>
+                    <% } else { %>
+                      <p>Invalid YouTube URL provided.</p>
+                    <% } 
+                  } %>
+
+                  <!-- Button -->
+                  <% if (item?.button && item?.button?.hyperLink !== "" && item?.button?.title !== "") { %>
+                    <div class="text-center">
+                      <a href="<%= item?.button?.hyperLink %>" target="_blank" class="btn-style1">
+                        <span>
+                          <%= item?.button?.title %>
+                          <svg class="ms-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path class="stroke-white"
+                              d="M21.1059 12.2562H0.5V11.7443H21.1059H22.313L21.4594 10.8907L17.0558 6.48705L17.4177 6.12508L23.2929 12.0002L17.4177 17.8754L17.0558 17.5134L21.4594 13.1098L22.313 12.2562H21.1059Z"
+                              stroke="white" />
+                          </svg>
+                        </span>
+                      </a>
+                    </div>
+                  <% } %>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+
+          <!-- Social Share -->
+          <div class="blog-details__bottom">
+            <div class="blog-details__social-list">
+              <a href="javascript:void(0)"><i class="fa fa-x"></i></a>
+              <a href="javascript:void(0)"><i class="fab fa-facebook"></i></a>
+              <a href="javascript:void(0)"><i class="fab fa-pinterest-p"></i></a>
+              <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-xl-4 col-lg-5">
+        <div class="sidebar">
+          <!-- Latest Posts -->
+          <%- include('./moreblogs', {latestblog, S3_BASE_URL}) %>
+          
+          <!-- Tags -->
+          <%- include('./blogtags', {blogDetails}) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Blog Details End-->
+
+<!-- Scripts for table rendering -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const blogDescription = document.querySelector('.blog-description');
+    if (blogDescription) {
+      const content = blogDescription.innerHTML || '';
+      if (content.includes('&lt;table') && content.includes('&lt;thead') && content.includes('&lt;tbody')) {
+        try {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = content;
+          let decodedContent = tempDiv.textContent;
+          decodedContent = decodedContent
+            .replace(/<\/?p>/g, '')
+            .replace(/&nbsp;/g, '')
+            .replace(/\s+</g, '<')
+            .replace(/>\s+/g, '>')
+            .trim();
+          blogDescription.innerHTML = decodedContent;
+          blogDescription.classList.add('table-container');
+        } catch (error) {
+          console.error('Error processing table HTML:', error);
+        }
+      }
+    }
+
+    // Get all item-description elements
+    const itemDescriptions = document.querySelectorAll('.item-description');
+    itemDescriptions.forEach(function (itemDescription) {
+      const content = itemDescription.innerHTML || '';
+      if (content.includes('&lt;table') || content.includes('<table')) {
+        try {
+          const tableStartIndex = content.indexOf('&lt;table');
+          const tableEndIndex = content.indexOf('&lt;/table&gt;') + '&lt;/table&gt;'.length;
+          if (tableStartIndex !== -1 && tableEndIndex !== -1) {
+            const encodedTableHtml = content.substring(tableStartIndex, tableEndIndex);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = encodedTableHtml;
+            let decodedTableHtml = tempDiv.textContent;
+            decodedTableHtml = decodedTableHtml
+              .replace(/&nbsp;/g, '')
+              .replace(/\s+</g, '<')
+              .replace(/>\s+/g, '>')
+              .trim();
+            const newContent = content.substring(0, tableStartIndex) +
+              decodedTableHtml +
+              content.substring(tableEndIndex);
+            itemDescription.innerHTML = newContent;
+          }
+        } catch (error) {
+          console.error('Error processing table HTML in item-description:', error);
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .gallery-container {
+    display: grid;
+    gap: 10px;
+    margin: 25px 0px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+  }
+
+  @media (max-width:550px) {
+    .blog-details {
+      margin-top: 30px !important;
+    }
+  }
+
+  .gallery-item {
+    position: relative;
+    width: 100%;
+    padding-top: 56%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-item.grid-span-2 {
+    grid-column: span 2;
+    padding-top: 54%;
+  }
+
+  @media (max-width:600px) {
+    .blog-description p,
+    .description-block p {
+      font-size: 15px;
+      line-height: 26px;
+    }
+  }
+
+  .blog-details__content h3 {
+    font-size: 42px;
+  }
+
+  @media (max-width:768px) {
+    .blog-details__content h3 {
+      font-size: 30px;
+      line-height: 34px;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    border: 1px solid #dddee1 !important;
+  }
+
+  table th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: none !important;
+    background-color: #f4f6f8 !important;
+    font-weight: 600;
+    color: black;
+    border-bottom: 1px solid #f4f6f8 !important;
+  }
+
+  table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: black;
+    border-bottom: 1px dashed #dddee19e !important;
+  }
+
+  table .even-row,
+  table .odd-row {
+    background-color: white !important;
+  }
+
+  table tbody tr:hover {
+    background-color: #f4f6f8 !important;
+  }
+
+  @media (max-width: 640px) {
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    table th,
+    table td {
+      padding: 0.5rem 0.75rem !important;
+    }
+  }
+
+  .facebook-embed,
+  .instagram-embed {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .fb-video {
+    width: 100% !important;
+    max-width: 540px;
+    min-width: 300px;
+  }
+
+  .lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lightbox-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover {
+    color: #bbb;
+  }
+</style>

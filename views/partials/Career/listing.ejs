@@ -1,0 +1,125 @@
+
+
+      	<!-- Start main-content -->
+	<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+		<div class="auto-container">
+			<div class="title-outer text-center">
+				<h1 class="title">Join Our Team</h1>
+				<ul class="page-breadcrumb">
+					<li><a href="/">Home</a></li>
+					<li>Jobs</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+      <!-- JOB LISTING
+      ================================================== -->
+      <% if (jobs && jobs.length > 0) { %>
+        <section class="job-listing-section py-80">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 offset-lg-1">
+                        <div class="job-list-container">
+                            <% jobs.forEach((job, index) => { %>
+                                <div class="job-list-item">
+                                    <div class="job-content-wrapper">
+                                        <div class="job-info">
+                                            <h2 class="job-title"><%= job.jobTitle || job.title || job.jobPosition || 'Job Title' %></h2>
+                                            <p class="job-category"><%= (job.category && typeof job.category === 'object' ? job.category.name : job.category) || job.jobPosition || 'General' %></p>
+                                        </div>
+                                        <div class="job-action">
+                                            <a href="/job/<%= job.seoDetails && job.seoDetails.slug ? job.seoDetails.slug : (job._id || '') %>" class="theme-btn btn-style-one">
+                                                <span class="btn-title">View Details</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% if (index < jobs.length - 1) { %>
+                                    <hr class="job-divider">
+                                <% } %>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <style>
+            .job-listing-section {
+                background-color: #fff;
+                min-height: 60vh;
+            }
+
+            .job-list-container {
+                padding: 40px 50px;
+            }
+
+            .job-list-item {
+                padding: 30px 0;
+            }
+
+            .job-content-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .job-info {
+                flex: 1;
+            }
+
+            .job-title {
+                font-size: 36px;
+                font-weight: 600;
+                color: #3a3a3a;
+                margin: 0 0 8px 0;
+                line-height: 1.4;
+            }
+
+            .job-category {
+                font-size: 16px;
+                color: #8b7355;
+                margin: 0;
+                font-weight: 400;
+            }
+
+            .job-action {
+                flex-shrink: 0;
+            }
+
+            .job-divider {
+                border: none;
+                border-top: 2px dashed #e0e0e0;
+                margin: 0;
+            }
+
+            @media (max-width: 768px) {
+                .job-list-container {
+                    padding: 30px 20px;
+                }
+
+                .job-content-wrapper {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 20px;
+                }
+
+                .job-action {
+                    width: 100%;
+                }
+
+                .job-action .theme-btn {
+                    width: 100%;
+                    text-align: center;
+                }
+
+                .job-title {
+                    font-size: 28px;
+                }
+            }
+        </style>
+        <% } %>
+  
+              

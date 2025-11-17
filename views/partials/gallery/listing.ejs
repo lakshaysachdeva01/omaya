@@ -1,0 +1,209 @@
+<style>
+    .gallery-container {
+        column-count: 3;
+        gap: 20px;
+    }
+    
+    .gallery-thumb {
+        margin-bottom: 20px;
+    }
+    
+    @media (max-width:992px) {
+        .gallery-container {
+            max-width: 800px;
+            margin: 2px auto;
+            column-count: 2;
+            gap: 30px;
+        }
+    }
+    
+    @media (max-width:700px) {
+        .gallery-container {
+            max-width: 500px;
+            margin: 2px auto;
+            column-count: 1;
+            gap: 30px;
+        }
+    }
+    
+    @media (max-width:500px) {
+        .gallery-container {
+            max-width: 500px;
+            margin: 2px auto;
+            column-count: 1;
+            gap: 0px;
+        }
+        .gallery-thumb {
+            margin-bottom: 14px !important;
+        }
+    }
+  
+    .thumbnail-container {
+        position: relative;
+        width: 100%;
+    }
+    
+    .thumbnail-image {
+        width: 100%;
+        height: 230px !important;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .play-button {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-self: center;
+        font-size: 40px;
+        color: white;
+        border: 2px solid white;
+        height: 72px;
+        width: 72px;
+        border-radius: 50%;
+        cursor: pointer;
+        top: 34%;
+        left: 42%;
+    }
+</style>
+
+
+
+      	<!-- Start main-content -->
+          <section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+            <div class="auto-container">
+                <div class="title-outer text-center">
+                    <h1 class="title">Visual Stories</h1>
+                    <ul class="page-breadcrumb">
+                        <li><a href="/">Home</a></li>
+                        <li>gallery</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+<section style="padding: 10px 0;">
+    <div class="container" style="padding: 30px 10px;">
+        <div class="filter-tabs-scroll">
+            <div class="filter-tabs-inner">
+                <button onclick="filterGallery('all')" class="gallery-tab theme-btn btn-style-one active" data-filter="all">All</button>
+                <% if (gallery && Array.isArray(gallery)) { %>
+                    <% gallery.forEach((album) => { %>
+                        <% if (album.galleryType === "IMAGE" && album.images && album.images.length > 0) { %>
+                            <button onclick="filterGallery('<%= album.title.toLowerCase() %>')" class="gallery-tab theme-btn btn-style-one" data-filter="<%= album.title.toLowerCase() %>"><%= album.title %></button>
+                        <% } %>
+                    <% }); %>
+                    <% 
+                    // Check if there are any videos
+                    const hasVideos = gallery.some(album => album.galleryType === "VIDEO" && album.videos && Array.isArray(album.videos) && album.videos.some(video => video.link && video.link !== ''));
+                    if (hasVideos) { 
+                    %>
+                        <button onclick="filterGallery('videos')" class="gallery-tab theme-btn btn-style-one" data-filter="videos">Videos</button>
+                    <% } %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gallery-area gallery-page masonry" style="padding-bottom: 120px;">
+    <div class="container">
+        <div class="gallery-itmes">
+            <div class="rows">
+                <!-- Gallery Container -->
+                <div class="gallery-container state-gallery">
+                    <% if (gallery && Array.isArray(gallery)) { %>
+                        <% gallery.slice().reverse().forEach((album) => { %>
+                            <% if (album.galleryType === "IMAGE" && album.images && Array.isArray(album.images) && album.images.length > 0) { %>
+                                <% 
+                                    const imageBase = typeof S3_BASE_URL !== 'undefined' && S3_BASE_URL 
+                                        ? S3_BASE_URL.replace(/\/$/, '') + '/' 
+                                        : 'https://technolitics-s3-bucket.s3.ap-south-1.amazonaws.com/websitebuilder-s3-bucket/';
+                                    const albumFilter = album.title.toLowerCase();
+                                %>
+                                <% album.images.slice().reverse().forEach((image) => { %>
+                                    <div class="gallery-thumb image-item popup-trigger" data-type="image" data-src="<%= imageBase + image %>" data-title="<%= albumFilter %>">
+                                        <img src="<%= imageBase + image %>" 
+                                             alt="<%= album.title %>" style="width: 100%;" />
+                                    </div>
+                                <% }); %>
+                            <% } %>
+                            <% if (album.galleryType === "VIDEO" && album.videos && Array.isArray(album.videos) && album.videos.length > 0) { 
+                                function convertToEmbedUrl(url) {
+                                    if (!url || url === '') return '';
+                                    let videoId = "";
+                                    if (url.includes("youtu.be")) {
+                                        videoId = url.split("youtu.be/")[1]?.split("?")[0];
+                                    } else if (url.includes("youtube.com/watch")) {
+                                        videoId = url.split("v=")[1]?.split("&")[0];
+                                    }
+                                    return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+                                }
+                                album.videos.forEach((video) => {
+                                    if (video.link) {
+                                        const embedUrl = convertToEmbedUrl(video.link);
+                                        if (embedUrl) {
+                            %>
+                                <div class="gallery-thumb video-item popup-trigger" data-type="video" data-src="<%= embedUrl %>" data-title="videos" style="margin-bottom: 20px; display:flex; flex-direction:column">
+                                    <div class="thumbnail-container">
+                                        <img src="https://img.youtube.com/vi/<%= embedUrl.split('/').pop() %>/0.jpg" 
+                                             alt="<%= album.title %>" class="thumbnail-image" />
+                                        <div class="play-button">▶</div>
+                                    </div>
+                                </div>
+                            <%      }
+                                    }
+                                });
+                            } %>
+                        <% }); %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Filter Gallery Functionality
+    function filterGallery(filter) {
+        const galleryItems = document.querySelectorAll('.gallery-thumb');
+        const galleryTabs = document.querySelectorAll('.gallery-tab');
+        
+        // Update active tab
+        galleryTabs.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.getAttribute('data-filter') === filter) {
+                tab.classList.add('active');
+            }
+        });
+        
+        // Filter items
+        galleryItems.forEach(item => {
+            const itemTitle = item.getAttribute('data-title');
+            if (filter === 'all') {
+                item.style.display = 'flex';
+                if (item.classList.contains('video-item')) {
+                    const title = item.querySelector('.video-title');
+                    if (title) title.style.display = 'none';
+                }
+            } else if (filter === 'videos' && item.classList.contains('video-item')) {
+                item.style.display = 'flex';
+                const title = item.querySelector('.video-title');
+                if (title) title.style.display = 'block';
+            } else if (filter !== 'videos' && itemTitle === filter && !item.classList.contains('video-item')) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Reinitialize Media Items for Popup if function exists
+        if (typeof initMediaItems === 'function') {
+            initMediaItems();
+        }
+    }
+
+    // Set default filter to 'All' on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        filterGallery('all');
+    });
+</script>

@@ -1,0 +1,9 @@
+<% banners.forEach((item) => { %>
+
+    <img src="<%= process.env.S3_BASE_URL + item?.bannerImage?.webView %>" alt="">
+    <img src="<%= process.env.S3_BASE_URL + item?.bannerImage?.mobileView %>" alt="">
+      <<%= item?.title %>
+              <%= item?.subTitle %>
+
+
+            <% }) %>

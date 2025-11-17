@@ -1,0 +1,14 @@
+<% 
+  // Get tags from seoconfigs or seoDetails
+  const tags = blogDetails?.seoconfigs?.tags || blogDetails?.seoDetails?.tags || [];
+%>
+<% if (tags && Array.isArray(tags) && tags.length > 0) { %>
+  <div class="sidebar__single sidebar__tags">
+    <h3 class="sidebar__title">Tags</h3>
+    <div class="sidebar__tags-list">
+      <% tags.forEach(tag => { %>
+        <a href="javascript:void(0)"><%= tag %></a>
+      <% }) %>
+    </div>
+  </div>
+<% } %>

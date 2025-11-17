@@ -1,0 +1,77 @@
+<!-- Job Application Form -->
+<form id="jobApplicationForm" method="post" style=" border-top: 2px dashed #e0e0e0; padding-top: 25px; margin-top: 25px;">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="mb-3">
+                <input name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.NAME %>" class="form-control" type="text" placeholder="Full Name*" required>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="mb-3">
+                <input name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.CONTACT_NUMBER %>" class="form-control" type="tel" placeholder="Contact Number*" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="mb-3">
+                <input name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.EMAIL %>" class="form-control required email" type="email" placeholder="Email Address*" required>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="mb-3">
+                <div class="custom-dropdown" id="experienceDropdown">
+                    <div class="custom-dropdown-selected" id="experienceDropdownSelected">
+                        <span class="selected-text">Years of Experience*</span>
+                    </div>
+                    <div class="custom-dropdown-options" id="experienceDropdownOptions">
+                        <div class="dropdown-option" data-value="FRESHER" data-title="Fresher">Fresher</div>
+                        <div class="dropdown-option" data-value="1_TO_3_YRS" data-title="1 to 3 Years">1 to 3 Years</div>
+                        <div class="dropdown-option" data-value="4_TO_5_YRS" data-title="4 to 5 Years">4 to 5 Years</div>
+                        <div class="dropdown-option" data-value="6_TO_7_YRS" data-title="6 to 7 Years">6 to 7 Years</div>
+                        <div class="dropdown-option" data-value="8_TO_12_YRS" data-title="8 to 12 Years">8 to 12 Years</div>
+                        <div class="dropdown-option" data-value="12__YRS" data-title="12+ Years">12+ Years</div>
+                    </div>
+                </div>
+                <input type="hidden" name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.YRS_OF_EXP %>" id="selectedExperienceValue" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="mb-3">
+                <input type="file" class="form-control" id="resumeUpload" name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.RESUME %>" accept=".pdf,.doc,.docx" required style="display: none;">
+                <input type="text" class="form-control" id="resumePlaceholder" placeholder="Upload Resume*" readonly style="cursor: pointer; background:#f4f5f8;">
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <input type="hidden" name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.JOB_ID %>" value="<%= job.jobTitle %>">
+        <textarea name="<%= JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS.MESSAGE %>" class="form-control required" rows="7" placeholder="Tell us about yourself and why you're interested in this position"></textarea>
+    </div>
+    <div class="mb-5">
+        <input name="form_botcheck" class="form-control" type="hidden" value="" />
+        <button type="submit" class="theme-btn btn-style-one" id="jobApplicationSubmitBtn" data-loading-text="Please wait...">
+            <span class="btn-title" id="jobApplicationBtnText">Submit</span>
+            <span class="submit-loader" id="jobApplicationSubmitLoader" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
+                    <g fill="none" fill-rule="evenodd">
+                        <g transform="translate(1 1)" stroke-width="2">
+                            <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
+                            <path d="M36 18c0-9.94-8.06-18-18-18">
+                                <animateTransform
+                                    attributeName="transform"
+                                    type="rotate"
+                                    from="0 18 18"
+                                    to="360 18 18"
+                                    dur="1s"
+                                    repeatCount="indefinite"/>
+                            </path>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+        </button>
+    </div>
+</form>
+<p class="form-messege mt-3"></p>

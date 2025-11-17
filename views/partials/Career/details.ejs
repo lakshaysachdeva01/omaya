@@ -1,0 +1,131 @@
+<% 
+  const descriptionArray = Array.isArray(job && job.jobDescription) ? job.jobDescription : [];
+  const mainDescriptionItem = descriptionArray.length > 0 ? descriptionArray[0] : null;
+  const imageBase = typeof S3_BASE_URL !== 'undefined' && S3_BASE_URL 
+    ? S3_BASE_URL.replace(/\/$/, '') + '/' 
+    : '';
+%>
+
+<main class="career-detail-page" style="background-color:#FFFFFF; min-height:100vh; padding:40px 16px 60px;">
+  <div class="career-detail-inner" style="max-width:960px; margin:0 auto;">
+    <% if (job) { %>
+      <!-- Header / Hero -->
+      <header style="margin-bottom:24px; padding-bottom: 24px; border-bottom: 2px dashed #e0e0e0;">
+        <h2 class="job-title" style="font-size:36px; line-height:1.4; font-weight:600; margin:0 0 8px; color:#3a3a3a;">
+          <%= job.jobTitle || job.title || job.jobPosition || 'Job Title' %>
+        </h2>
+        <p style="font-size:16px; color:#8b7355; margin:0; font-weight:400;"">
+          <%= (job.category && typeof job.category === 'object' ? job.category.name : job.category) || job.jobPosition || 'General' %>
+        </p>
+        <!-- <% if (job.createdAt) { %>
+          <p style="font-size:13px; color:#7A7A7A; margin:4px 0 0; font-family:'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            Posted on
+            <%= new Date(job.createdAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) %>
+          </p>
+        <% } %> -->
+      </header>
+
+      <!-- Main description block -->
+      <div style="font-size:15px; line-height:1.7; color:#1E1E1E; font-family:'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin-bottom:24px;">
+        <% if (mainDescriptionItem && mainDescriptionItem.description) { %>
+          <%- mainDescriptionItem.description %>
+        <% } else if (job.description) { %>
+          <%- job.description %>
+        <% } else { %>
+          <p>No description available.</p>
+        <% } %>
+      </div>
+
+      <!-- Additional sections mapped from API (title / image / description packets) -->
+      <% 
+        const contentSections = descriptionArray.slice(1).filter(function(section) {
+          return section && (section.description || (section.singleImage && section.singleImage.image) || (section.button && section.button.title && section.button.hyperLink));
+        });
+      %>
+
+      <% if (contentSections.length > 0) { %>
+        <div class="career-detail-sections" style="display:flex; flex-direction:column; gap:16px;">
+          <% contentSections.forEach(function(section, index) { 
+               const hasHtml = !!section.description;
+               const hasImage = section.singleImage && section.singleImage.image;
+               const hasButton = section.button && section.button.title && section.button.hyperLink;
+          %>
+            <div>
+              <!-- Text content -->
+              <% if (hasHtml) { %>
+                <div style="font-size:15px; line-height:1.7; color:#1E1E1E; font-family:'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin-bottom:12px;">
+                  <%- section.description %>
+                </div>
+              <% } %>
+
+              <!-- Image (if any) -->
+              <% if (hasImage) { %>
+                <div style="margin:8px 0;">
+                  <img 
+                    src="<%= imageBase + section.singleImage.image %>" 
+                    alt="" 
+                    style="display:block; width:100%; height:auto; object-fit:cover;"
+                  />
+                </div>
+              <% } %>
+
+              <!-- Optional button -->
+              <% if (hasButton) { %>
+                <div style="margin-top:35px; margin-bottom: 15px; text-align:center;">
+                  <a 
+                    href="<%= section.button.hyperLink %>" 
+                    style="
+                      display:inline-flex;
+                      align-items:center;
+                      justify-content:center;
+                      padding:10px 18px;
+                      border-radius:999px;
+                      border:1px solid #1E1E1E;
+                      font-size:13px;
+                      font-weight:500;
+                      letter-spacing:0.08em;
+                      text-transform:uppercase;
+                      text-decoration:none;
+                      color:#1E1E1E;
+                      font-family:'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    "
+                  >
+                    <span><%= section.button.title %></span>
+                  </a>
+                </div>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <!-- Job Application Form -->
+      <%- include('./careerform.ejs', {job, JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS}) %>
+      <%- include('./careerformendpoint.ejs', {job, JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS, API_BASE_URL, websiteID, WEBSITE_ID_KEY}) %>
+
+    <% } else { %>
+      <!-- Fallback when no job is available -->
+      <section style="padding:80px 0; text-align:left;">
+        <h2 style="font-size:24px; font-weight:600; margin:0 0 8px; color:#1E1E1E; font-family:'Utile Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          Job not found
+        </h2>
+        <p style="font-size:14px; color:#626262; margin:0; font-family:'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          The job posting you are looking for does not exist or is no longer available.
+        </p>
+      </section>
+    <% } %>
+  </div>
+</main>
+
+<style>
+  @media (max-width: 768px) {
+    .career-detail-page {
+      padding: 60px 16px !important;
+    }
+
+    .career-detail-section-card {
+      padding: 20px 18px !important;
+    }
+  }
+</style>
+

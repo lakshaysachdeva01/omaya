@@ -1,0 +1,92 @@
+     <!-- news-section two -->
+  <section id="news" class="news-section-two">
+    <div class="auto-container">
+      <div class="sec-title text-center wow fadeInUp"> <span class="sub-title">Hoexr Hotel News</span>
+        <h2>Latest News Update</h2>
+      </div>
+      <div class="row"> 
+        <% if (blogs && Array.isArray(blogs) && blogs.length > 0) { %>
+          <% 
+            const imageBase = typeof S3_BASE_URL !== 'undefined' && S3_BASE_URL 
+              ? S3_BASE_URL.replace(/\/$/, '') + '/' 
+              : '';
+            
+            // Helper function to strip HTML and get first sentence/words for description
+            function getDescriptionPreview(descriptionArray) {
+              if (!descriptionArray || !Array.isArray(descriptionArray) || descriptionArray.length === 0) {
+                return 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.';
+              }
+              const firstDesc = descriptionArray[0].description || '';
+              // Strip HTML tags and get first ~50 words
+              const text = firstDesc.replace(/<[^>]*>/g, '').trim();
+              const words = text.split(/\s+/);
+              return words.length > 50 ? words.slice(0, 50).join(' ') + '...' : text;
+            }
+            
+            // Helper function to format date
+            function formatDate(dateString) {
+              if (!dateString) return '';
+              try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-GB', { 
+                  day: '2-digit', 
+                  month: 'short', 
+                  year: 'numeric' 
+                });
+              } catch (e) {
+                return '';
+              }
+            }
+          %>
+          <% blogs.slice(0, 3).forEach((item, index) => { %>
+            <% 
+              const imageUrl = item.coverImage || item.uploadBanner || '';
+              const slug = item.seoconfigs?.slug || item.seoDetails?.slug || '';
+              const category = item.postCategory || 'BLOG';
+              const title = item.postTitle || item.title || '';
+              const date = item.postDate || formatDate(item.createdAt);
+              const description = getDescriptionPreview(item.description);
+            %>
+            <!-- News Block -->
+            <div class="news-block-two col-lg-4 col-sm-6 wow fadeInUp"<% if (index === 1) { %> data-wow-delay="300ms"<% } else if (index === 2) { %> data-wow-delay="600ms"<% } %>>
+              <div class="inner-box wow fadeInLeft"<% if (index === 1) { %> data-wow-delay="200ms"<% } else if (index === 2) { %> data-wow-delay="300ms"<% } %>>
+                <div class="image-box">
+                  <figure class="image overlay-anim">
+                    <a href="/blog/<%= slug %>">
+                      <img src="<%= imageBase + imageUrl %>" alt="<%= title %>" class="blog-home-image">
+                    </a>
+                  </figure>
+                  <span class="date"><%= category %></span>
+                </div>
+                <div class="content-box">
+                  <h4 class="title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                    <a href="/blog/<%= slug %>"><%= title %></a>
+                  </h4>
+                  <p style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><%= description %></p>
+                  <div class="btn-box">
+                    <span><%= date %></span>
+                    <a href="/blog/<%= slug %>" class="read-more">Read More<i class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+<style>
+  .news-section-two .blog-home-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    .news-section-two .blog-home-image {
+      height: 340px;
+      object-fit: cover;
+    }
+  }
+</style>

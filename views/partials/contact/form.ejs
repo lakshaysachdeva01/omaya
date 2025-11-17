@@ -1,0 +1,111 @@
+
+	<!-- Start main-content -->
+	<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+		<div class="auto-container">
+			<div class="title-outer text-center">
+				<h1 class="title">Contact Us</h1>
+				<ul class="page-breadcrumb">
+					<li><a href="/">Home</a></li>
+					<li>Contact</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- end main-content -->
+
+	<!--Contact Details Start-->
+	<section class="contact-details">
+		<div class="container pt-110 pb-70">
+			<div class="row">
+				<div class="col-xl-7 col-lg-6">
+					<div class="sec-title">
+						<span class="sub-title before-none">Send us email</span>
+						<h2>Feel free to write</h2>
+					</div>
+					<!-- Contact Form -->
+
+          <!-- Footer Column -->
+          <form id="contactForm" method="post">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="mb-3">
+									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name %>" class="form-control" type="text" placeholder="Enter Name" required>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="mb-3">
+									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email %>" class="form-control required email" type="email" placeholder="Enter Email" required>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="mb-3">
+									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.address %>" class="form-control required" type="text" placeholder="Enter address" required>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="mb-3">
+									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone %>" class="form-control" type="tel" placeholder="Enter Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+								</div>
+							</div>
+						</div>
+						<div class="mb-3">
+							<textarea name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.remarks %>" class="form-control required" rows="7" placeholder="Enter Message" required></textarea>
+						</div>
+						<div class="mb-5">
+							<input name="form_botcheck" class="form-control" type="hidden" value="" />
+							<button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait..."><span class="btn-title">Send message</span></button>
+							<!-- <button type="reset" class="theme-btn btn-style-one bg-theme-color5"><span class="btn-title">Reset</span></button> -->
+						</div>
+					</form>
+					<!-- Contact Form Validation-->
+				</div>
+				<div class="col-xl-5 col-lg-6">
+					<div class="contact-details__right">
+						<div class="sec-title">
+							<span class="sub-title before-none">Need any help?</span>
+							<h2>Get in touch with us</h2>
+							<div class="text">Lorem ipsum is simply free text available dolor sit amet consectetur notted adipisicing elit sed do eiusmod tempor incididunt simply dolore magna.</div>
+						</div>
+						<ul class="list-unstyled contact-details__info">
+							<li>
+								<div class="icon">
+									<span class="lnr-icon-phone-plus"></span>
+								</div>
+								<div class="text">
+									<h6>Have any question?</h6>
+									<a href="tel:980089850"><span>Free</span> +92 (020)-9850</a>
+								</div>
+							</li>
+							<li>
+								<div class="icon">
+									<span class="lnr-icon-envelope1"></span>
+								</div>
+								<div class="text">
+									<h6>Write email</h6>
+									<a href="https://html.kodesolution.com/cdn-cgi/l/email-protection#355b5050515d50594575565a5845545b4c1b565a58"><span class="__cf_email__" data-cfemail="f8969d9d9c909d9488b89b979588999681d69b9795">[email&#160;protected]</span></a>
+								</div>
+							</li>
+							<li>
+								<div class="icon">
+									<span class="lnr-icon-location"></span>
+								</div>
+								<div class="text">
+									<h6>Visit anytime</h6>
+									<span>66 broklyn golden street. New York</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--Contact Details End-->
+
+	<!-- Map Section-->
+	<section class="map-section">
+		<iframe  class="map w-100"  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=1%20Grafton%20Street,%20Dublin,%20Ireland+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+	</section>
+	<!--End Map Section-->
