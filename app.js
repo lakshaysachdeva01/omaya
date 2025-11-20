@@ -9,6 +9,7 @@ const { CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS ,JOB_ENQUIRY_DYNAMIC_FIELDS_KEYS , B
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const port = 8000;
 const metaLogoPath = "/assets/img/logos/meta.png";
@@ -25,11 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(async (req, res, next) => {
     try {
         const categories = await getCategories();
-        console.log('🔧 Middleware - Categories loaded:', categories ? categories.length : 0);
         res.locals.categories = categories;
         next();
     } catch (error) {
-        console.error('❌ Middleware - Error fetching categories:', error);
+        
         res.locals.categories = [];
         next();
     }
@@ -110,6 +110,17 @@ app.get('/gallery/:filter', async (req, res) => {
 
 app.get('/stay', async (req, res) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
+    
+    // Read stays data from JSON file
+    let stays = [];
+    try {
+        const staysDataPath = path.join(__dirname, 'data', 'stays.json');
+        const staysData = fs.readFileSync(staysDataPath, 'utf8');
+        stays = JSON.parse(staysData);
+    } catch (error) {
+        console.error('Error reading stays.json:', error);
+    }
+    
     const seoDetails = {
         title: "Stay - Maniram Steel",
         metaDescription: "Experience luxury accommodation at our resort.",
@@ -117,11 +128,54 @@ app.get('/stay', async (req, res) => {
         keywords: "stay, accommodation, resort, hotel",
         canonical: `${baseUrl}/stay`,
     };
-    res.render('stay', { body: "", seoDetails });
+    res.render('stay', { body: "", seoDetails, stays });
+});
+
+app.get('/stay/:slug', async (req, res) => {
+    const baseUrl = req.protocol + '://' + req.get('Host');
+    const { slug } = req.params;
+    
+    // Read stays data from JSON file
+    let stays = [];
+    let stayItem = null;
+    try {
+        const staysDataPath = path.join(__dirname, 'data', 'stays.json');
+        const staysData = fs.readFileSync(staysDataPath, 'utf8');
+        stays = JSON.parse(staysData);
+        stayItem = stays.find(s => s.slug === slug);
+    } catch (error) {
+        console.error('Error reading stays.json:', error);
+    }
+    
+    // If stay item not found, redirect to stays listing
+    if (!stayItem) {
+        return res.redirect('/stay');
+    }
+    
+    const seoDetails = {
+        title: `${stayItem.title} - Stay Details`,
+        metaDescription: stayItem.listDescription || stayItem.description,
+        metaImage: `${baseUrl}${stayItem.bannerImage || stayItem.image}`,
+        keywords: `stay, ${stayItem.title}, ${stayItem.tagline}`,
+        canonical: `${baseUrl}/stay/${slug}`,
+    };
+    
+    res.render('detailspage', { body: "", seoDetails, stay: stayItem, stays });
 });
 
 app.get('/dining', async (req, res) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
+    
+    // Read dining data from JSON file
+    let dining = [];
+    try {
+        const diningDataPath = path.join(__dirname, 'data', 'dining.json');
+        const diningData = fs.readFileSync(diningDataPath, 'utf8');
+        dining = JSON.parse(diningData);
+    } catch (error) {
+        console.error('Error reading dining.json:', error);
+    }
+    
     const seoDetails = {
         title: "Dining - Maniram Steel",
         metaDescription: "Discover our exquisite dining experiences and culinary offerings.",
@@ -129,11 +183,54 @@ app.get('/dining', async (req, res) => {
         keywords: "dining, restaurant, food, cuisine",
         canonical: `${baseUrl}/dining`,
     };
-    res.render('dining', { body: "", seoDetails });
+    res.render('dining', { body: "", seoDetails, dining });
+});
+
+app.get('/dining/:slug', async (req, res) => {
+    const baseUrl = req.protocol + '://' + req.get('Host');
+    const { slug } = req.params;
+    
+    // Read dining data from JSON file
+    let dining = [];
+    let diningItem = null;
+    try {
+        const diningDataPath = path.join(__dirname, 'data', 'dining.json');
+        const diningData = fs.readFileSync(diningDataPath, 'utf8');
+        dining = JSON.parse(diningData);
+        diningItem = dining.find(d => d.slug === slug);
+    } catch (error) {
+        console.error('Error reading dining.json:', error);
+    }
+    
+    // If dining item not found, redirect to dining listing
+    if (!diningItem) {
+        return res.redirect('/dining');
+    }
+    
+    const seoDetails = {
+        title: `${diningItem.title} - Dining Details`,
+        metaDescription: diningItem.listDescription || diningItem.description,
+        metaImage: `${baseUrl}${diningItem.bannerImage || diningItem.image}`,
+        keywords: `dining, ${diningItem.title}, ${diningItem.tagline}`,
+        canonical: `${baseUrl}/dining/${slug}`,
+    };
+    
+    res.render('detailspage', { body: "", seoDetails, dining: diningItem, diningList: dining });
 });
 
 app.get('/venue', async (req, res) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
+    
+    // Read venue data from JSON file
+    let venues = [];
+    try {
+        const venueDataPath = path.join(__dirname, 'data', 'venue.json');
+        const venueData = fs.readFileSync(venueDataPath, 'utf8');
+        venues = JSON.parse(venueData);
+    } catch (error) {
+        console.error('Error reading venue.json:', error);
+    }
+    
     const seoDetails = {
         title: "Venue - Maniram Steel",
         metaDescription: "Host your events at our premium venue spaces.",
@@ -141,7 +238,39 @@ app.get('/venue', async (req, res) => {
         keywords: "venue, events, conference, meeting",
         canonical: `${baseUrl}/venue`,
     };
-    res.render('venue', { body: "", seoDetails });
+    res.render('venue', { body: "", seoDetails, venues });
+});
+
+app.get('/venue/:slug', async (req, res) => {
+    const baseUrl = req.protocol + '://' + req.get('Host');
+    const { slug } = req.params;
+    
+    // Read venue data from JSON file
+    let venues = [];
+    let venue = null;
+    try {
+        const venueDataPath = path.join(__dirname, 'data', 'venue.json');
+        const venueData = fs.readFileSync(venueDataPath, 'utf8');
+        venues = JSON.parse(venueData);
+        venue = venues.find(v => v.slug === slug);
+    } catch (error) {
+        console.error('Error reading venue.json:', error);
+    }
+    
+    // If venue not found, redirect to venue listing
+    if (!venue) {
+        return res.redirect('/venue');
+    }
+    
+    const seoDetails = {
+        title: `${venue.title} - Venue Details`,
+        metaDescription: venue.listDescription || venue.description,
+        metaImage: `${baseUrl}${venue.bannerImage || venue.image}`,
+        keywords: `venue, ${venue.title}, ${venue.tagline}`,
+        canonical: `${baseUrl}/venue/${slug}`,
+    };
+    
+    res.render('detailspage', { body: "", seoDetails, venue, venues });
 });
 
 app.get('/contact', async (req, res) => {
@@ -189,7 +318,7 @@ app.get('/posts', async (req, res) => {
         canonical: `${baseUrl}/blogs`,
     };
 
-    res.render('blogs', { body: "", blogs, baseUrl, seoDetails });
+    res.render('blogs', { body: "", blogs, baseUrl, seoDetails, S3_BASE_URL });
 });
 
 

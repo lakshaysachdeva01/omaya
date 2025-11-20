@@ -1,0 +1,127 @@
+[
+  {
+    "id": 1,
+    "slug": "pdr",
+    "tagline": "PRIVATE DINING",
+    "title": "PDR",
+    "description": "A refined private dining space crafted for intimate meals and exclusive celebrations. Enjoy curated menus, elegant ambience, and personalised service for your special moments.",
+    "image": "/assets/images/resource/feature-1.jpg",
+    "icon": "/assets/images/resource/icon.png",
+    "link": "/dining/pdr",
+    "bannerImage": "/assets/images/resource/feature-1.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "A refined private dining space crafted for intimate meals and exclusive celebrations.",
+    "detailDescription": "The Private Dining Room (PDR) at Omaya Suites offers an exclusive and intimate space designed for guests who prefer privacy and personalised service. The warm lighting, rich interiors, and sophisticated ambience make it perfect for family meals, romantic dinners, confidential business conversations, or small celebrations.\n\nWhether you're hosting a special occasion or planning a quiet meal with loved ones, the PDR offers a refined dining experience with dedicated service. It delivers privacy, comfort, and an elevated atmosphere that makes every moment memorable.",
+    "diningDetails": {
+      "category": "Private Dining",
+      "cuisine": "Multi-Cuisine",
+      "seating": "8–12 Guests",
+      "timings": "11:00 AM – 11:00 PM"
+    },
+    "features": [
+      "Fully private and enclosed dining space",
+      "Ideal for celebrations & business meals",
+      "Curated menu options",
+      "Elegant ambience with personalised service"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "oma-air-bar",
+    "tagline": "ROOFTOP BAR",
+    "title": "OMA Air Bar",
+    "description": "A stylish open-air rooftop bar offering premium cocktails, sunset views, and vibrant music. Perfect for evenings with friends, romantic nights, and unforgettable celebrations under the sky.",
+    "image": "/assets/images/resource/feature-2.jpg",
+    "icon": "/assets/images/resource/icon-2.png",
+    "link": "/dining/oma-air-bar",
+    "bannerImage": "/assets/images/resource/feature-2.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "A stylish open-air rooftop bar offering premium cocktails, sunset views, and vibrant music.",
+    "detailDescription": "OMA Air Bar brings together open-air elegance and vibrant evening energy. With panoramic city views, chic seating, and warm night lighting, it is the perfect spot to unwind after a long day. Enjoy signature cocktails, refreshing mocktails, and handcrafted small plates while soaking in the rooftop ambience.\n\nWhether you're planning a date, meeting friends, or hosting a casual celebration, the rooftop bar provides the perfect combination of relaxation and vibrancy. It delivers a memorable evening experience under the sky.",
+    "diningDetails": {
+      "category": "Rooftop Bar",
+      "cuisine": "Cocktails & Finger Foods",
+      "seating": "40+ Guests",
+      "timings": "5:00 PM – 11:30 PM"
+    },
+    "features": [
+      "Open-air rooftop ambience",
+      "Signature drinks & curated beverages",
+      "Stylish evening setting",
+      "Perfect for dates, gatherings & celebrations"
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "oma-kitchen",
+    "tagline": "MULTI-CUISINE DINING",
+    "title": "OMA Kitchen",
+    "description": "Experience flavours from across the world in a warm and modern setting. From classic Indian dishes to global cuisines, each plate is crafted with fresh ingredients and exceptional taste.",
+    "image": "/assets/images/resource/feature-3.jpg",
+    "icon": "/assets/images/resource/icon-3.png",
+    "link": "/dining/oma-kitchen",
+    "bannerImage": "/assets/images/resource/feature-3.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Experience flavours from across the world in a warm and modern setting.",
+    "detailDescription": "OMA Kitchen is a warm and welcoming multi-cuisine restaurant that offers a thoughtfully curated dining experience throughout the day. With elegant interiors, cosy seating, and a comforting ambience, it is ideal for families, travellers, and corporate guests alike. Each dish is prepared with fresh ingredients and authentic flavours to deliver a fulfilling meal.\n\nFrom breakfast spreads to hearty lunches and relaxed dinners, OMA Kitchen brings you a variety of Indian, continental, and global dishes. Whether you're enjoying a family outing or a business lunch, the restaurant ensures a memorable and satisfying experience.",
+    "diningDetails": {
+      "category": "Multi-Cuisine Restaurant",
+      "cuisine": "Indian & Global Dishes",
+      "seating": "60+ Guests",
+      "timings": "7:00 AM – 11:00 PM"
+    },
+    "features": [
+      "Wide multi-cuisine menu",
+      "Family-friendly environment",
+      "Comfortable & elegant seating",
+      "Suitable for corporate lunches & dinners"
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "oma-pool-bar",
+    "tagline": "POOLSIDE BAR",
+    "title": "OMA Pool Bar",
+    "description": "Relax by the view with refreshing drinks, light bites, and a serene ambience. Ideal for unwinding, socialising, or enjoying a laid-back afternoon with signature beverages.",
+    "image": "/assets/images/resource/feature-1.jpg",
+    "icon": "/assets/images/resource/icon-2.png",
+    "link": "/dining/oma-pool-bar",
+    "bannerImage": "/assets/images/resource/feature-1.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Relax by the view with refreshing drinks, light bites, and a serene ambience.",
+    "detailDescription": "OMA Pool Bar offers a refreshing and relaxed poolside atmosphere, perfect for enjoying chilled beverages and quick bites. With comfortable lounge seating and a peaceful ambience, it is an ideal place to unwind during the day or enjoy a calm evening by the water.\n\nWhether you're relaxing after a swim or catching up with friends, the pool bar provides a soothing environment. Its light snacks, refreshing drinks, and serene surroundings make it a favourite spot for laid-back moments.",
+    "diningDetails": {
+      "category": "Poolside Bar",
+      "cuisine": "Beverages & Light Snacks",
+      "seating": "20–25 Guests",
+      "timings": "11:00 AM – 10:00 PM"
+    },
+    "features": [
+      "Relaxing poolside ambience",
+      "Refreshing beverages & chilled drinks",
+      "Light bites & quick snacks",
+      "Comfortable lounge seating"
+    ]
+  }
+]
+

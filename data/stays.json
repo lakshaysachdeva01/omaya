@@ -1,0 +1,187 @@
+[
+  {
+    "id": 1,
+    "slug": "royal-suite",
+    "tagline": "LUXURY SUITE",
+    "title": "Royal Suite",
+    "description": "Indulge in an exclusive retreat featuring an in-room private pool, elegant dining space, and premium interiors designed for unmatched comfort. Perfect for celebrations, intimate gatherings, and VIP stays.",
+    "image": "/assets/images/resource/feature-1.jpg",
+    "icon": "/assets/images/resource/icon.png",
+    "link": "/stay/royal-suite",
+    "bannerImage": "/assets/images/resource/feature-1.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Indulge in an exclusive retreat featuring an in-room private pool, elegant dining space, and premium interiors.",
+    "detailDescription": "The Royal Suite is designed for guests who desire an extraordinary stay, blending elegance, privacy, and complete indulgence. From warm lighting to spacious interiors and refined décor, every corner elevates the sense of luxury. The private in-room swimming pool adds an exclusive touch, making the suite perfect for romantic getaways, VIP guests, small celebrations, or high-profile corporate stays.\n\nA separate dining area, balcony, and premium furnishings create a serene environment to relax or entertain. Whether you're celebrating an occasion or enjoying a premium work-and-relax retreat, the Royal Suite delivers an unforgettable experience with the finest comfort and privacy.",
+    "stayDetails": {
+      "roomSize": "900 sq. ft.",
+      "bedType": "Luxury King-Size Bed",
+      "occupancy": "2 Guests"
+    },
+    "features": [
+      "Private In-Room Swimming Pool",
+      "Separate Dining Area",
+      "Private Balcony",
+      "Individual Climate-Control AC",
+      "LED TV",
+      "Tea/Coffee Maker",
+      "Safety Locker",
+      "Toiletry Kit",
+      "Hair Dryer",
+      "Dental & Shaving Kit",
+      "Cotton Slippers",
+      "Weighing Scale",
+      "Iron & Iron Board (on request)",
+      "Wake-Up Call Service"
+    ],
+    "paidServices": [
+      "In-Room Dining",
+      "Laundry & Dry Cleaning",
+      "Photocopy / Printouts",
+      "Direct Dialing Facility"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "deluxe-suite",
+    "tagline": "PREMIUM SUITE",
+    "title": "Deluxe Suite",
+    "description": "Experience refined elegance with a private Jacuzzi, modern décor, and a calm, relaxing ambience. Ideal for couples, executives, and guests seeking comfort with a touch of luxury.",
+    "image": "/assets/images/resource/feature-2.jpg",
+    "icon": "/assets/images/resource/icon-2.png",
+    "link": "/stay/deluxe-suite",
+    "bannerImage": "/assets/images/resource/feature-2.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Experience refined elegance with a private Jacuzzi, modern décor, and a calm, relaxing ambience.",
+    "detailDescription": "The Deluxe Suite offers a warm and stylish setting, making it ideal for both leisure travellers and corporate professionals who prefer comfort with elegance. The soothing interiors and spacious layout create a peaceful atmosphere to unwind after a long day. The private in-room Jacuzzi adds a luxurious spa-like touch, perfect for rejuvenation.\n\nWhether you're a couple celebrating a special moment or an executive on a business trip, the Deluxe Suite offers privacy, comfort, and premium hospitality. Its thoughtfully crafted ambience ensures a refreshing experience for short stays, weekend breaks, and corporate visits.",
+    "stayDetails": {
+      "roomSize": "800 sq. ft.",
+      "bedType": "Luxury King-Size Bed",
+      "occupancy": "2 Guests"
+    },
+    "features": [
+      "Private In-Room Jacuzzi",
+      "Separate Dining Area",
+      "Individual Climate-Control AC",
+      "LED TV",
+      "Tea/Coffee Maker",
+      "Safety Locker",
+      "Toiletry Kit",
+      "Hair Dryer",
+      "Dental & Shaving Kit",
+      "Cotton Slippers",
+      "Weighing Scale",
+      "Wake-Up Call Service",
+      "Iron & Iron Board (on request)"
+    ],
+    "paidServices": [
+      "In-Room Dining",
+      "Laundry & Dry Cleaning",
+      "Photocopy / Printouts",
+      "Direct Dialing Facility"
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "executive-suite",
+    "tagline": "BUSINESS SUITE",
+    "title": "Executive Suite",
+    "description": "Designed for business and leisure, this suite offers a spacious layout, separate dining area, and sophisticated interiors. A perfect blend of productivity and relaxation for corporate travellers.",
+    "image": "/assets/images/resource/feature-3.jpg",
+    "icon": "/assets/images/resource/icon-3.png",
+    "link": "/stay/executive-suite",
+    "bannerImage": "/assets/images/resource/feature-3.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Designed for business and leisure, this suite offers a spacious layout, separate dining area, and sophisticated interiors.",
+    "detailDescription": "The Executive Suite is designed specifically for corporate travellers, business professionals, and long-stay guests, offering the perfect balance of comfort and productivity. Its smart layout, calming décor, and dedicated dining and work-friendly space create an environment ideal for meetings, work calls, or focused tasks. The private balcony and soft ambient lighting make it equally perfect for unwinding after a busy day.\n\nWhether you're visiting Raipur for work, attending conferences, or requiring extended-stay accommodation, the Executive Suite ensures a smooth, efficient, and premium experience. It delivers all the essentials of corporate comfort with a touch of luxury.",
+    "stayDetails": {
+      "roomSize": "750 sq. ft.",
+      "bedType": "Luxury King-Size Bed",
+      "occupancy": "2 Guests"
+    },
+    "features": [
+      "Separate Dining Area",
+      "Private Balcony",
+      "Individual Climate-Control AC",
+      "LED TV",
+      "Tea/Coffee Maker",
+      "Safety Locker",
+      "Toiletry Kit",
+      "Hair Dryer",
+      "Dental & Shaving Kit",
+      "Cotton Slippers",
+      "Weighing Scale",
+      "Iron & Iron Board (on request)",
+      "Wake-Up Call Service"
+    ],
+    "paidServices": [
+      "In-Room Dining",
+      "Laundry Services",
+      "Photocopy / Printouts",
+      "Direct Dialing Facility"
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "duo-suite",
+    "tagline": "FAMILY SUITE",
+    "title": "Duo Suite",
+    "description": "A spacious dual-suite experience created for families and groups. Enjoy two connected suites with ample space, privacy, and comfort—ideal for vacations, wedding guests, and long stays.",
+    "image": "/assets/images/resource/feature-1.jpg",
+    "icon": "/assets/images/resource/icon-2.png",
+    "link": "/stay/duo-suite",
+    "bannerImage": "/assets/images/resource/feature-1.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "A spacious dual-suite experience created for families and groups.",
+    "detailDescription": "The Duo Suite is the ideal choice for families, groups, wedding guests, and even corporate teams who prefer staying together with the comfort of individual privacy. Featuring two connected luxury suites, the space is designed for both bonding and personal relaxation. With multiple dining areas and balconies, the suite provides ample room for shared moments and peaceful downtime.\n\nPremium interiors, spacious rooms, and thoughtful amenities make the Duo Suite perfect for extended vacations, family gatherings, group tours, and team stays during corporate events. It brings the comfort of home with the luxury of a premium stay experience.",
+    "stayDetails": {
+      "roomSize": "1500 sq. ft.",
+      "bedType": "Two Luxury King-Size Beds",
+      "occupancy": "4 Guests"
+    },
+    "features": [
+      "Two Spacious Bedrooms",
+      "Two Dining Spaces",
+      "Connected Suite Layout",
+      "Private Balconies",
+      "Individual Climate-Control AC",
+      "LED TVs",
+      "Tea/Coffee Maker",
+      "Safety Locker",
+      "Toiletry Kit",
+      "Hair Dryer",
+      "Dental & Shaving Kit",
+      "Cotton Slippers",
+      "Weighing Scale",
+      "Iron & Iron Board (on request)",
+      "Wake-Up Call Service",
+      "In-Room Bar Counter"
+    ],
+    "paidServices": [
+      "In-Room Dining",
+      "Laundry Services",
+      "Photocopy / Printing",
+      "Direct Dialing Facility"
+    ]
+  }
+]
+

@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "slug": "ivory-hall",
+    "tagline": "BANQUET HALL",
+    "title": "Ivory Hall",
+    "description": "A spacious and elegant venue ideal for anniversaries, corporate events, family gatherings, and celebrations. With modern amenities and premium décor, it offers a seamless event experience.",
+    "image": "/assets/images/resource/feature-1.jpg",
+    "icon": "/assets/images/resource/icon.png",
+    "link": "/venue/ivory-hall",
+    "bannerImage": "/assets/images/resource/feature-1.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "A spacious and elegant venue ideal for anniversaries, corporate events, family gatherings, and celebrations.",
+    "detailDescription": "Ivory Hall is a grand and elegantly designed venue created for events that deserve a refined and memorable setting. With its spacious layout, premium décor, and warm ambience, it is perfect for anniversaries, weddings, corporate gatherings, and large family functions. The hall offers an inviting atmosphere where celebrations feel elevated and seamless.\n\nEquipped with modern amenities, dedicated buffet space, and comfortable guest movement areas, Ivory Hall ensures every event is executed with ease. Whether it's a formal event or a joyous celebration, the venue provides a sophisticated backdrop that enhances every moment.",
+    "venueDetails": {
+      "size": "3600 sq. ft.",
+      "capacity": "170–200 Guests",
+      "flooring": "Carpet Flooring",
+      "airConditioning": "Fully Centralized AC"
+    },
+    "features": [
+      "Separate buffet counters",
+      "Attached washrooms",
+      "High-speed WiFi",
+      "DG power backup",
+      "Lounge area",
+      "Valet parking",
+      "Wheelchair-accessible entry",
+      "Inbuilt music system"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "silver-hall",
+    "tagline": "PRIVATE HALL",
+    "title": "Silver Hall",
+    "description": "Perfect for birthdays, kitty parties, small gatherings, and private dinners. This cosy venue blends comfort with style, offering an intimate setting for your special occasions.",
+    "image": "/assets/images/resource/feature-2.jpg",
+    "icon": "/assets/images/resource/icon-2.png",
+    "link": "/venue/silver-hall",
+    "bannerImage": "/assets/images/resource/feature-2.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Perfect for birthdays, kitty parties, small gatherings, and private dinners.",
+    "detailDescription": "Silver Hall is an intimate and charming venue designed for smaller, more personal celebrations. With its cozy atmosphere and elegant styling, it creates the perfect setting for birthdays, kitty parties, small family gatherings, and private dinners. The venue combines comfort with sophisticated design, ensuring your special moments are celebrated in style.\n\nThe hall features modern amenities, flexible seating arrangements, and a warm ambiance that makes every guest feel welcome. Whether you're hosting a milestone birthday or an intimate dinner party, Silver Hall provides the ideal backdrop for creating lasting memories.",
+    "venueDetails": {
+      "size": "1800 sq. ft.",
+      "capacity": "80–100 Guests",
+      "flooring": "Premium Carpet",
+      "airConditioning": "Centralized AC"
+    },
+    "features": [
+      "Private dining area",
+      "Modern sound system",
+      "High-speed WiFi",
+      "Power backup",
+      "Comfortable seating",
+      "Valet parking",
+      "Washroom facilities",
+      "Flexible layout options"
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "omaya-meet",
+    "tagline": "BOARD ROOM",
+    "title": "Omaya Meet",
+    "description": "Designed for professional meetings, conferences, and discussions. Equipped with modern AV setup, comfortable seating, and high-speed internet for productive business sessions.",
+    "image": "/assets/images/resource/feature-3.jpg",
+    "icon": "/assets/images/resource/icon-3.png",
+    "link": "/venue/omaya-meet",
+    "bannerImage": "/assets/images/resource/feature-3.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Designed for professional meetings, conferences, and discussions.",
+    "detailDescription": "Omaya Meet is a professional boardroom designed to facilitate productive business meetings, conferences, and strategic discussions. The space is equipped with state-of-the-art audio-visual technology, comfortable executive seating, and high-speed internet connectivity to ensure seamless presentations and video conferences.\n\nThe boardroom features a sophisticated business environment with modern amenities that support both formal presentations and collaborative discussions. With its professional ambiance and cutting-edge technology, Omaya Meet provides the perfect setting for making important business decisions and conducting successful corporate meetings.",
+    "venueDetails": {
+      "size": "1200 sq. ft.",
+      "capacity": "20–30 Persons",
+      "flooring": "Premium Flooring",
+      "airConditioning": "Centralized AC"
+    },
+    "features": [
+      "Modern AV setup",
+      "Projector and screen",
+      "High-speed WiFi",
+      "Video conferencing",
+      "Executive seating",
+      "Whiteboard facilities",
+      "Power backup",
+      "Business center access"
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "zenith-one-two",
+    "tagline": "MEETING SPACE",
+    "title": "Zenith One & Two",
+    "description": "Compact, well-equipped meeting rooms ideal for interviews, presentations, and focused discussions. A perfect choice for small group meetings with premium facilities.",
+    "image": "/assets/images/resource/feature-1.jpg",
+    "icon": "/assets/images/resource/icon-2.png",
+    "link": "/venue/zenith-one-two",
+    "bannerImage": "/assets/images/resource/feature-1.jpg",
+    "detailImages": [
+      "/assets/images/resource/room-1.jpg",
+      "/assets/images/resource/room-2.jpg",
+      "/assets/images/resource/room-4.jpg",
+      "/assets/images/resource/room-6.jpg"
+    ],
+    "listDescription": "Compact, well-equipped meeting rooms ideal for interviews, presentations, and focused discussions.",
+    "detailDescription": "Zenith One & Two are compact, well-equipped meeting rooms designed for focused business activities. These versatile spaces are perfect for interviews, presentations, training sessions, and small group discussions. Each room is thoughtfully designed to provide a professional yet comfortable environment for productive meetings.\n\nWith modern amenities, flexible seating arrangements, and premium facilities, Zenith One & Two offer an ideal solution for businesses seeking efficient meeting spaces. Whether you're conducting interviews, hosting training sessions, or holding strategic discussions, these rooms provide the perfect setting for your professional needs.",
+    "venueDetails": {
+      "size": "600 sq. ft. each",
+      "capacity": "10–15 Persons each",
+      "flooring": "Premium Flooring",
+      "airConditioning": "Individual AC Units"
+    },
+    "features": [
+      "Compact design",
+      "Modern AV equipment",
+      "High-speed WiFi",
+      "Flexible seating",
+      "Presentation screen",
+      "Power backup",
+      "Privacy ensured",
+      "Professional ambiance"
+    ]
+  }
+]

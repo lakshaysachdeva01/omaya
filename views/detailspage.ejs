@@ -1,0 +1,406 @@
+<%- include('header', {seoDetails}) %>
+
+<% 
+    // Determine the type and current item
+    const currentItem = typeof venue !== 'undefined' && venue ? venue : (typeof stay !== 'undefined' && stay ? stay : (typeof dining !== 'undefined' && dining ? dining : null));
+    const itemType = typeof venue !== 'undefined' && venue ? 'venue' : (typeof stay !== 'undefined' && stay ? 'stay' : (typeof dining !== 'undefined' && dining ? 'dining' : 'venue'));
+    const typePath = itemType === 'venue' ? '/venue' : (itemType === 'stay' ? '/stay' : '/dining');
+    const typeLabel = itemType === 'venue' ? 'Venue' : (itemType === 'stay' ? 'Stay' : 'Dining');
+%>
+
+<!-- Start main-content -->
+<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+    <div class="auto-container">
+        <div class="title-outer text-center">
+            <h1 class="title"><%= currentItem ? currentItem.title : typeLabel + ' Details' %></h1>
+            <ul class="page-breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="<%= typePath %>"><%= typeLabel %></a></li>
+                <li><%= currentItem ? currentItem.title : 'Details' %></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- end main-content -->
+
+<!--Room Details Start-->
+<section class="blog-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-7 product-details rd-page">
+                <% if (currentItem && currentItem.detailImages && currentItem.detailImages.length > 0) { %>
+                    <div class="bxslider">
+                        <% currentItem.detailImages.forEach((image, index) => { %>
+                            <div class="slider-content">
+                                <figure class="image-box popup-trigger" data-type="image" data-src="<%= image %>" data-title="<%= currentItem.title %>" style="cursor: pointer;">
+                                    <img src="<%= image %>" alt="<%= currentItem.title %>">
+                                </figure>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <div class="slider-pager">
+                        <ul class="thumb-box" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <% currentItem.detailImages.forEach((thumbImage, thumbIndex) => { %>
+                                <li class="mb-0" style="width: 100px; height: 100px;">
+                                    <a class="<%= thumbIndex === 0 ? 'active' : '' %>" data-slide-index="<%= thumbIndex %>" href="#">
+                                        <figure><img src="<%= thumbImage %>" alt=""></figure>
+                                    </a>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                <% } %>
+                
+                <div class="room-details__left">
+                    <div class="wrapper">
+                        <h3>Description</h3>
+                        <% if (currentItem && currentItem.detailDescription) { %>
+                            <% 
+                                const paragraphs = currentItem.detailDescription.split('\n\n');
+                                paragraphs.forEach(paragraph => {
+                                    if (paragraph.trim()) {
+                            %>
+                                <p class="text"><%= paragraph.trim() %></p>
+                            <% 
+                                    }
+                                });
+                            %>
+                        <% } else { %>
+                            <p class="text">No description available.</p>
+                        <% } %>
+                        
+                        <% if (currentItem && (currentItem.venueDetails || currentItem.stayDetails || currentItem.diningDetails)) { %>
+                            <% const details = currentItem.venueDetails || currentItem.stayDetails || currentItem.diningDetails; %>
+                            <div class="row justify-content-center">
+                                <div class="col-xl-12">
+                                    <div class="room-details__content-right mb-40 mt-20">
+                                        <div class="room-details__details-box">
+                                            <div class="row">
+                                                <% if (details.roomSize) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Room Size</p>
+                                                        <h6><%= details.roomSize %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.bedType) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Bed Type</p>
+                                                        <h6><%= details.bedType %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.occupancy) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Occupancy</p>
+                                                        <h6><%= details.occupancy %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.category) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Category</p>
+                                                        <h6><%= details.category %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.cuisine) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Cuisine</p>
+                                                        <h6><%= details.cuisine %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.seating) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Seating</p>
+                                                        <h6><%= details.seating %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.timings) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Timings</p>
+                                                        <h6><%= details.timings %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.size) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Size</p>
+                                                        <h6><%= details.size %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.capacity && !details.seating) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Capacity</p>
+                                                        <h6><%= details.capacity %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.flooring) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Flooring</p>
+                                                        <h6><%= details.flooring %></h6>
+                                                    </div>
+                                                <% } %>
+                                                <% if (details.airConditioning) { %>
+                                                    <div class="col-6 col-md-3">
+                                                        <p class="text mb-0">Air Conditioning</p>
+                                                        <h6><%= details.airConditioning %></h6>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <% if (currentItem && currentItem.features && currentItem.features.length > 0) { %>
+                        <div class="mt-40">
+                            <h4>Room Facilities</h4>
+                            <div class="row room-facility-list mb-40">
+                                <% currentItem.features.forEach((feature, index) => { %>
+                                    <div class="col-sm-6 col-xl-4">
+                                        <div class="list-one d-flex align-items-center me-sm-4 <%= index < currentItem.features.length - 1 ? 'mb-3' : '' %>">
+                                            <div class="icon text-theme-color1 mr-10 flex-shrink-0">
+                                                <i class="far fa-check-circle"></i>
+                                            </div>
+                                            <h6 class="title m-0"><%= feature %></h6>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <% if (currentItem && currentItem.paidServices && currentItem.paidServices.length > 0) { %>
+                        <div class="mt-40">
+                            <h4>Paid Services</h4>
+                            <ul class="list-unstyled" style="list-style: none; padding-left: 0;">
+                                <% currentItem.paidServices.forEach((service) => { %>
+                                    <li style="margin-bottom: 10px; padding-left: 20px; position: relative;">
+                                        <span style="position: absolute; left: 0; color: var(--theme-color1);">•</span>
+                                        <span><%= service %></span>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+                    
+                    <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-40 pb-40 border-top">
+                        <h6 class="my-sm-0">Share Details</h6>
+                        <div class="blog-details__social-list">
+                            <a href="#"><i class="fa fa-x"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 p-lg-5 bg-light">
+                        <h4 class="mt-0">Send Us Your Question</h4>
+                        <form id="contact_form" name="contact_form" class="" action="#" method="post">
+                            <div class="row">
+                                <div class="col-sm-6 col-xl-4">
+                                    <div class="mb-3">
+                                        <input name="form_name" class="form-control bg-white" type="text" placeholder="Enter Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-xl-4">
+                                    <div class="mb-3">
+                                        <input name="form_email" class="form-control bg-white required email" type="email" placeholder="Enter Email" required>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="mb-3">
+                                        <input name="form_phone" class="form-control bg-white required phone" type="tel" placeholder="Enter Phone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="form_message" class="form-control bg-white required" rows="5" placeholder="Enter Message" required></textarea>
+                            </div>
+                            <div class="mb-0">
+                                <input name="form_botcheck" class="form-control" type="hidden" value="">
+                                <button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait..."><span class="btn-title">Submit Comment</span></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="sidebar">
+                    <% 
+                        // Get the items list and type label for sidebar
+                        const itemsList = (typeof venues !== 'undefined' && venues) ? venues : 
+                                        ((typeof stays !== 'undefined' && stays) ? stays : 
+                                        ((typeof diningList !== 'undefined' && diningList) ? diningList : []));
+                        const sidebarTypeLabel = itemType === 'venue' ? 'Venues' : (itemType === 'stay' ? 'Stays' : 'Dining');
+                    %>
+                    <% if (itemsList && Array.isArray(itemsList) && itemsList.length > 0 && currentItem) { %>
+                        <div class="sidebar__single sidebar__post">
+                            <h3 class="sidebar__title">Other <%= sidebarTypeLabel %></h3>
+                            <ul class="sidebar__post-list list-unstyled">
+                                <% itemsList.filter(item => item.id !== currentItem.id).slice(0, 3).forEach((otherItem) => { %>
+                                    <li>
+                                        <div class="sidebar__post-image">
+                                            <img src="<%= otherItem.bannerImage || otherItem.image %>" alt="<%= otherItem.title %>" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
+                                        </div>
+                                        <div class="sidebar__post-content">
+                                            <span class="sidebar__post-content-meta" style="text-transform: uppercase; font-size: 12px; color: #666; display: block; ">
+                                                <%= otherItem.tagline || '' %>
+                                            </span>
+                                            <span style="display: block; font-size: 18px; font-weight: 600;">
+                                                <%= otherItem.title %>
+                                            </span>
+                                        </div>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('footer') %>
+
+<style>
+    /* Queue slider styles - only for main images */
+    .product-details .bxslider .slider-content .image-box {
+        margin-right: 30px;
+        margin-bottom: 10px;
+    }
+    
+    .product-details .bxslider .slider-content .image-box img {
+        width: 100%;
+        height: auto;
+    }
+    
+    /* Keep thumbnails original style */
+    .product-details .bxslider .thumb-box li {
+        position: relative;
+        display: inline-block;
+        float: left;
+        margin-right: 10px;
+        margin-bottom: 15px;
+        width: 100px;
+        height: 100px;
+    }
+    
+    .product-details .bxslider .thumb-box li:last-child {
+        margin: 0px !important;
+    }
+    
+    .product-details .bxslider .thumb-box li a {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .product-details .bxslider .thumb-box li a:before {
+        position: absolute;
+        content: "";
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        -webkit-transition: all 500ms ease;
+        transition: all 500ms ease;
+    }
+    
+    .product-details .bxslider .thumb-box li a.active:before {
+        opacity: 1;
+    }
+    
+    /* Sidebar other items styling */
+    .sidebar__post-list li {
+        margin-bottom: 25px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #e0e4e8;
+    }
+    
+    .sidebar__post-list li:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .sidebar__post-image {
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .sidebar__post-image img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar__post-image:hover img {
+        transform: scale(1.05);
+    }
+    
+    .sidebar__post-content h3 {
+        margin: 0;
+    }
+</style>
+
+<script>
+    // Force remove preloader
+    document.addEventListener('DOMContentLoaded', function() {
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+            preloader.remove();
+        }
+    });
+    
+    // Also remove on window load as backup
+    window.addEventListener('load', function() {
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+            preloader.remove();
+        }
+    });
+    
+     // Initialize bxslider with queue/carousel mode for main images
+     $(window).on('load', function() {
+         var $slider = $('.product-details .bxslider');
+         if ($slider.length) {
+             // Destroy existing slider if any
+             if ($slider.data('bxSlider')) {
+                 $slider.destroySlider();
+             }
+             
+             // Initialize with horizontal queue mode
+             $slider.bxSlider({
+                 mode: 'horizontal',
+                 minSlides: 1,
+                 maxSlides: 3,
+                 moveSlides: 1,
+                 slideWidth: 300,
+                 slideMargin: 20,
+                 auto: false,
+                 speed: 700,
+                 pagerCustom: '.product-details .slider-pager .thumb-box',
+                 controls: true,
+                 nextText: '<i class="fa fa-angle-right"></i>',
+                 prevText: '<i class="fa fa-angle-left"></i>',
+                 responsive: true,
+                 adaptiveHeight: false,
+                 infiniteLoop: true,
+                 onSliderLoad: function() {
+                     // Ensure thumbnails are visible and working
+                     $('.product-details .slider-pager').show();
+                     
+                     // Reinitialize media items for popup after slider loads
+                     if (typeof initMediaItems === 'function') {
+                         initMediaItems();
+                     }
+                 }
+             });
+         }
+     });
+</script>

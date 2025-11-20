@@ -37,6 +37,19 @@
                 return '';
               }
             }
+            
+            // Helper function to format date as DD <br/> MMM
+            function formatDateDisplay(dateString) {
+              if (!dateString) return '';
+              try {
+                const date = new Date(dateString);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = date.toLocaleDateString('en-GB', { month: 'short' });
+                return day + ' <br/> ' + month;
+              } catch (e) {
+                return '';
+              }
+            }
           %>
           <% blogs.slice(0, 3).forEach((item, index) => { %>
             <% 
@@ -45,31 +58,30 @@
               const category = item.postCategory || 'BLOG';
               const title = item.postTitle || item.title || '';
               const date = item.postDate || formatDate(item.createdAt);
+              const dateDisplay = formatDateDisplay(item.postDate || item.createdAt);
               const description = getDescriptionPreview(item.description);
             %>
-            <!-- News Block -->
-            <div class="news-block-two col-lg-4 col-sm-6 wow fadeInUp"<% if (index === 1) { %> data-wow-delay="300ms"<% } else if (index === 2) { %> data-wow-delay="600ms"<% } %>>
-              <div class="inner-box wow fadeInLeft"<% if (index === 1) { %> data-wow-delay="200ms"<% } else if (index === 2) { %> data-wow-delay="300ms"<% } %>>
-                <div class="image-box">
-                  <figure class="image overlay-anim">
-                    <a href="/blog/<%= slug %>">
-                      <img src="<%= imageBase + imageUrl %>" alt="<%= title %>" class="blog-home-image">
-                    </a>
-                  </figure>
-                  <span class="date"><%= category %></span>
-                </div>
-                <div class="content-box">
-                  <h4 class="title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
-                    <a href="/blog/<%= slug %>"><%= title %></a>
-                  </h4>
-                  <p style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><%= description %></p>
-                  <div class="btn-box">
-                    <span><%= date %></span>
-                    <a href="/blog/<%= slug %>" class="read-more">Read More<i class="fa-solid fa-arrow-right"></i></a>
-                  </div>
-                </div>
-              </div>
+              <!-- News Block -->
+        <div class="news-block col-lg-4 col-md-6 wow fadeInUp">
+          <div class="inner-box wow fadeInLeft">
+            <div class="image-box">
+              <figure class="image overlay-anim"><a href="/blog/<%= slug %>"><img style="height: 374px; object-fit: cover;" src="<%= imageBase + imageUrl %>" alt="<%= title %>"></a></figure>
+              <span class="date" style="text-transform: uppercase;"><%- dateDisplay %></span>
             </div>
+            <div class="content-box">
+              <ul class="post-info">
+                <li style="text-transform: uppercase;"><%= category %></li>
+              </ul>
+              <h4 class="title"><a href="/blog/<%= slug %>" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><%= title %></a></h4>
+              <a href="/blog/<%= slug %>" class="read-more">Read More<i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+   
+
+     
+  <!-- End news section -->
+
           <% }); %>
         <% } %>
       </div>
