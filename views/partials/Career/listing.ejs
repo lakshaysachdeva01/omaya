@@ -13,39 +13,50 @@
 		</div>
 	</section>
 
-      <!-- JOB LISTING
-      ================================================== -->
-      <% if (jobs && jobs.length > 0) { %>
-        <section class="job-listing-section py-80">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 offset-lg-1">
-                        <div class="job-list-container">
-                            <% jobs.forEach((job, index) => { %>
-                                <div class="job-list-item">
-                                    <div class="job-content-wrapper">
-                                        <div class="job-info">
-                                            <h2 class="job-title"><%= job.jobTitle || job.title || job.jobPosition || 'Job Title' %></h2>
-                                            <p class="job-category"><%= (job.category && typeof job.category === 'object' ? job.category.name : job.category) || job.jobPosition || 'General' %></p>
-                                        </div>
-                                        <div class="job-action">
-                                            <a href="/job/<%= job.seoDetails && job.seoDetails.slug ? job.seoDetails.slug : (job._id || '') %>" class="theme-btn btn-style-one">
-                                                <span class="btn-title">View Details</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% if (index < jobs.length - 1) { %>
-                                    <hr class="job-divider">
-                                <% } %>
-                            <% }) %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
+
+    <section id="news" class="news-section-two">
+        <div class="auto-container">
+         
+          <div class="row"> 
+            <% if (jobs && jobs.length > 0) { %>
+             
+                <% jobs.forEach((job, index) => { %>
+                
+                <!-- News Block -->
+                <div class="news-block-two col-lg-4 col-sm-6 wow fadeInUp">
+                  <div class="inner-box wow fadeInLeft">
+                    
+                    <div class="content-box">
+                      <h4 class="title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 3.2em; line-height: 1.6em;">
+                        <a href="/job/<%= job.seoDetails && job.seoDetails.slug ? job.seoDetails.slug : (job._id || '') %>"><%= job.jobTitle || job.title || job.jobPosition || 'Job Title' %></a>
+                      </h4>
+                      <div class="desc" style=" display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-bottom: 25px;"><%- job.jobDescription[0].description %></div>
+                      <div class="btn-box">
+
+                        <a href="/job/<%= job.seoDetails && job.seoDetails.slug ? job.seoDetails.slug : (job._id || '') %>" style="width: 100%;" class="read-more">Apply Now<i class="fa-solid fa-arrow-right"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    
+   
+
+
+
+
+
+  
         <style>
+.desc h3,.desc h1,.desc h2,.desc h4,.desc h5,.desc h6,.desc p, .desc ul, .desc ol, .desc li{
+    font-size: 16px; font-family: "Barlow", sans-serif; font-weight: 400; color: #666666; margin-bottom: 0; line-height: 28px;
+}
+
             .job-listing-section {
                 background-color: #fff;
                 min-height: 60vh;
@@ -120,6 +131,4 @@
                 }
             }
         </style>
-        <% } %>
-  
               
