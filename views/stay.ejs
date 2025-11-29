@@ -36,24 +36,55 @@
                                         <h2><%= item.title %></h2>
                                         <div class="text"><%= item.description %></div>
                                     </div>
-                                    <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one read-more">Discover More</a>
+                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                        <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one read-more">Discover More</a>
+                                        <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one book-now-btn" style="background-color: #aa8453; color: white; border-color: #aa8453;">Book Now</a>
+                                    </div>
                                     <figure class="image-2"><img src="<%= item.icon %>" alt=""></figure>
                                 </div>
                             </div>
                         </div>
                         <div class="image-column col-lg-4 col-md-12 col-sm-12">
-                            <div class="inner-column">
-                                <div class="image-box">
-                                    <figure class="image overlay-anim"><img src="<%= item.image %>" alt="<%= item.title %>"></figure>
+                            <div class="inner-column" style="margin-top: 120px;">
+                                <div class="image-box product-details rd-page">
+                                    <% 
+                                        // Use detailImages if available, otherwise use single image
+                                        const itemImages = (item.detailImages && item.detailImages.length > 0) ? item.detailImages : [item.image];
+                                    %>
+                                    <% if (itemImages.length > 0) { %>
+                                        <div class="bxslider">
+                                            <% itemImages.forEach((img, imgIndex)=> { %>
+                                                <div class="slider-content">
+                                                    <figure class="image-box">
+                                                        <img style="height: 380px;" src="<%= img %>" alt="<%= item.title %>">
+                                                    </figure>
+                                                </div>
+                                            <% }); %>
+                                        </div>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
                     <% } else { %>
                         <!-- Image first, then content (normal layout) -->
                         <div class="image-column col-lg-4 col-md-12 col-sm-12">
-                            <div class="inner-column">
-                                <div class="image-box">
-                                    <figure class="image overlay-anim"><img src="<%= item.image %>" alt="<%= item.title %>"></figure>
+                            <div class="inner-column" style="margin-top: 120px;">
+                                <div class="image-box product-details rd-page">
+                                    <% 
+                                        // Use detailImages if available, otherwise use single image
+                                        const itemImages = (item.detailImages && item.detailImages.length > 0) ? item.detailImages : [item.image];
+                                    %>
+                                    <% if (itemImages.length > 0) { %>
+                                        <div class="bxslider">
+                                            <% itemImages.forEach((img, imgIndex)=> { %>
+                                                <div class="slider-content">
+                                                    <figure class="image-box">
+                                                        <img style="height: 380px;" src="<%= img %>" alt="<%= item.title %>">
+                                                    </figure>
+                                                </div>
+                                            <% }); %>
+                                        </div>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +96,10 @@
                                         <h2><%= item.title %></h2>
                                         <div class="text"><%= item.description %></div>
                                     </div>
-                                    <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one read-more">Discover More</a>
+                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                        <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one read-more">Discover More</a>
+                                        <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one book-now-btn" style="background-color: #aa8453; color: white; border-color: #aa8453;">Book Now</a>
+                                    </div>
                                     <figure class="image-2"><img src="<%= item.icon %>" alt=""></figure>
                                 </div>
                             </div>
@@ -76,5 +110,52 @@
         <% } %>
     </div>
 </section>
+
+<style>
+    .feature-section .image-box {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .feature-section .bxslider {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .feature-section .bxslider .slider-content {
+        width: 100%;
+    }
+
+    .feature-section .bxslider .slider-content .image-box {
+        width: 100%;
+        margin: 0;
+    }
+
+    .feature-section .bxslider .slider-content .image-box img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    /* Hide navigation arrows for stay sliders */
+    .feature-section .bx-controls-direction {
+        display: none !important;
+    }
+    
+    .feature-section .bx-prev,
+    .feature-section .bx-next {
+        display: none !important;
+    }
+    
+    .feature-section .book-now-btn:hover {
+        background-color: var(--theme-color1, #222222) !important;
+        color: white !important;
+        border-color: var(--theme-color1, #222222) !important;
+    }
+</style>
+
+<!-- Viewport-based auto-play is now handled globally in script.js -->
 
 <%- include('footer') %>

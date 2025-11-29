@@ -12,7 +12,7 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const port = 8000;
-const metaLogoPath = "/assets/img/logos/meta.png";
+const metaLogoPath = "/assets/images/Omaya_MetaImage.jpg";
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Define the views directory

@@ -11020,16 +11020,12 @@ Section Title
   background-color: #333333;
 }
 .footer-style-one .footer-bottom .inner-container a {
-  width: 17px;
-  height: 17px;
-  text-align: center;
-  line-height: 18px;
-  background-color: var(--theme-color1);
-  border-radius: 50%;
-  display: inline-block;
-  font-size: 8px;
-  margin-top: 3px;
+ font-weight: 600;
 }
+.footer-style-one .footer-bottom .inner-container a:hover {
+  
+  color: #d3bf77 !important;
+ }
 
 .footer-style-two {
   background-color: var(--theme-color-dark);

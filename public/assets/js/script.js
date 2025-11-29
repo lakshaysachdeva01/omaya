@@ -319,19 +319,181 @@ var THEMEMASCOT = {};
 		thumbs.controller.control = slider;
 	}
 
-	//product bxslider
-	if ($('.product-details .bxslider').length) {
-		$('.product-details .bxslider').bxSlider({
-        nextSelector: '.product-details #slider-next',
-        prevSelector: '.product-details #slider-prev',
-        nextText: '<i class="fa fa-angle-right"></i>',
-        prevText: '<i class="fa fa-angle-left"></i>',
-        mode: 'fade',
-        auto: 'true',
-        speed: '700',
-        pagerCustom: '.product-details .slider-pager .thumb-box'
-	    });
-	};
+	//Global bxslider with viewport-based auto-play
+	var bxsliderInstances = [];
+	
+	// Simple function to check if element is in viewport
+	function isBxsliderInViewport($element) {
+		if (!$element || !$element.length) return false;
+		
+		try {
+			var elementTop = $element.offset().top;
+			var elementBottom = elementTop + $element.outerHeight();
+			var viewportTop = $(window).scrollTop();
+			var viewportBottom = viewportTop + $(window).height();
+			
+			// Simple check: any part of element is in viewport
+			return elementBottom > viewportTop && elementTop < viewportBottom;
+		} catch(e) {
+			return false;
+		}
+	}
+	
+	// Function to manage all bxslider playback based on viewport
+	function manageBxslidersViewport() {
+		var activeSlider = null;
+		
+		// Process all sliders
+		bxsliderInstances.forEach(function(slider) {
+			var $slider = slider.element;
+			
+			if (!$slider || !$slider.length) {
+				return;
+			}
+			
+			var isVisible = isBxsliderInViewport($slider);
+			
+			if (isVisible) {
+				// If visible and not playing, start it
+				if (!slider.isPlaying && !activeSlider) {
+					try {
+						$slider.startAuto();
+						slider.isPlaying = true;
+						activeSlider = slider;
+					} catch(e) {
+						// Try alternative method
+						try {
+							var sliderData = $slider.data('bxSlider');
+							if (sliderData && sliderData.startAuto) {
+								sliderData.startAuto();
+								slider.isPlaying = true;
+								activeSlider = slider;
+							}
+						} catch(e2) {
+							console.log('Error starting slider auto:', e2);
+						}
+					}
+				}
+			} else {
+				// If not visible and playing, stop it
+				if (slider.isPlaying) {
+					try {
+						$slider.stopAuto();
+						slider.isPlaying = false;
+					} catch(e) {
+						try {
+							var sliderData = $slider.data('bxSlider');
+							if (sliderData && sliderData.stopAuto) {
+								sliderData.stopAuto();
+								slider.isPlaying = false;
+							}
+						} catch(e2) {
+							// Ignore
+						}
+					}
+				}
+			}
+		});
+	}
+	
+	// Throttle function for scroll events
+	var bxsliderScrollTimeout;
+	function throttledManageBxsliders() {
+		clearTimeout(bxsliderScrollTimeout);
+		bxsliderScrollTimeout = setTimeout(manageBxslidersViewport, 100);
+	}
+	
+	// Initialize all bxsliders with viewport-based auto-play
+	function initBxslidersWithViewport() {
+		$('.bxslider').each(function() {
+			var $slider = $(this);
+			
+			// Skip if already initialized
+			if ($slider.data('bxSlider')) {
+				// If already initialized, add to instances array if not already there
+				var exists = bxsliderInstances.some(function(s) {
+					return s.element.is($slider);
+				});
+				if (!exists) {
+					bxsliderInstances.push({
+						element: $slider,
+						instance: $slider.data('bxSlider'),
+						isPlaying: false,
+						hasAuto: true
+					});
+				}
+				return;
+			}
+			
+			var slideCount = $slider.find('.slider-content, li').length;
+			
+			// Only initialize if there are multiple slides
+			if (slideCount > 1) {
+				// Hide controls for feature-section sliders
+				var hideControls = $slider.closest('.feature-section').length > 0;
+				
+				var sliderInstance = $slider.bxSlider({
+					mode: 'fade',
+					auto: false, // Start with auto disabled - will be enabled by viewport check
+					autoHover: true,
+					speed: 700,
+					pause: 1500,
+					controls: !hideControls, // Hide controls for feature-section
+					nextText: '<i class="fa fa-angle-right"></i>',
+					prevText: '<i class="fa fa-angle-left"></i>',
+					pager: false,
+					responsive: true,
+					adaptiveHeight: false,
+					infiniteLoop: true,
+					useCSS: true
+				});
+				
+				// Store slider instance
+				bxsliderInstances.push({
+					element: $slider,
+					instance: sliderInstance,
+					isPlaying: false,
+					hasAuto: true
+				});
+			}
+		});
+		
+		// Initial viewport check - multiple attempts
+		setTimeout(function() {
+			manageBxslidersViewport();
+		}, 500);
+		
+		setTimeout(function() {
+			manageBxslidersViewport();
+		}, 1000);
+		
+		setTimeout(function() {
+			manageBxslidersViewport();
+		}, 2000);
+		
+		// Check on scroll and resize
+		$(window).on('scroll', throttledManageBxsliders);
+		$(window).on('resize', throttledManageBxsliders);
+		
+		// Periodic check as backup
+		setInterval(function() {
+			manageBxslidersViewport();
+		}, 3000);
+	}
+	
+	// Initialize on window load
+	$(window).on('load', function() {
+		setTimeout(function() {
+			initBxslidersWithViewport();
+		}, 100);
+	});
+	
+	// Also try on document ready
+	$(document).ready(function() {
+		setTimeout(function() {
+			initBxslidersWithViewport();
+		}, 500);
+	});
 
 	//MixItup Gallery
 	if ($('.filter-list').length) {
@@ -464,19 +626,7 @@ var THEMEMASCOT = {};
 	// 	thumbs.controller.control = slider;
 	// }
 
-	//product bxslider
-	if ($('.product-details .bxslider').length) {
-		$('.product-details .bxslider').bxSlider({
-        nextSelector: '.product-details #slider-next',
-        prevSelector: '.product-details #slider-prev',
-        nextText: '<i class="fa fa-angle-right"></i>',
-        prevText: '<i class="fa fa-angle-left"></i>',
-        mode: 'fade',
-        auto: 'true',
-        speed: '700',
-        pagerCustom: '.product-details .slider-pager .thumb-box'
-	    });
-	};
+	//Legacy product bxslider - now handled by global viewport-based system above
 
 	//Quantity box
    $(".quantity-box .add").on("click", function () {

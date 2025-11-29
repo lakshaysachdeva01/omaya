@@ -1,80 +1,177 @@
 <%- include('header', {seoDetails}) %>
 
-	<!-- Start main-content -->
-	<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
-		<div class="auto-container">
-			<div class="title-outer text-center">
-				<h1 class="title">Venue</h1>
-				<ul class="page-breadcrumb">
-					<li><a href="/">Home</a></li>
-					<li>Venue</li>
-				</ul>
-			</div>
-		</div>
-	</section>
-	<!-- end main-content -->
+  <!-- Start main-content -->
+  <section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+    <div class="auto-container">
+      <div class="title-outer text-center">
+        <h1 class="title">Venue</h1>
+        <ul class="page-breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li>Venue</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- end main-content -->
 
   <!-- feature-section -->
   <section class="feature-section">
     <div class="auto-container">
-        <% if (venues && Array.isArray(venues) && venues.length > 0) { %>
-            <% venues.forEach((venue, index) => { %>
-                <% 
-                    // Alternate layout: even index (0, 2, 4...) = image left, content right
-                    // odd index (1, 3, 5...) = content left, image right
-                    const isReversed = index % 2 === 1;
-                    const delay = (index + 1) * 100;
-                %>
-                <div class="row feature-row g-0 wow slideInUp" data-wow-delay="<%= delay %>ms">
-                    <% if (isReversed) { %>
-                        <!-- Content first, then image (reversed layout) -->
-        <div class="content-column col-lg-8 col-md-12 col-sm-12">
-          <div class="inner-column">
-            <div class="content-box">
-              <div class="sec-title">
-                                        <span class="sub-title" style="text-transform: uppercase;"><%= venue.tagline %></span>
-                                        <h2><%= venue.title %></h2>
-                                        <div class="text"><%= venue.description %></div>
-              </div>
-                                    <a href="<%= venue.link || '#' %>" class="theme-btn btn-style-one read-more">Discover More</a>
-                                    <figure class="image-2"><img src="<%= venue.icon %>" alt=""></figure>
-            </div>
-          </div>
-        </div>
-          <div class="image-column col-lg-4 col-md-12 col-sm-12">
-              <div class="inner-column">
-                  <div class="image-box">
-                                    <figure class="image overlay-anim"><img src="<%= venue.image %>" alt="<%= venue.title %>"></figure>
+       <% if (venues && Array.isArray(venues) && venues.length > 0) { %>
+         <% venues.forEach((venue, index) => { %>
+           <% 
+             // Alternate layout: even index (0, 2, 4...) = image left, content right
+             // odd index (1, 3, 5...) = content left, image right
+             const isReversed = index % 2 === 1;
+             const delay = (index + 1) * 100;
+           %>
+            <div class="row feature-row g-0 wow slideInUp" data-wow-delay="<%= delay %>ms">
+              <% if (isReversed) { %>
+                <!-- Content first, then image (reversed layout) -->
+                <div class="content-column col-lg-8 col-md-12 col-sm-12">
+                  <div class="inner-column">
+                    <div class="content-box">
+                      <div class="sec-title">
+                        <span class="sub-title" style="text-transform: uppercase;">
+                          <%= venue.tagline %>
+                        </span>
+                        <h2>
+                          <%= venue.title %>
+                        </h2>
+                        <div class="text">
+                          <%= venue.description %>
+                        </div>
+                      </div>
+                      <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <a href="<%= venue.link || '#' %>" class="theme-btn btn-style-one read-more">Explore More</a>
+                        <a href="<%= venue.link || '#' %>" class="theme-btn btn-style-one book-now-btn" style="background-color: #aa8453; color: white; border-color: #aa8453;">Book Now</a>
+                      </div>
+                      <figure class="image-2"><img src="<%= venue.icon %>" alt=""></figure>
+                    </div>
                   </div>
-              </div>
-          </div>
-                    <% } else { %>
-                        <!-- Image first, then content (normal layout) -->
-       <div class="image-column col-lg-4 col-md-12 col-sm-12">
-          <div class="inner-column">
-            <div class="image-box">
-                                    <figure class="image overlay-anim"><img src="<%= venue.image %>" alt="<%= venue.title %>"></figure>
+                </div>
+                <div class="image-column col-lg-4 col-md-12 col-sm-12">
+                  <div class="inner-column"  style="margin-top: 120px;">
+                    <div class="image-box product-details rd-page">
+                      <% 
+                        // Use detailImages if available, otherwise use single image
+                        const venueImages = (venue.detailImages && venue.detailImages.length > 0) ? venue.detailImages : [venue.image];
+                      %>
+                      <% if (venueImages.length > 0) { %>
+                          <div class="bxslider">
+                            <% venueImages.forEach((img, imgIndex)=> { %>
+                              <div class="slider-content">
+                                <figure class="image-box">
+                                  <img style="height: 380px;" src="<%= img %>" alt="<%= venue.title %>">
+                                </figure>
+                              </div>
+                              <% }); %>
+                          </div>
+                          <% } %>
+                    </div>
+                  </div>
+                </div>
+                <% } else { %>
+                  <!-- Image first, then content (normal layout) -->
+                  <div class="image-column col-lg-4 col-md-12 col-sm-12">
+                    <div class="inner-column"  style="margin-top: 120px;">
+                      <div class="image-box product-details rd-page">
+                        <% 
+                          // Use detailImages if available, otherwise use single image
+                          const venueImages = (venue.detailImages && venue.detailImages.length > 0) ? venue.detailImages : [venue.image];
+                        %>
+                        <% if (venueImages.length > 0) { %>
+                            <div class="bxslider">
+                              <% venueImages.forEach((img, imgIndex)=> { %>
+
+                                <div class="slider-content">
+                                  <figure class="image-box">
+                                    <img style="height: 380px;" src="<%= img %>" alt="<%= venue.title %>">
+                                  </figure>
+                                </div>
+
+                                <% }); %>
+                            </div>
+                            <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="content-column col-lg-8 col-md-12 col-sm-12">
+                    <div class="inner-column">
+                      <div class="content-box">
+                        <div class="sec-title">
+                          <span class="sub-title" style="text-transform: uppercase;">
+                            <%= venue.tagline %>
+                          </span>
+                          <h2>
+                            <%= venue.title %>
+                          </h2>
+                          <div class="text">
+                            <%= venue.description %>
+                          </div>
+                        </div>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                          <a href="<%= venue.link || '#' %>" class="theme-btn btn-style-one read-more">Explore More</a>
+                          <a href="<%= venue.link || '#' %>" class="theme-btn btn-style-one book-now-btn" style="background-color: #aa8453; color: white; border-color: #aa8453;">Book Now</a>
+                        </div>
+                        <figure class="image-2"><img src="<%= venue.icon %>" alt=""></figure>
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
             </div>
-          </div>
-        </div>
-        <div class="content-column col-lg-8 col-md-12 col-sm-12">
-          <div class="inner-column">
-            <div class="content-box">
-              <div class="sec-title">
-                                        <span class="sub-title" style="text-transform: uppercase;"><%= venue.tagline %></span>
-                                        <h2><%= venue.title %></h2>
-                                        <div class="text"><%= venue.description %></div>
-              </div>
-                                    <a href="<%= venue.link || '#' %>" class="theme-btn btn-style-one read-more">Discover More</a>
-                                    <figure class="image-2"><img src="<%= venue.icon %>" alt=""></figure>
-            </div> 
-          </div>
-        </div> 
-                    <% } %>
-      </div>
             <% }); %>
-        <% } %>
+              <% } %>
     </div>
   </section>
 
-<%- include('footer') %>
+  <style>
+    .feature-section .image-box {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .feature-section .bxslider {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-section .bxslider .slider-content {
+      width: 100%;
+    }
+
+    .feature-section .bxslider .slider-content .image-box {
+      width: 100%;
+      margin: 0;
+    }
+
+    .feature-section .bxslider .slider-content .image-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* Hide navigation arrows for venue sliders */
+    .feature-section .bx-controls-direction {
+      display: none !important;
+    }
+    
+    .feature-section .bx-prev,
+    .feature-section .bx-next {
+      display: none !important;
+    }
+    
+   
+    
+    .feature-section .book-now-btn:hover {
+      background-color: var(--theme-color1, #222222) !important;
+      color: white !important;
+      border-color: var(--theme-color1, #222222) !important;
+    }
+  </style>
+
+   <!-- Viewport-based auto-play is now handled globally in script.js -->
+
+  <%- include('footer') %>

@@ -263,15 +263,34 @@
 <%- include('footer') %>
 
 <style>
-    /* Queue slider styles - only for main images */
+    /* Single image slider styles */
+    .product-details .bxslider {
+        margin-bottom: 20px;
+    }
+    
+    .product-details .bxslider .slider-content {
+        width: 100%;
+    }
+    
     .product-details .bxslider .slider-content .image-box {
-        margin-right: 30px;
-        margin-bottom: 10px;
+        width: 100%;
+        margin: 0;
     }
     
     .product-details .bxslider .slider-content .image-box img {
         width: 100%;
         height: auto;
+        display: block;
+    }
+    
+    /* Hide navigation arrows */
+    .product-details .bx-controls-direction {
+        display: none !important;
+    }
+    
+    .product-details .bx-prev,
+    .product-details .bx-next {
+        display: none !important;
     }
     
     /* Keep thumbnails original style */
@@ -365,7 +384,7 @@
         }
     });
     
-     // Initialize bxslider with queue/carousel mode for main images
+     // Initialize bxslider with single image mode
      $(window).on('load', function() {
          var $slider = $('.product-details .bxslider');
          if ($slider.length) {
@@ -374,22 +393,14 @@
                  $slider.destroySlider();
              }
              
-             // Initialize with horizontal queue mode
+             // Initialize with fade mode for single large image display
              $slider.bxSlider({
-                 mode: 'horizontal',
-                 minSlides: 1,
-                 maxSlides: 3,
-                 moveSlides: 1,
-                 slideWidth: 300,
-                 slideMargin: 20,
+                 mode: 'fade',
                  auto: false,
                  speed: 700,
                  pagerCustom: '.product-details .slider-pager .thumb-box',
-                 controls: true,
-                 nextText: '<i class="fa fa-angle-right"></i>',
-                 prevText: '<i class="fa fa-angle-left"></i>',
-                 responsive: true,
-                 adaptiveHeight: false,
+                 controls: false,
+                 adaptiveHeight: true,
                  infiniteLoop: true,
                  onSliderLoad: function() {
                      // Ensure thumbnails are visible and working
