@@ -122,7 +122,7 @@ app.get('/stay', async (req, res) => {
     }
     
     const seoDetails = {
-        title: "Stay - Maniram Steel",
+        title: "Stay - ",
         metaDescription: "Experience luxury accommodation at our resort.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
         keywords: "stay, accommodation, resort, hotel",
@@ -177,7 +177,7 @@ app.get('/dining', async (req, res) => {
     }
     
     const seoDetails = {
-        title: "Dining - Maniram Steel",
+        title: "Dining - ",
         metaDescription: "Discover our exquisite dining experiences and culinary offerings.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
         keywords: "dining, restaurant, food, cuisine",
@@ -232,7 +232,7 @@ app.get('/venue', async (req, res) => {
     }
     
     const seoDetails = {
-        title: "Venue - Maniram Steel",
+        title: "Venue - ",
         metaDescription: "Host your events at our premium venue spaces.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
         keywords: "venue, events, conference, meeting",
@@ -345,7 +345,7 @@ app.get('/job/:slug', async (req, res) => {
     // const otherJobs = await getotherjobs(slug);
     const seoDetails = {
         title: job?.seoDetails?.title ,
-        metaDescription: job?.seoDetails?.metaDescription || job?.description?.replace(/<[^>]*>/g, '').substring(0, 160) || "View job details and apply for this position at Maniram Steel.",
+        metaDescription: job?.seoDetails?.metaDescription || job?.description?.replace(/<[^>]*>/g, '').substring(0, 160) || "View job details and apply for this position at .",
         metaImage: `${baseUrl}/${metaLogoPath}`,
         keywords: job?.seoDetails?.tags?.join(', ') || "job, career, employment",
         canonical: `${baseUrl}/job/${slug}`,

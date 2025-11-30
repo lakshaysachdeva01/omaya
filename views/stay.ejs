@@ -48,18 +48,30 @@
                             <div class="inner-column" style="margin-top: 120px;">
                                 <div class="image-box product-details rd-page">
                                     <% 
-                                        // Use detailImages if available, otherwise use single image
-                                        const itemImages = (item.detailImages && item.detailImages.length > 0) ? item.detailImages : [item.image];
+                                        // Extract YouTube video ID from URL
+                                        let youtubeVideoId = null;
+                                        if (item.youtubeVideo) {
+                                            const youtubeUrl = item.youtubeVideo;
+                                            // Handle different YouTube URL formats
+                                            if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                                                youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                                            } else if (youtubeUrl.includes('youtu.be/')) {
+                                                youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                                            } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                                                youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
+                                            }
+                                        }
                                     %>
-                                    <% if (itemImages.length > 0) { %>
-                                        <div class="bxslider">
-                                            <% itemImages.forEach((img, imgIndex)=> { %>
-                                                <div class="slider-content">
-                                                    <figure class="image-box">
-                                                        <img style="height: 380px;" src="<%= img %>" alt="<%= item.title %>">
-                                                    </figure>
-                                                </div>
-                                            <% }); %>
+                                    <% if (youtubeVideoId) { %>
+                                        <% 
+                                            // Get placeholder image - use first detailImage or main image
+                                            const placeholderImage = (item.detailImages && item.detailImages.length > 0) 
+                                                ? item.detailImages[0] 
+                                                : (item.image || item.bannerImage || '/assets/images/resource/feature-1.jpg');
+                                        %>
+                                        <div class="youtube-player-container" id="youtube-player-reversed-<%= index %>" style="width: 100%; height: 380px; scale:1.45; position: relative; background-image: url('<%= placeholderImage %>'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #000;">
+                                            <!-- YouTube Player will be initialized here -->
+                                            <div class="youtube-overlay-blocker"></div>
                                         </div>
                                     <% } %>
                                 </div>
@@ -71,18 +83,30 @@
                             <div class="inner-column" style="margin-top: 120px;">
                                 <div class="image-box product-details rd-page">
                                     <% 
-                                        // Use detailImages if available, otherwise use single image
-                                        const itemImages = (item.detailImages && item.detailImages.length > 0) ? item.detailImages : [item.image];
+                                        // Extract YouTube video ID from URL
+                                        let youtubeVideoId = null;
+                                        if (item.youtubeVideo) {
+                                            const youtubeUrl = item.youtubeVideo;
+                                            // Handle different YouTube URL formats
+                                            if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                                                youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                                            } else if (youtubeUrl.includes('youtu.be/')) {
+                                                youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                                            } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                                                youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
+                                            }
+                                        }
                                     %>
-                                    <% if (itemImages.length > 0) { %>
-                                        <div class="bxslider">
-                                            <% itemImages.forEach((img, imgIndex)=> { %>
-                                                <div class="slider-content">
-                                                    <figure class="image-box">
-                                                        <img style="height: 380px;" src="<%= img %>" alt="<%= item.title %>">
-                                                    </figure>
-                                                </div>
-                                            <% }); %>
+                                    <% if (youtubeVideoId) { %>
+                                        <% 
+                                            // Get placeholder image - use first detailImage or main image
+                                            const placeholderImage = (item.detailImages && item.detailImages.length > 0) 
+                                                ? item.detailImages[0] 
+                                                : (item.image || item.bannerImage || '/assets/images/resource/feature-1.jpg');
+                                        %>
+                                        <div class="youtube-player-container" id="youtube-player-<%= index %>" style="width: 100%; height: 380px; scale:1.45; position: relative; background-image: url('<%= placeholderImage %>'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #000;">
+                                            <!-- YouTube Player will be initialized here -->
+                                            <div class="youtube-overlay-blocker"></div>
                                         </div>
                                     <% } %>
                                 </div>
@@ -118,44 +142,386 @@
         overflow: hidden;
     }
 
-    .feature-section .bxslider {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .feature-section .bxslider .slider-content {
-        width: 100%;
-    }
-
-    .feature-section .bxslider .slider-content .image-box {
-        width: 100%;
-        margin: 0;
-    }
-
-    .feature-section .bxslider .slider-content .image-box img {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-    
-    /* Hide navigation arrows for stay sliders */
-    .feature-section .bx-controls-direction {
-        display: none !important;
-    }
-    
-    .feature-section .bx-prev,
-    .feature-section .bx-next {
-        display: none !important;
-    }
-    
     .feature-section .book-now-btn:hover {
         background-color: var(--theme-color1, #222222) !important;
         color: white !important;
         border-color: var(--theme-color1, #222222) !important;
     }
+    
+    /* YouTube video player styles */
+    .feature-section .youtube-player-container {
+        width: 100%;
+        height: 380px;
+        position: relative;
+        background: #000;
+        overflow: hidden; /* Keep hidden to contain content, but iframe is absolute so it works */
+        user-select: none; /* Prevent text selection */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        isolation: isolate;
+    }
+    
+    /* Container has background image that shows until video loads */
+    .feature-section .youtube-player-container {
+        /* Background image is set inline - shows immediately and stays behind video */
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+    }
+    
+    /* Block ALL interactions with iframe - hide until video is ready */
+    .feature-section .youtube-player-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        pointer-events: none !important; /* Block ALL iframe interactions - video autoplays so this is fine */
+        -webkit-touch-callout: none;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        display: none !important; /* Completely hide iframe until ready - prevents black screen */
+        position: absolute !important; /* Position absolute so it doesn't block background */
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 2; /* Above background image when visible */
+        /* Ensure iframe doesn't interfere with background when hidden */
+        background: transparent !important;
+        object-fit: cover; /* Ensure video fits container */
+    }
+    
+    /* Show iframe only when video is ready */
+    .feature-section .youtube-player-container.video-ready iframe {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: opacity 0.5s ease;
+    }
+    
+    /* Ensure iframe is visible when ready - override any hidden states */
+    .feature-section .youtube-player-container.video-ready iframe[style*="display: none"] {
+        display: block !important;
+    }
+    
+    /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
+    .feature-section .youtube-player-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999 !important;
+        pointer-events: auto !important; /* Block ALL interactions including hover */
+        background: transparent;
+        cursor: default !important;
+    }
+    
+    /* Additional overlay blocker element - ALWAYS ACTIVE */
+    .feature-section .youtube-player-container .youtube-overlay-blocker {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 100000 !important;
+        pointer-events: auto !important; /* Block ALL interactions including hover */
+        background: transparent !important;
+        cursor: default !important;
+        display: block !important;
+    }
+    
+    /* Prevent any hover effects - overlays stay active on hover */
+    .feature-section .youtube-player-container:hover::before {
+        pointer-events: auto !important;
+        z-index: 99999 !important;
+    }
+    
+    .feature-section .youtube-player-container:hover .youtube-overlay-blocker {
+        pointer-events: auto !important;
+        z-index: 100000 !important;
+    }
+    
+    /* Ensure overlays are always on top, even when YouTube adds elements */
+    .feature-section .youtube-player-container * {
+        z-index: auto;
+    }
 </style>
 
-<!-- Viewport-based auto-play is now handled globally in script.js -->
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    // Store YouTube player instances
+    var youtubePlayers = {};
+    var youtubeVideoIds = {};
+    
+    // Set video IDs from server-side data
+    <% if (stays && Array.isArray(stays) && stays.length > 0) { %>
+        <% stays.forEach((item, index) => { %>
+            <% 
+                let youtubeVideoId = null;
+                if (item.youtubeVideo) {
+                    const youtubeUrl = item.youtubeVideo;
+                    if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                        youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                    } else if (youtubeUrl.includes('youtu.be/')) {
+                        youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                    } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                        youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
+                    }
+                }
+            %>
+            <% if (youtubeVideoId) { %>
+                youtubeVideoIds['youtube-player-<%= index %>'] = '<%= youtubeVideoId.replace(/'/g, "\\'") %>';
+                youtubeVideoIds['youtube-player-reversed-<%= index %>'] = '<%= youtubeVideoId.replace(/'/g, "\\'") %>';
+            <% } %>
+        <% }); %>
+    <% } %>
+    
+    // YouTube API ready callback
+    function onYouTubeIframeAPIReady() {
+        // Initialize players after a short delay to ensure DOM is ready
+        setTimeout(initializeYouTubePlayers, 500);
+    }
+    
+    // Initialize YouTube players
+    function initializeYouTubePlayers() {
+        // Find all YouTube player containers
+        var containers = document.querySelectorAll('.youtube-player-container');
+        
+        containers.forEach(function(container) {
+            var containerId = container.id;
+            if (!containerId || youtubePlayers[containerId]) {
+                return; // Already initialized
+            }
+            
+            // Get video ID from our stored data
+            var videoId = youtubeVideoIds[containerId];
+            if (!videoId) {
+                return;
+            }
+            
+            // Create player with HD quality settings, autoplay, loop, muted, and no controls
+            youtubePlayers[containerId] = new YT.Player(containerId, {
+                videoId: videoId,
+                width: '100%',
+                height: '380',
+                playerVars: {
+                    'autoplay': 1, // Autoplay enabled
+                    'mute': 1, // Muted
+                    'loop': 1, // Loop enabled (requires playlist parameter)
+                    'playlist': videoId, // Required for loop to work
+                    'controls': 0, // No controls
+                    'rel': 0, // Don't show related videos
+                    'modestbranding': 1, // Minimal YouTube branding
+                    'playsinline': 1,
+                    'vq': 'hd2160', // Force HD quality
+                    'enablejsapi': 1,
+                    'iv_load_policy': 3, // Disable annotations
+                    'cc_load_policy': 0, // Disable captions
+                    'disablekb': 1, // Disable keyboard controls
+                    'fs': 0, // Disable fullscreen button
+                    'showinfo': 0, // Don't show video info
+                    'origin': window.location.origin, // Required for some features
+                    'widget_referrer': window.location.origin
+                },
+                events: {
+                    'onReady': function(event) {
+                        var player = event.target;
+                        var iframe = document.getElementById(containerId);
+                        
+                        // DON'T hide placeholder here - keep it visible until video is actually playing
+                        // Set HD quality immediately and repeatedly to ensure it sticks
+                        try {
+                            player.setPlaybackQuality('hd2160');
+                            player.mute();
+                            
+                            // Force HD quality multiple times to ensure it's set before video plays
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 50);
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 150);
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 300);
+                            
+                            // Ensure overlay blockers are in place
+                            if (iframe && iframe.parentElement) {
+                                var container = iframe.parentElement;
+                                // Make sure overlay blocker exists
+                                var blocker = container.querySelector('.youtube-overlay-blocker');
+                                if (!blocker) {
+                                    blocker = document.createElement('div');
+                                    blocker.className = 'youtube-overlay-blocker';
+                                    container.appendChild(blocker);
+                                }
+                                // Ensure iframe has no pointer events and is completely hidden initially
+                                iframe.style.pointerEvents = 'none';
+                                iframe.style.display = 'none';
+                                iframe.style.position = 'absolute';
+                                iframe.style.top = '0';
+                                iframe.style.left = '0';
+                            }
+                            
+                            // Continuously monitor and prevent pausing
+                            setInterval(function() {
+                                try {
+                                    if (player.getPlayerState() === YT.PlayerState.PAUSED) {
+                                        player.playVideo();
+                                    }
+                                    player.mute(); // Ensure it stays muted
+                                } catch(e) {
+                                    // Ignore errors
+                                }
+                            }, 500); // Check every 500ms
+                        } catch(e) {
+                            // Quality setting may not be available yet
+                        }
+                    },
+                    'onStateChange': function(event) {
+                        var player = event.target;
+                        var iframe = document.getElementById(containerId);
+                        
+                        // Show iframe ONLY when video is actually playing (not buffering/cued)
+                        if (event.data === YT.PlayerState.PLAYING && iframe && iframe.parentElement) {
+                            var container = iframe.parentElement;
+                            
+                            // Wait a bit to ensure video frame is fully rendered (no black screen/loader)
+                            setTimeout(function() {
+                                if (iframe && container) {
+                                    // Show iframe - background image stays behind
+                                    // Force show the iframe with important flags and proper positioning
+                                    iframe.style.setProperty('display', 'block', 'important');
+                                    iframe.style.setProperty('visibility', 'visible', 'important');
+                                    iframe.style.setProperty('position', 'absolute', 'important');
+                                    iframe.style.setProperty('top', '0', 'important');
+                                    iframe.style.setProperty('left', '0', 'important');
+                                    iframe.style.setProperty('right', '0', 'important');
+                                    iframe.style.setProperty('bottom', '0', 'important');
+                                    iframe.style.setProperty('width', '100%', 'important');
+                                    iframe.style.setProperty('height', '100%', 'important');
+                                    container.classList.add('video-ready');
+                                    // Fade in smoothly after a tiny delay
+                                    setTimeout(function() {
+                                        if (iframe) {
+                                            iframe.style.setProperty('opacity', '1', 'important');
+                                        }
+                                    }, 100);
+                                }
+                            }, 1500); // Wait 1.5 seconds to ensure video is fully loaded and rendered
+                        }
+                        
+                        // Prevent pausing - auto-resume if paused
+                        if (event.data === YT.PlayerState.PAUSED) {
+                            try {
+                                player.playVideo();
+                            } catch(e) {
+                                // Ignore errors
+                            }
+                        }
+                        // When video is buffering, cueing, or playing, force HD quality
+                        if (event.data === YT.PlayerState.BUFFERING || 
+                            event.data === YT.PlayerState.CUED || 
+                            event.data === YT.PlayerState.PLAYING) {
+                            try {
+                                player.setPlaybackQuality('hd2160');
+                                player.mute();
+                            } catch(e) {
+                                // Quality may not be available
+                            }
+                        }
+                    },
+                    'onPlaybackQualityChange': function(event) {
+                        // If quality changes to something lower, force it back to HD
+                        if (event.data !== 'hd2160' && event.data !== 'highres') {
+                            try {
+                                event.target.setPlaybackQuality('hd2160');
+                            } catch(e) {
+                                // Ignore errors
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    }
+    
+    // Fallback: If API loads after page load
+    if (typeof YT !== 'undefined' && YT.Player) {
+        onYouTubeIframeAPIReady();
+    }
+    
+    // Prevent right-click context menu on YouTube players
+    document.addEventListener('contextmenu', function(e) {
+        if (e.target.closest('.youtube-player-container')) {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
+    
+    // Prevent keyboard shortcuts that might pause/control video
+    document.addEventListener('keydown', function(e) {
+        if (e.target.closest('.youtube-player-container') || 
+            (e.key === ' ' || e.key === 'k' || e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+            // Allow space and other keys only if not focused on video container
+            if (document.activeElement && document.activeElement.closest('.youtube-player-container')) {
+                e.preventDefault();
+                return false;
+            }
+        }
+    }, false);
+    
+    // Prevent drag and drop on video containers
+    document.addEventListener('dragstart', function(e) {
+        if (e.target.closest('.youtube-player-container')) {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
+    
+    // Ensure all YouTube containers have overlays and blocked interactions
+    function enforceYouTubeBlocking() {
+        var containers = document.querySelectorAll('.youtube-player-container');
+        containers.forEach(function(container) {
+            var iframe = container.querySelector('iframe');
+            if (iframe) {
+                // Block all iframe interactions
+                iframe.style.pointerEvents = 'none';
+                
+                // Ensure overlay blocker exists
+                var blocker = container.querySelector('.youtube-overlay-blocker');
+                if (!blocker) {
+                    blocker = document.createElement('div');
+                    blocker.className = 'youtube-overlay-blocker';
+                    container.appendChild(blocker);
+                }
+                blocker.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100000; pointer-events: auto !important; background: transparent; cursor: default;';
+            }
+        });
+    }
+    
+    // Run immediately and continuously
+    enforceYouTubeBlocking();
+    setTimeout(enforceYouTubeBlocking, 100);
+    setTimeout(enforceYouTubeBlocking, 500);
+    setTimeout(enforceYouTubeBlocking, 1000);
+    setInterval(enforceYouTubeBlocking, 2000);
+    
+    // Also run on any DOM changes
+    if (window.MutationObserver) {
+        var observer = new MutationObserver(function(mutations) {
+            enforceYouTubeBlocking();
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+</script>
+
 
 <%- include('footer') %>
