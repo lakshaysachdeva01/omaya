@@ -10927,9 +10927,7 @@ Section Title
 .footer-style-one .links-widget {
   margin-bottom: 50px;
 }
-.footer-style-one .links-widget li {
-  padding-left: 27px;
-}
+
 .footer-style-one .links-widget li a {
   color: #adadad;
 }
@@ -14090,7 +14088,7 @@ Page Title
   right: 0;
   background-color: var(--theme-color1);
   text-align: center;
-  padding: 21px 24px 20px;
+  padding: 16px 16px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -14105,19 +14103,21 @@ Page Title
           flex-direction: column;
 }
 .blog-details__date .day {
-  font-size: 16px;
+  font-size: 26px;
   color: #fff;
   font-weight: var(--body-font-weight-bold);
-  line-height: 16px;
+  line-height: 28px;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 .blog-details__date .month {
   position: relative;
   display: block;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: var(--body-font-weight-bold);
   color: #fff;
   line-height: 12px;
   text-transform: uppercase;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 .blog-details__content {
@@ -14534,7 +14534,7 @@ Sidebar
   display: flex;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 16px 20px 17px;
   -webkit-transition: all 500ms ease;
   transition: all 500ms ease;
@@ -14575,7 +14575,7 @@ Sidebar
   transition: all 500ms ease;
   display: block;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 24px;
 }
 .sidebar__post .sidebar__post-list .sidebar__post-content-meta {

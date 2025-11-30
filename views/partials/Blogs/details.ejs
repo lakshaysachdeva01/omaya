@@ -166,7 +166,7 @@ const descriptionsToRender = Array.isArray(blogDetails?.description) && blogDeta
                       imageCount === 5 ? 'five-images' :
                       'grid-layout' 
                     %>"
-                      style="display: grid; gap: 15px; grid-template-columns: <%= gridColumns %>; align-items: stretch;">
+                      style="display: grid; gap: 15px; grid-template-columns: <%= gridColumns %>; align-items: stretch; margin-bottom: 20px;">
 
                       <% item.multipleImages.forEach((image, index) => { %>
                         <div class="popup-trigger" data-type="image" data-src="<%= imageBase + image %>" style="position: relative; 
@@ -216,10 +216,15 @@ const descriptionsToRender = Array.isArray(blogDetails?.description) && blogDeta
           <!-- Social Share -->
           <div class="blog-details__bottom">
             <div class="blog-details__social-list">
-              <a href="javascript:void(0)"><i class="fa fa-x"></i></a>
-              <a href="javascript:void(0)"><i class="fab fa-facebook"></i></a>
-              <a href="javascript:void(0)"><i class="fab fa-pinterest-p"></i></a>
-              <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+              <% 
+                const blogSlug = blogDetails?.seoconfigs?.slug || blogDetails?.seoDetails?.slug || '';
+                const blogTitle = blogDetails?.postTitle || blogDetails?.title || '';
+              %>
+              <a href="#" id="twitter-share-btn" data-title="<%= blogTitle.replace(/"/g, '&quot;') %>" target="_blank" rel="noopener noreferrer" title="Share on Twitter"><i class="fa fa-x"></i></a>
+              <a href="#" id="facebook-share-btn" target="_blank" rel="noopener noreferrer" title="Share on Facebook"><i class="fab fa-facebook"></i></a>
+              <a href="#" id="instagram-share-btn" target="_blank" rel="noopener noreferrer" title="Share on Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" id="copy-link-btn" onclick="copyBlogLink(event); return false;" title="Copy Link"><i class="fas fa-link"></i></a>
+              <span id="copy-feedback">Copied!</span>
             </div>
           </div>
         </div>
@@ -242,7 +247,93 @@ const descriptionsToRender = Array.isArray(blogDetails?.description) && blogDeta
 
 <!-- Scripts for table rendering -->
 <script>
+  // Function to copy blog link to clipboard
+  function copyBlogLink(event) {
+    event.preventDefault();
+    const currentUrl = window.location.href;
+    
+    // Use the modern Clipboard API if available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(currentUrl).then(function() {
+        // Show visible success feedback
+        showCopyFeedback();
+      }).catch(function(err) {
+        console.error('Failed to copy link:', err);
+        fallbackCopyTextToClipboard(currentUrl, event);
+      });
+    } else {
+      // Fallback for older browsers
+      fallbackCopyTextToClipboard(currentUrl, event);
+    }
+  }
+
+  // Show visible "Copied!" feedback
+  function showCopyFeedback() {
+    const feedbackEl = document.getElementById('copy-feedback');
+    if (feedbackEl) {
+      feedbackEl.textContent = 'Copied!';
+      feedbackEl.style.display = 'inline-block';
+      feedbackEl.style.animation = 'none'; // Reset animation
+      
+      // Force reflow to restart animation
+      void feedbackEl.offsetWidth;
+      
+      feedbackEl.style.animation = 'fadeInOut 3s ease-in-out';
+      
+      // Hide after animation completes (3 seconds)
+      setTimeout(function() {
+        feedbackEl.style.display = 'none';
+        feedbackEl.style.animation = '';
+      }, 3000);
+    }
+  }
+
+  // Fallback function for older browsers
+  function fallbackCopyTextToClipboard(text, event) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        showCopyFeedback();
+      }
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+      alert('Failed to copy link. Please copy manually: ' + text);
+    }
+    
+    document.body.removeChild(textArea);
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    // Update social share URLs with current page URL
+    const currentUrl = window.location.href;
+    
+    const twitterBtn = document.getElementById('twitter-share-btn');
+    const facebookBtn = document.getElementById('facebook-share-btn');
+    const instagramBtn = document.getElementById('instagram-share-btn');
+    
+    if (twitterBtn) {
+      const blogTitle = twitterBtn.getAttribute('data-title') || '';
+      twitterBtn.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(blogTitle)}`;
+    }
+    
+    if (facebookBtn) {
+      facebookBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    }
+    
+    if (instagramBtn) {
+      // Instagram doesn't have a direct share URL, so link to their web app
+      instagramBtn.href = `https://www.instagram.com/`;
+    }
+
     const blogDescription = document.querySelector('.blog-description');
     if (blogDescription) {
       const content = blogDescription.innerHTML || '';
@@ -448,5 +539,44 @@ const descriptionsToRender = Array.isArray(blogDetails?.description) && blogDeta
 
   .lightbox-close:hover {
     color: #bbb;
+  }
+
+  #copy-feedback {
+    display: none;
+    margin-left: 12px;
+    color: #9c9c9c !important;
+    font-size: 14px;
+    align-self: center;
+    animation: fadeInOut 3s ease-in-out;
+  }
+
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 </style>
