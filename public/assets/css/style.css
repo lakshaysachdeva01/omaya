@@ -15137,9 +15137,11 @@ Sidebar
 }
 
 
-
 .pnlm-load-box{
+  background-color: #f4f6f8 !important;
+}
+
+.pnlm-lbar{
   display: none !important;
   opacity: 0 !important;
-  visibility: hidden !important;
 }
