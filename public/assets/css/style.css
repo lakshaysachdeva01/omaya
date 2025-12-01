@@ -15135,3 +15135,11 @@ Sidebar
   background-position: center center;
   background-repeat: no-repeat;
 }
+
+
+
+.pnlm-load-box{
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}

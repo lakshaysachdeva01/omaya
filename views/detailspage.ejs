@@ -182,6 +182,17 @@
                         </div>
                     <% } %>
                     
+                    <% if (currentItem && currentItem.view360) { %>
+                        <div class="mt-40">
+                            <h4>360° View</h4>
+                            <div id="panorama-360" style="width: 100%; height: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; background: #f4f6f8;">
+                                <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
+                                    <div class="panorama-spinner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    
                     <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-40 pb-40 border-top">
                         <h6 class="my-sm-0">Share Details</h6>
                         <div class="blog-details__social-list">
@@ -363,7 +374,33 @@
     .sidebar__post-content h3 {
         margin: 0;
     }
+    
+    .panorama-preloader {
+        z-index: 10;
+    }
+    
+    #panorama-360.loaded .panorama-preloader {
+        display: none !important;
+    }
+    
+    /* Panorama spinner */
+    .panorama-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #e8ebef;
+        border-top: 4px solid var(--theme-color1);
+        border-radius: 50%;
+        animation: panorama-spin 1s linear infinite;
+    }
+    
+    @keyframes panorama-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
+
+<!-- Pannellum 360 Viewer CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
 
 <script>
     // Force remove preloader
@@ -414,4 +451,73 @@
              });
          }
      });
+     
+     // Load Pannellum and initialize 360 view if available
+     <% if (currentItem && currentItem.view360) { %>
+     $(document).ready(function() {
+         function initPannellumViewer() {
+             var container = document.getElementById('panorama-360');
+             if (!container) {
+                 return;
+             }
+             
+             if (typeof pannellum === 'undefined') {
+                 // Load Pannellum script dynamically
+                 var script = document.createElement('script');
+                 script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
+                 script.onload = function() {
+                     setTimeout(initPannellumViewer, 200);
+                 };
+                 script.onerror = function() {
+                     var preloader = container.querySelector('.panorama-preloader');
+                     if (preloader) preloader.style.display = 'none';
+                 };
+                 document.head.appendChild(script);
+                 return;
+             }
+             
+             try {
+                 // Remove preloader
+                 var preloader = container.querySelector('.panorama-preloader');
+                 if (preloader) {
+                     preloader.style.display = 'none';
+                 }
+                 
+                 pannellum.viewer('panorama-360', {
+                     "type": "equirectangular",
+                     "panorama": "<%= currentItem.view360 %>",
+                     "autoLoad": true,
+                     "autoRotate": 0,
+                     "compass": false,
+                     "showControls": true,
+                     "keyboardZoom": false,
+                     "mouseZoom": false,
+                     "draggable": true,
+                     "disableKeyboardCtrl": true,
+                     "hfov": 100,
+                     "minHfov": 100,
+                     "maxHfov": 100,
+                     "pitch": 0,
+                     "yaw": 0,
+                     "showFullscreenCtrl": true,
+                     "showZoomCtrl": false
+                 });
+                 
+                 container.classList.add('loaded');
+                 console.log('360 view initialized');
+             } catch(e) {
+                 console.error('Error initializing 360 view:', e);
+                 var preloader = container.querySelector('.panorama-preloader');
+                 if (preloader) preloader.style.display = 'none';
+             }
+         }
+         
+         // Check if Pannellum is already loaded
+         if (typeof pannellum !== 'undefined') {
+             setTimeout(initPannellumViewer, 200);
+         } else {
+             setTimeout(initPannellumViewer, 200);
+         }
+     });
+     <% } %>
 </script>
