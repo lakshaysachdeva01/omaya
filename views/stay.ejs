@@ -46,30 +46,24 @@
                         </div>
                         <div class="image-column col-lg-4 col-md-12 col-sm-12">
                             <div class="inner-column" style="margin-top: 120px;">
-                                <div class="image-box product-details rd-page">
-                                    <% 
-                                        // Extract YouTube video ID from URL
-                                        let youtubeVideoId = null;
-                                        if (item.youtubeVideo) {
-                                            const youtubeUrl = item.youtubeVideo;
-                                            // Handle different YouTube URL formats
-                                            if (youtubeUrl.includes('youtube.com/watch?v=')) {
-                                                youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
-                                            } else if (youtubeUrl.includes('youtu.be/')) {
-                                                youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
-                                            } else if (youtubeUrl.includes('youtube.com/embed/')) {
-                                                youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
-                                            }
+                                <% 
+                                    // Extract YouTube video ID from URL
+                                    let youtubeVideoId = null;
+                                    if (item.youtubeVideo) {
+                                        const youtubeUrl = item.youtubeVideo;
+                                        // Handle different YouTube URL formats
+                                        if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                                            youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                                        } else if (youtubeUrl.includes('youtu.be/')) {
+                                            youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                                        } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                                            youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
                                         }
-                                    %>
+                                    }
+                                %>
+                                <div class="image-box product-details rd-page">
                                     <% if (youtubeVideoId) { %>
-                                        <% 
-                                            // Get placeholder image - use first detailImage or main image
-                                            const placeholderImage = (item.detailImages && item.detailImages.length > 0) 
-                                                ? item.detailImages[0] 
-                                                : (item.image || item.bannerImage || '/assets/images/resource/feature-1.jpg');
-                                        %>
-                                        <div class="youtube-player-container" id="youtube-player-reversed-<%= index %>" style="width: 100%; height: 380px; scale:1.45; position: relative; background-image: url('<%= placeholderImage %>'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #000;">
+                                        <div class="youtube-player-container" id="youtube-player-reversed-<%= index %>" style="width: 100%; height: 100%; position: relative;">
                                             <!-- YouTube Player will be initialized here -->
                                             <div class="youtube-overlay-blocker"></div>
                                         </div>
@@ -81,30 +75,24 @@
                         <!-- Image first, then content (normal layout) -->
                         <div class="image-column col-lg-4 col-md-12 col-sm-12">
                             <div class="inner-column" style="margin-top: 120px;">
-                                <div class="image-box product-details rd-page">
-                                    <% 
-                                        // Extract YouTube video ID from URL
-                                        let youtubeVideoId = null;
-                                        if (item.youtubeVideo) {
-                                            const youtubeUrl = item.youtubeVideo;
-                                            // Handle different YouTube URL formats
-                                            if (youtubeUrl.includes('youtube.com/watch?v=')) {
-                                                youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
-                                            } else if (youtubeUrl.includes('youtu.be/')) {
-                                                youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
-                                            } else if (youtubeUrl.includes('youtube.com/embed/')) {
-                                                youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
-                                            }
+                                <% 
+                                    // Extract YouTube video ID from URL
+                                    let youtubeVideoId = null;
+                                    if (item.youtubeVideo) {
+                                        const youtubeUrl = item.youtubeVideo;
+                                        // Handle different YouTube URL formats
+                                        if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                                            youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                                        } else if (youtubeUrl.includes('youtu.be/')) {
+                                            youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                                        } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                                            youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
                                         }
-                                    %>
+                                    }
+                                %>
+                                <div class="image-box product-details rd-page">
                                     <% if (youtubeVideoId) { %>
-                                        <% 
-                                            // Get placeholder image - use first detailImage or main image
-                                            const placeholderImage = (item.detailImages && item.detailImages.length > 0) 
-                                                ? item.detailImages[0] 
-                                                : (item.image || item.bannerImage || '/assets/images/resource/feature-1.jpg');
-                                        %>
-                                        <div class="youtube-player-container" id="youtube-player-<%= index %>" style="width: 100%; height: 380px; scale:1.45; position: relative; background-image: url('<%= placeholderImage %>'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #000;">
+                                        <div class="youtube-player-container" id="youtube-player-<%= index %>" style="width: 100%; height: 100%; position: relative;">
                                             <!-- YouTube Player will be initialized here -->
                                             <div class="youtube-overlay-blocker"></div>
                                         </div>
@@ -140,6 +128,11 @@
         position: relative;
         width: 100%;
         overflow: hidden;
+        height: 100%;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        /* Background image should ALWAYS be visible */
     }
 
     .feature-section .book-now-btn:hover {
@@ -148,60 +141,59 @@
         border-color: var(--theme-color1, #222222) !important;
     }
     
-    /* YouTube video player styles */
-    .feature-section .youtube-player-container {
+    /* YouTube video player styles - ONLY for the container DIV, NOT iframe */
+    .feature-section .image-box > div.youtube-player-container:not(iframe) {
         width: 100%;
-        height: 380px;
+        height: 100%;
         position: relative;
-        background: #000;
-        overflow: hidden; /* Keep hidden to contain content, but iframe is absolute so it works */
+        overflow: hidden;
         user-select: none; /* Prevent text selection */
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         isolation: isolate;
+        /* Container should NOT have background - background is on .image-box only */
+        background: transparent !important;
+        background-image: none !important;
     }
     
-    /* Container has background image that shows until video loads */
-    .feature-section .youtube-player-container {
-        /* Background image is set inline - shows immediately and stays behind video */
-        background-size: cover !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
+    /* CRITICAL: EXPLICITLY prevent iframe from getting background styles - target iframe directly */
+    .feature-section iframe.youtube-player-container,
+    .feature-section iframe[id^="youtube-player"],
+    .feature-section .youtube-player-container iframe,
+    .feature-section iframe {
+        background: transparent !important;
+        background-image: none !important;
+        background-color: transparent !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
     }
     
-    /* Block ALL interactions with iframe - hide until video is ready */
-    .feature-section .youtube-player-container iframe {
+    /* Block ALL interactions with iframe - no hover, no clicks, nothing */
+    .feature-section .youtube-player-container iframe,
+    .feature-section iframe.youtube-player-container,
+    .feature-section iframe[id^="youtube-player"],
+    .feature-section .image-box iframe {
         width: 100%;
         height: 100%;
         border: none;
         pointer-events: none !important; /* Block ALL iframe interactions - video autoplays so this is fine */
         -webkit-touch-callout: none;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        display: none !important; /* Completely hide iframe until ready - prevents black screen */
-        position: absolute !important; /* Position absolute so it doesn't block background */
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        z-index: 2; /* Above background image when visible */
-        /* Ensure iframe doesn't interfere with background when hidden */
+        transform: translateZ(0) scale(1.45);
+        -webkit-transform: translateZ(0) scale(1.45);
+        transform-origin: center center;
+        -webkit-transform-origin: center center;
+        opacity: 1;
+        position: relative;
+        z-index: 1;
+        /* CRITICAL: iframe must NEVER have background - background is on .image-box only */
+        background-image: none !important;
         background: transparent !important;
-        object-fit: cover; /* Ensure video fits container */
-    }
-    
-    /* Show iframe only when video is ready */
-    .feature-section .youtube-player-container.video-ready iframe {
-        display: block !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        transition: opacity 0.5s ease;
-    }
-    
-    /* Ensure iframe is visible when ready - override any hidden states */
-    .feature-section .youtube-player-container.video-ready iframe[style*="display: none"] {
-        display: block !important;
+        background-color: transparent !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
     }
     
     /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
@@ -332,7 +324,6 @@
                         var player = event.target;
                         var iframe = document.getElementById(containerId);
                         
-                        // DON'T hide placeholder here - keep it visible until video is actually playing
                         // Set HD quality immediately and repeatedly to ensure it sticks
                         try {
                             player.setPlaybackQuality('hd2160');
@@ -359,12 +350,24 @@
                                     blocker.className = 'youtube-overlay-blocker';
                                     container.appendChild(blocker);
                                 }
-                                // Ensure iframe has no pointer events and is completely hidden initially
+                                // Ensure iframe has no pointer events
                                 iframe.style.pointerEvents = 'none';
-                                iframe.style.display = 'none';
-                                iframe.style.position = 'absolute';
-                                iframe.style.top = '0';
-                                iframe.style.left = '0';
+                                
+                                // CRITICAL: Remove any background from iframe immediately - use multiple methods
+                                iframe.style.backgroundImage = 'none';
+                                iframe.style.background = 'transparent';
+                                iframe.style.backgroundColor = 'transparent';
+                                iframe.style.backgroundSize = 'unset';
+                                iframe.style.backgroundPosition = 'unset';
+                                iframe.style.backgroundRepeat = 'unset';
+                                
+                                // Force remove via setProperty with important flag
+                                iframe.style.setProperty('background-image', 'none', 'important');
+                                iframe.style.setProperty('background', 'transparent', 'important');
+                                iframe.style.setProperty('background-color', 'transparent', 'important');
+                                iframe.style.setProperty('background-size', 'unset', 'important');
+                                iframe.style.setProperty('background-position', 'unset', 'important');
+                                iframe.style.setProperty('background-repeat', 'unset', 'important');
                             }
                             
                             // Continuously monitor and prevent pausing
@@ -384,36 +387,6 @@
                     },
                     'onStateChange': function(event) {
                         var player = event.target;
-                        var iframe = document.getElementById(containerId);
-                        
-                        // Show iframe ONLY when video is actually playing (not buffering/cued)
-                        if (event.data === YT.PlayerState.PLAYING && iframe && iframe.parentElement) {
-                            var container = iframe.parentElement;
-                            
-                            // Wait a bit to ensure video frame is fully rendered (no black screen/loader)
-                            setTimeout(function() {
-                                if (iframe && container) {
-                                    // Show iframe - background image stays behind
-                                    // Force show the iframe with important flags and proper positioning
-                                    iframe.style.setProperty('display', 'block', 'important');
-                                    iframe.style.setProperty('visibility', 'visible', 'important');
-                                    iframe.style.setProperty('position', 'absolute', 'important');
-                                    iframe.style.setProperty('top', '0', 'important');
-                                    iframe.style.setProperty('left', '0', 'important');
-                                    iframe.style.setProperty('right', '0', 'important');
-                                    iframe.style.setProperty('bottom', '0', 'important');
-                                    iframe.style.setProperty('width', '100%', 'important');
-                                    iframe.style.setProperty('height', '100%', 'important');
-                                    container.classList.add('video-ready');
-                                    // Fade in smoothly after a tiny delay
-                                    setTimeout(function() {
-                                        if (iframe) {
-                                            iframe.style.setProperty('opacity', '1', 'important');
-                                        }
-                                    }, 100);
-                                }
-                            }, 1500); // Wait 1.5 seconds to ensure video is fully loaded and rendered
-                        }
                         
                         // Prevent pausing - auto-resume if paused
                         if (event.data === YT.PlayerState.PAUSED) {
@@ -491,6 +464,41 @@
             if (iframe) {
                 // Block all iframe interactions
                 iframe.style.pointerEvents = 'none';
+                
+                // CRITICAL: Remove any background-image from iframe - it should NEVER have background
+                // Use setProperty with important flag
+                iframe.style.setProperty('background-image', 'none', 'important');
+                iframe.style.setProperty('background', 'transparent', 'important');
+                iframe.style.setProperty('background-color', 'transparent', 'important');
+                iframe.style.setProperty('background-size', 'unset', 'important');
+                iframe.style.setProperty('background-position', 'unset', 'important');
+                iframe.style.setProperty('background-repeat', 'unset', 'important');
+                
+                // Also set via direct style properties
+                iframe.style.backgroundImage = 'none';
+                iframe.style.background = 'transparent';
+                iframe.style.backgroundColor = 'transparent';
+                iframe.style.backgroundSize = 'unset';
+                iframe.style.backgroundPosition = 'unset';
+                iframe.style.backgroundRepeat = 'unset';
+                
+                // Remove any data attributes
+                iframe.removeAttribute('data-background-image');
+                
+                // Force override via setAttribute
+                var currentStyle = iframe.getAttribute('style') || '';
+                // Remove any existing background styles from the string
+                currentStyle = currentStyle.replace(/background[^;]*;?/gi, '');
+                // Add our forced styles
+                iframe.setAttribute('style', 
+                    currentStyle + 
+                    'background-image: none !important; ' +
+                    'background: transparent !important; ' +
+                    'background-color: transparent !important; ' +
+                    'background-size: unset !important; ' +
+                    'background-position: unset !important; ' +
+                    'background-repeat: unset !important; '
+                );
                 
                 // Ensure overlay blocker exists
                 var blocker = container.querySelector('.youtube-overlay-blocker');

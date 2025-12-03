@@ -10,10 +10,16 @@
     "link": "/stay/royal-suite",
     "bannerImage": "/assets/images/resource/feature-1.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Royalsuites/RCP00246.webp",
+      "/assets/images/data/Royalsuites/RCP00247.webp",
+      "/assets/images/data/Royalsuites/RCP00248.webp",
+      "/assets/images/data/Royalsuites/RCP00255.webp",
+      "/assets/images/data/Royalsuites/RCP00257.webp",
+      "/assets/images/data/Royalsuites/RCP00261.webp",
+      "/assets/images/data/Royalsuites/RCP00263.webp",
+      "/assets/images/data/Royalsuites/RCP00265.webp",
+      "/assets/images/data/Royalsuites/RCP00267.webp",
+      "/assets/images/data/Royalsuites/RCP00269.webp"
     ],
     "listDescription": "Indulge in an exclusive retreat featuring an in-room private pool, elegant dining space, and premium interiors.",
     "detailDescription": "The Royal Suite is designed for guests who desire an extraordinary stay, blending elegance, privacy, and complete indulgence. From warm lighting to spacious interiors and refined décor, every corner elevates the sense of luxury. The private in-room swimming pool adds an exclusive touch, making the suite perfect for romantic getaways, VIP guests, small celebrations, or high-profile corporate stays.\n\nA separate dining area, balcony, and premium furnishings create a serene environment to relax or entertain. Whether you're celebrating an occasion or enjoying a premium work-and-relax retreat, the Royal Suite delivers an unforgettable experience with the finest comfort and privacy.",
@@ -44,8 +50,8 @@
       "Photocopy / Printouts",
       "Direct Dialing Facility"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=kko1EE220eI",
-    "view360": "/assets/images/360/SUN.webp"
+    "youtubeVideo": "https://www.youtube.com/watch?v=WQljDYsD0AU",
+    "view360": "/assets/images/360/Royalsuites.webp"
   },
   {
     "id": 2,
@@ -91,7 +97,8 @@
       "Photocopy / Printouts",
       "Direct Dialing Facility"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=8DNjf_MyDEo"
+    "youtubeVideo": "https://www.youtube.com/watch?v=cvzsDFUu9o4",
+    "view360": "/assets/images/360/deluxesuites.webp"
   },
   {
     "id": 3,
@@ -104,10 +111,16 @@
     "link": "/stay/executive-suite",
     "bannerImage": "/assets/images/resource/feature-3.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Executive/RCP00222.webp",
+      "/assets/images/data/Executive/RCP00223.webp",
+      "/assets/images/data/Executive/RCP00225.webp",
+      "/assets/images/data/Executive/RCP00226.webp",
+      "/assets/images/data/Executive/RCP00228.webp",
+      "/assets/images/data/Executive/RCP00231.webp",
+      "/assets/images/data/Executive/RCP00234.webp",
+      "/assets/images/data/Executive/RCP00235.webp",
+      "/assets/images/data/Executive/RCP00240.webp",
+      "/assets/images/data/Executive/RCP00243.webp"
     ],
     "listDescription": "Designed for business and leisure, this suite offers a spacious layout, separate dining area, and sophisticated interiors.",
     "detailDescription": "The Executive Suite is designed specifically for corporate travellers, business professionals, and long-stay guests, offering the perfect balance of comfort and productivity. Its smart layout, calming décor, and dedicated dining and work-friendly space create an environment ideal for meetings, work calls, or focused tasks. The private balcony and soft ambient lighting make it equally perfect for unwinding after a busy day.\n\nWhether you're visiting Raipur for work, attending conferences, or requiring extended-stay accommodation, the Executive Suite ensures a smooth, efficient, and premium experience. It delivers all the essentials of corporate comfort with a touch of luxury.",
@@ -137,7 +150,8 @@
       "Photocopy / Printouts",
       "Direct Dialing Facility"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=nZmO8B9rRik"
+    "youtubeVideo": "https://www.youtube.com/watch?v=Z-xP0LT2Vno",
+    "view360": "/assets/images/360/executivesuite.webp"
   },
   {
     "id": 4,
@@ -186,7 +200,7 @@
       "Photocopy / Printing",
       "Direct Dialing Facility"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=nZmO8B9rRik"
+    "youtubeVideo": "https://www.youtube.com/watch?v=cvzsDFUu9o4"
   }
 ]
 

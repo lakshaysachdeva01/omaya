@@ -10,10 +10,10 @@
     "link": "/dining/pdr",
     "bannerImage": "/assets/images/resource/feature-1.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/PDR/RCP00179.webp",
+      "/assets/images/data/PDR/RCP00181.webp",
+      "/assets/images/data/PDR/RCP00182.webp",
+      "/assets/images/data/PDR/RCP00184.webp"
     ],
     "listDescription": "A refined private dining space crafted for intimate meals and exclusive celebrations.",
     "detailDescription": "The Private Dining Room (PDR) at Omaya Suites offers an exclusive and intimate space designed for guests who prefer privacy and personalised service. The warm lighting, rich interiors, and sophisticated ambience make it perfect for family meals, romantic dinners, confidential business conversations, or small celebrations.\n\nWhether you're hosting a special occasion or planning a quiet meal with loved ones, the PDR offers a refined dining experience with dedicated service. It delivers privacy, comfort, and an elevated atmosphere that makes every moment memorable.",
@@ -28,7 +28,9 @@
       "Ideal for celebrations & business meals",
       "Curated menu options",
       "Elegant ambience with personalised service"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E",
+    "view360": "/assets/images/360/PDR.webp"
   },
   {
     "id": 2,
@@ -41,10 +43,15 @@
     "link": "/dining/oma-air-bar",
     "bannerImage": "/assets/images/resource/feature-2.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/omaairbar/RCP00100.webp",
+      "/assets/images/data/omaairbar/RCP00101.webp",
+      "/assets/images/data/omaairbar/RCP00103.webp",
+      "/assets/images/data/omaairbar/RCP00105.webp",
+      "/assets/images/data/omaairbar/RCP00106.webp",
+      "/assets/images/data/omaairbar/RCP00107.webp",
+      "/assets/images/data/omaairbar/RCP00108.webp",
+      "/assets/images/data/omaairbar/RCP00110.webp",
+      "/assets/images/data/omaairbar/RCP00112.webp"
     ],
     "listDescription": "A stylish open-air rooftop bar offering premium cocktails, sunset views, and vibrant music.",
     "detailDescription": "OMA Air Bar brings together open-air elegance and vibrant evening energy. With panoramic city views, chic seating, and warm night lighting, it is the perfect spot to unwind after a long day. Enjoy signature cocktails, refreshing mocktails, and handcrafted small plates while soaking in the rooftop ambience.\n\nWhether you're planning a date, meeting friends, or hosting a casual celebration, the rooftop bar provides the perfect combination of relaxation and vibrancy. It delivers a memorable evening experience under the sky.",
@@ -59,7 +66,9 @@
       "Signature drinks & curated beverages",
       "Stylish evening setting",
       "Perfect for dates, gatherings & celebrations"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=H5moMl0Ufb8",
+    "view360": "/assets/images/360/Omaairbar.webp"
   },
   {
     "id": 3,
@@ -90,7 +99,8 @@
       "Family-friendly environment",
       "Comfortable & elegant seating",
       "Suitable for corporate lunches & dinners"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E"
   },
   {
     "id": 4,
@@ -121,7 +131,8 @@
       "Refreshing beverages & chilled drinks",
       "Light bites & quick snacks",
       "Comfortable lounge seating"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E"
   }
 ]
 

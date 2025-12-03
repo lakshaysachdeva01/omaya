@@ -32,7 +32,9 @@
       "Valet parking",
       "Wheelchair-accessible entry",
       "Inbuilt music system"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=7T7oQpWkz6Q",
+    "view360": "/assets/images/360/Ivoryhall.webp"
   },
   {
     "id": 2,
@@ -45,10 +47,11 @@
     "link": "/venue/silver-hall",
     "bannerImage": "/assets/images/resource/feature-2.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Silverhall/RCP00171.webp",
+      "/assets/images/data/Silverhall/RCP00173.webp",
+      "/assets/images/data/Silverhall/RCP00175.webp",
+      "/assets/images/data/Silverhall/RCP00176.webp",
+      "/assets/images/data/Silverhall/RCP00177.webp"
     ],
     "listDescription": "Perfect for birthdays, kitty parties, small gatherings, and private dinners.",
     "detailDescription": "Silver Hall is an intimate and charming venue designed for smaller, more personal celebrations. With its cozy atmosphere and elegant styling, it creates the perfect setting for birthdays, kitty parties, small family gatherings, and private dinners. The venue combines comfort with sophisticated design, ensuring your special moments are celebrated in style.\n\nThe hall features modern amenities, flexible seating arrangements, and a warm ambiance that makes every guest feel welcome. Whether you're hosting a milestone birthday or an intimate dinner party, Silver Hall provides the ideal backdrop for creating lasting memories.",
@@ -67,7 +70,9 @@
       "Valet parking",
       "Washroom facilities",
       "Flexible layout options"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=PkhiFW7RTLE",
+    "view360": "/assets/images/360/Silverhall.webp"
   },
   {
     "id": 3,
@@ -102,7 +107,9 @@
       "Whiteboard facilities",
       "Power backup",
       "Business center access"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=76KIjb-GFRM",
+    "view360": "/assets/images/360/Omayameet.webp"
   },
   {
     "id": 4,
@@ -115,10 +122,9 @@
     "link": "/venue/zenith-one-two",
     "bannerImage": "/assets/images/resource/feature-1.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Zenith/RCP00293.webp",
+      "/assets/images/data/Zenith/RCP00295.webp",
+      "/assets/images/data/Zenith/RCP00296.webp"
     ],
     "listDescription": "Compact, well-equipped meeting rooms ideal for interviews, presentations, and focused discussions.",
     "detailDescription": "Zenith One & Two are compact, well-equipped meeting rooms designed for focused business activities. These versatile spaces are perfect for interviews, presentations, training sessions, and small group discussions. Each room is thoughtfully designed to provide a professional yet comfortable environment for productive meetings.\n\nWith modern amenities, flexible seating arrangements, and premium facilities, Zenith One & Two offer an ideal solution for businesses seeking efficient meeting spaces. Whether you're conducting interviews, hosting training sessions, or holding strategic discussions, these rooms provide the perfect setting for your professional needs.",
@@ -137,6 +143,8 @@
       "Power backup",
       "Privacy ensured",
       "Professional ambiance"
-    ]
+    ],
+    "youtubeVideo": "https://www.youtube.com/watch?v=19k7GgC24wA",
+    "view360": "/assets/images/360/Zenith.webp"
   }
 ]

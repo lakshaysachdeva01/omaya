@@ -46,20 +46,26 @@
                         </div>
                         <div class="image-column col-lg-4 col-md-12 col-sm-12">
                             <div class="inner-column" style="margin-top: 120px;">
+                                <% 
+                                    // Extract YouTube video ID from URL
+                                    let youtubeVideoId = null;
+                                    if (item.youtubeVideo) {
+                                        const youtubeUrl = item.youtubeVideo;
+                                        // Handle different YouTube URL formats
+                                        if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                                            youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                                        } else if (youtubeUrl.includes('youtu.be/')) {
+                                            youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                                        } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                                            youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
+                                        }
+                                    }
+                                %>
                                 <div class="image-box product-details rd-page">
-                                    <% 
-                                        // Use detailImages if available, otherwise use single image
-                                        const itemImages = (item.detailImages && item.detailImages.length > 0) ? item.detailImages : [item.image];
-                                    %>
-                                    <% if (itemImages.length > 0) { %>
-                                        <div class="bxslider">
-                                            <% itemImages.forEach((img, imgIndex)=> { %>
-                                                <div class="slider-content">
-                                                    <figure class="image-box">
-                                                        <img style="height: 380px;" src="<%= img %>" alt="<%= item.title %>">
-                                                    </figure>
-                                                </div>
-                                            <% }); %>
+                                    <% if (youtubeVideoId) { %>
+                                        <div class="youtube-player-container" id="youtube-player-reversed-<%= index %>" style="width: 100%; height: 100%; position: relative;">
+                                            <!-- YouTube Player will be initialized here -->
+                                            <div class="youtube-overlay-blocker"></div>
                                         </div>
                                     <% } %>
                                 </div>
@@ -69,20 +75,26 @@
                         <!-- Image first, then content (normal layout) -->
                         <div class="image-column col-lg-4 col-md-12 col-sm-12">
                             <div class="inner-column" style="margin-top: 120px;">
+                                <% 
+                                    // Extract YouTube video ID from URL
+                                    let youtubeVideoId = null;
+                                    if (item.youtubeVideo) {
+                                        const youtubeUrl = item.youtubeVideo;
+                                        // Handle different YouTube URL formats
+                                        if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                                            youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                                        } else if (youtubeUrl.includes('youtu.be/')) {
+                                            youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                                        } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                                            youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
+                                        }
+                                    }
+                                %>
                                 <div class="image-box product-details rd-page">
-                                    <% 
-                                        // Use detailImages if available, otherwise use single image
-                                        const itemImages = (item.detailImages && item.detailImages.length > 0) ? item.detailImages : [item.image];
-                                    %>
-                                    <% if (itemImages.length > 0) { %>
-                                        <div class="bxslider">
-                                            <% itemImages.forEach((img, imgIndex)=> { %>
-                                                <div class="slider-content">
-                                                    <figure class="image-box">
-                                                        <img style="height: 380px;" src="<%= img %>" alt="<%= item.title %>">
-                                                    </figure>
-                                                </div>
-                                            <% }); %>
+                                    <% if (youtubeVideoId) { %>
+                                        <div class="youtube-player-container" id="youtube-player-<%= index %>" style="width: 100%; height: 100%; position: relative;">
+                                            <!-- YouTube Player will be initialized here -->
+                                            <div class="youtube-overlay-blocker"></div>
                                         </div>
                                     <% } %>
                                 </div>
@@ -116,46 +128,367 @@
         position: relative;
         width: 100%;
         overflow: hidden;
+        height: 100%;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
     }
 
-    .feature-section .bxslider {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .feature-section .bxslider .slider-content {
-        width: 100%;
-    }
-
-    .feature-section .bxslider .slider-content .image-box {
-        width: 100%;
-        margin: 0;
-    }
-
-    .feature-section .bxslider .slider-content .image-box img {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-    
-    /* Hide navigation arrows for dining sliders */
-    .feature-section .bx-controls-direction {
-        display: none !important;
-    }
-    
-    .feature-section .bx-prev,
-    .feature-section .bx-next {
-        display: none !important;
-    }
-    
     .feature-section .book-now-btn:hover {
         background-color: var(--theme-color1, #222222) !important;
         color: white !important;
         border-color: var(--theme-color1, #222222) !important;
     }
+    
+    /* YouTube video player styles - ONLY for the container DIV, NOT iframe */
+    .feature-section .image-box > div.youtube-player-container:not(iframe) {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        isolation: isolate;
+        background: transparent !important;
+        background-image: none !important;
+    }
+    
+    /* CRITICAL: EXPLICITLY prevent iframe from getting background styles - target iframe directly */
+    .feature-section iframe.youtube-player-container,
+    .feature-section iframe[id^="youtube-player"],
+    .feature-section .youtube-player-container iframe,
+    .feature-section iframe {
+        background: transparent !important;
+        background-image: none !important;
+        background-color: transparent !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
+    }
+    
+    /* Block ALL interactions with iframe - no hover, no clicks, nothing */
+    .feature-section .youtube-player-container iframe,
+    .feature-section iframe.youtube-player-container,
+    .feature-section iframe[id^="youtube-player"],
+    .feature-section .image-box iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        pointer-events: none !important;
+        -webkit-touch-callout: none;
+        transform: translateZ(0) scale(1.45);
+        -webkit-transform: translateZ(0) scale(1.45);
+        transform-origin: center center;
+        -webkit-transform-origin: center center;
+        opacity: 1;
+        position: relative;
+        z-index: 1;
+        background-image: none !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
+    }
+    
+    /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
+    .feature-section .youtube-player-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999 !important;
+        pointer-events: auto !important;
+        background: transparent;
+        cursor: default !important;
+    }
+    
+    /* Additional overlay blocker element - ALWAYS ACTIVE */
+    .feature-section .youtube-player-container .youtube-overlay-blocker {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 100000 !important;
+        pointer-events: auto !important;
+        background: transparent !important;
+        cursor: default !important;
+        display: block !important;
+    }
+    
+    /* Prevent any hover effects - overlays stay active on hover */
+    .feature-section .youtube-player-container:hover::before {
+        pointer-events: auto !important;
+        z-index: 99999 !important;
+    }
+    
+    .feature-section .youtube-player-container:hover .youtube-overlay-blocker {
+        pointer-events: auto !important;
+        z-index: 100000 !important;
+    }
+    
+    /* Ensure overlays are always on top, even when YouTube adds elements */
+    .feature-section .youtube-player-container * {
+        z-index: auto;
+    }
 </style>
 
-<!-- Viewport-based auto-play is now handled globally in script.js -->
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    // Store YouTube player instances
+    var youtubePlayers = {};
+    var youtubeVideoIds = {};
+    
+    // Set video IDs from server-side data
+    <% if (dining && Array.isArray(dining) && dining.length > 0) { %>
+        <% dining.forEach((item, index) => { %>
+            <% 
+                let youtubeVideoId = null;
+                if (item.youtubeVideo) {
+                    const youtubeUrl = item.youtubeVideo;
+                    if (youtubeUrl.includes('youtube.com/watch?v=')) {
+                        youtubeVideoId = youtubeUrl.split('v=')[1]?.split('&')[0];
+                    } else if (youtubeUrl.includes('youtu.be/')) {
+                        youtubeVideoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
+                    } else if (youtubeUrl.includes('youtube.com/embed/')) {
+                        youtubeVideoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
+                    }
+                }
+            %>
+            <% if (youtubeVideoId) { %>
+                youtubeVideoIds['youtube-player-<%= index %>'] = '<%= youtubeVideoId.replace(/'/g, "\\'") %>';
+                youtubeVideoIds['youtube-player-reversed-<%= index %>'] = '<%= youtubeVideoId.replace(/'/g, "\\'") %>';
+            <% } %>
+        <% }); %>
+    <% } %>
+    
+    // YouTube API ready callback
+    function onYouTubeIframeAPIReady() {
+        setTimeout(initializeYouTubePlayers, 500);
+    }
+    
+    // Initialize YouTube players
+    function initializeYouTubePlayers() {
+        var containers = document.querySelectorAll('.youtube-player-container');
+        
+        containers.forEach(function(container) {
+            var containerId = container.id;
+            if (!containerId || youtubePlayers[containerId]) {
+                return;
+            }
+            
+            var videoId = youtubeVideoIds[containerId];
+            if (!videoId) {
+                return;
+            }
+            
+            youtubePlayers[containerId] = new YT.Player(containerId, {
+                videoId: videoId,
+                width: '100%',
+                height: '380',
+                playerVars: {
+                    'autoplay': 1,
+                    'mute': 1,
+                    'loop': 1,
+                    'playlist': videoId,
+                    'controls': 0,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'playsinline': 1,
+                    'vq': 'hd2160',
+                    'enablejsapi': 1,
+                    'iv_load_policy': 3,
+                    'cc_load_policy': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'showinfo': 0,
+                    'origin': window.location.origin,
+                    'widget_referrer': window.location.origin
+                },
+                events: {
+                    'onReady': function(event) {
+                        var player = event.target;
+                        var iframe = document.getElementById(containerId);
+                        
+                        try {
+                            player.setPlaybackQuality('hd2160');
+                            player.mute();
+                            
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 50);
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 150);
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 300);
+                            
+                            if (iframe && iframe.parentElement) {
+                                var container = iframe.parentElement;
+                                var blocker = container.querySelector('.youtube-overlay-blocker');
+                                if (!blocker) {
+                                    blocker = document.createElement('div');
+                                    blocker.className = 'youtube-overlay-blocker';
+                                    container.appendChild(blocker);
+                                }
+                                iframe.style.pointerEvents = 'none';
+                                
+                                iframe.style.backgroundImage = 'none';
+                                iframe.style.background = 'transparent';
+                                iframe.style.backgroundColor = 'transparent';
+                                iframe.style.backgroundSize = 'unset';
+                                iframe.style.backgroundPosition = 'unset';
+                                iframe.style.backgroundRepeat = 'unset';
+                                
+                                iframe.style.setProperty('background-image', 'none', 'important');
+                                iframe.style.setProperty('background', 'transparent', 'important');
+                                iframe.style.setProperty('background-color', 'transparent', 'important');
+                                iframe.style.setProperty('background-size', 'unset', 'important');
+                                iframe.style.setProperty('background-position', 'unset', 'important');
+                                iframe.style.setProperty('background-repeat', 'unset', 'important');
+                            }
+                            
+                            setInterval(function() {
+                                try {
+                                    if (player.getPlayerState() === YT.PlayerState.PAUSED) {
+                                        player.playVideo();
+                                    }
+                                    player.mute();
+                                } catch(e) {
+                                }
+                            }, 500);
+                        } catch(e) {
+                        }
+                    },
+                    'onStateChange': function(event) {
+                        var player = event.target;
+                        
+                        if (event.data === YT.PlayerState.PAUSED) {
+                            try {
+                                player.playVideo();
+                            } catch(e) {
+                            }
+                        }
+                        if (event.data === YT.PlayerState.BUFFERING || 
+                            event.data === YT.PlayerState.CUED || 
+                            event.data === YT.PlayerState.PLAYING) {
+                            try {
+                                player.setPlaybackQuality('hd2160');
+                                player.mute();
+                            } catch(e) {
+                            }
+                        }
+                    },
+                    'onPlaybackQualityChange': function(event) {
+                        if (event.data !== 'hd2160' && event.data !== 'highres') {
+                            try {
+                                event.target.setPlaybackQuality('hd2160');
+                            } catch(e) {
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    }
+    
+    if (typeof YT !== 'undefined' && YT.Player) {
+        onYouTubeIframeAPIReady();
+    }
+    
+    document.addEventListener('contextmenu', function(e) {
+        if (e.target.closest('.youtube-player-container')) {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.target.closest('.youtube-player-container') || 
+            (e.key === ' ' || e.key === 'k' || e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+            if (document.activeElement && document.activeElement.closest('.youtube-player-container')) {
+                e.preventDefault();
+                return false;
+            }
+        }
+    }, false);
+    
+    document.addEventListener('dragstart', function(e) {
+        if (e.target.closest('.youtube-player-container')) {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
+    
+    function enforceYouTubeBlocking() {
+        var containers = document.querySelectorAll('.youtube-player-container');
+        containers.forEach(function(container) {
+            var iframe = container.querySelector('iframe');
+            if (iframe) {
+                iframe.style.pointerEvents = 'none';
+                
+                iframe.style.setProperty('background-image', 'none', 'important');
+                iframe.style.setProperty('background', 'transparent', 'important');
+                iframe.style.setProperty('background-color', 'transparent', 'important');
+                iframe.style.setProperty('background-size', 'unset', 'important');
+                iframe.style.setProperty('background-position', 'unset', 'important');
+                iframe.style.setProperty('background-repeat', 'unset', 'important');
+                
+                iframe.style.backgroundImage = 'none';
+                iframe.style.background = 'transparent';
+                iframe.style.backgroundColor = 'transparent';
+                iframe.style.backgroundSize = 'unset';
+                iframe.style.backgroundPosition = 'unset';
+                iframe.style.backgroundRepeat = 'unset';
+                
+                iframe.removeAttribute('data-background-image');
+                
+                var currentStyle = iframe.getAttribute('style') || '';
+                currentStyle = currentStyle.replace(/background[^;]*;?/gi, '');
+                iframe.setAttribute('style', 
+                    currentStyle + 
+                    'background-image: none !important; ' +
+                    'background: transparent !important; ' +
+                    'background-color: transparent !important; ' +
+                    'background-size: unset !important; ' +
+                    'background-position: unset !important; ' +
+                    'background-repeat: unset !important; '
+                );
+                
+                var blocker = container.querySelector('.youtube-overlay-blocker');
+                if (!blocker) {
+                    blocker = document.createElement('div');
+                    blocker.className = 'youtube-overlay-blocker';
+                    container.appendChild(blocker);
+                }
+                blocker.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100000; pointer-events: auto !important; background: transparent; cursor: default;';
+            }
+        });
+    }
+    
+    enforceYouTubeBlocking();
+    setTimeout(enforceYouTubeBlocking, 100);
+    setTimeout(enforceYouTubeBlocking, 500);
+    setTimeout(enforceYouTubeBlocking, 1000);
+    setInterval(enforceYouTubeBlocking, 2000);
+    
+    if (window.MutationObserver) {
+        var observer = new MutationObserver(function(mutations) {
+            enforceYouTubeBlocking();
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+</script>
 
 <%- include('footer') %>
