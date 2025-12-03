@@ -10,10 +10,12 @@
     "link": "/venue/ivory-hall",
     "bannerImage": "/assets/images/resource/feature-1.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Ivoryhall/RCP00271.webp",
+      "/assets/images/data/Ivoryhall/RCP00273.webp",
+      "/assets/images/data/Ivoryhall/RCP00274.webp",
+      "/assets/images/data/Ivoryhall/RCP00275.webp",
+      "/assets/images/data/Ivoryhall/RCP00276.webp",
+      "/assets/images/data/Ivoryhall/RCP00280.webp"
     ],
     "listDescription": "A spacious and elegant venue ideal for anniversaries, corporate events, family gatherings, and celebrations.",
     "detailDescription": "Ivory Hall is a grand and elegantly designed venue created for events that deserve a refined and memorable setting. With its spacious layout, premium décor, and warm ambience, it is perfect for anniversaries, weddings, corporate gatherings, and large family functions. The hall offers an inviting atmosphere where celebrations feel elevated and seamless.\n\nEquipped with modern amenities, dedicated buffet space, and comfortable guest movement areas, Ivory Hall ensures every event is executed with ease. Whether it's a formal event or a joyous celebration, the venue provides a sophisticated backdrop that enhances every moment.",
@@ -85,10 +87,11 @@
     "link": "/venue/omaya-meet",
     "bannerImage": "/assets/images/resource/feature-3.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Omayameet/RCP00163.webp",
+      "/assets/images/data/Omayameet/RCP00164.webp",
+      "/assets/images/data/Omayameet/RCP00166.webp",
+      "/assets/images/data/Omayameet/RCP00167.webp",
+      "/assets/images/data/Omayameet/RCP00169.webp"
     ],
     "listDescription": "Designed for professional meetings, conferences, and discussions.",
     "detailDescription": "Omaya Meet is a professional boardroom designed to facilitate productive business meetings, conferences, and strategic discussions. The space is equipped with state-of-the-art audio-visual technology, comfortable executive seating, and high-speed internet connectivity to ensure seamless presentations and video conferences.\n\nThe boardroom features a sophisticated business environment with modern amenities that support both formal presentations and collaborative discussions. With its professional ambiance and cutting-edge technology, Omaya Meet provides the perfect setting for making important business decisions and conducting successful corporate meetings.",

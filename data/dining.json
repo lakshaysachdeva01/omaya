@@ -81,10 +81,12 @@
     "link": "/dining/oma-kitchen",
     "bannerImage": "/assets/images/resource/feature-3.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/omakitchen/RCP00282.webp",
+      "/assets/images/data/omakitchen/RCP00298.webp",
+      "/assets/images/data/omakitchen/RCP00299.webp",
+      "/assets/images/data/omakitchen/RCP00300.webp",
+      "/assets/images/data/omakitchen/RCP00302.webp",
+      "/assets/images/data/omakitchen/RCP00304.webp"
     ],
     "listDescription": "Experience flavours from across the world in a warm and modern setting.",
     "detailDescription": "OMA Kitchen is a warm and welcoming multi-cuisine restaurant that offers a thoughtfully curated dining experience throughout the day. With elegant interiors, cosy seating, and a comforting ambience, it is ideal for families, travellers, and corporate guests alike. Each dish is prepared with fresh ingredients and authentic flavours to deliver a fulfilling meal.\n\nFrom breakfast spreads to hearty lunches and relaxed dinners, OMA Kitchen brings you a variety of Indian, continental, and global dishes. Whether you're enjoying a family outing or a business lunch, the restaurant ensures a memorable and satisfying experience.",
@@ -100,7 +102,8 @@
       "Comfortable & elegant seating",
       "Suitable for corporate lunches & dinners"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E"
+    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E",
+    "view360": "/assets/images/360/Omakitchen.webp"
   },
   {
     "id": 4,
@@ -113,10 +116,14 @@
     "link": "/dining/oma-pool-bar",
     "bannerImage": "/assets/images/resource/feature-1.jpg",
     "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+      "/assets/images/data/Omapoolbar/RCP00090.webp",
+      "/assets/images/data/Omapoolbar/RCP00091.webp",
+      "/assets/images/data/Omapoolbar/RCP00092.webp",
+      "/assets/images/data/Omapoolbar/RCP00094.webp",
+      "/assets/images/data/Omapoolbar/RCP00095.webp",
+      "/assets/images/data/Omapoolbar/RCP00305.webp",
+      "/assets/images/data/Omapoolbar/RCP00307.webp",
+      "/assets/images/data/Omapoolbar/RCP00308.webp"
     ],
     "listDescription": "Relax by the view with refreshing drinks, light bites, and a serene ambience.",
     "detailDescription": "OMA Pool Bar offers a refreshing and relaxed poolside atmosphere, perfect for enjoying chilled beverages and quick bites. With comfortable lounge seating and a peaceful ambience, it is an ideal place to unwind during the day or enjoy a calm evening by the water.\n\nWhether you're relaxing after a swim or catching up with friends, the pool bar provides a soothing environment. Its light snacks, refreshing drinks, and serene surroundings make it a favourite spot for laid-back moments.",
@@ -132,7 +139,8 @@
       "Light bites & quick snacks",
       "Comfortable lounge seating"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E"
+    "youtubeVideo": "https://www.youtube.com/watch?v=XsAt4KE0g6E",
+    "view360": "/assets/images/360/Omapoolbar.webp"
   }
 ]
 
