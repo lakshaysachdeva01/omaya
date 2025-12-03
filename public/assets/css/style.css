@@ -7490,9 +7490,9 @@ Section Title
   z-index: 1;
 }
 
-.product-details.rd-page .bx-wrapper {
+/* .product-details.rd-page .bx-wrapper {
   margin-bottom: 30px;
-}
+} */
 .product-details.rd-page .bx-wrapper .thumb-box li {
   height: auto;
 }
@@ -11228,9 +11228,9 @@ Section Title
 .product-details .bxslider .thumb-box li a.active:before {
   opacity: 1;
 }
-.product-details .bx-wrapper {
+/* .product-details .bx-wrapper {
   margin-bottom: 30px;
-}
+} */
 .product-details .product-info .product-details__top {
   position: relative;
   display: block;
@@ -13272,9 +13272,7 @@ Page Title
 .contact-details__info li:hover .text a span {
   color: var(--notech-gray);
 }
-.contact-details__info li .text {
-  margin-left: 30px;
-}
+
 .contact-details__info li .text p {
   font-size: 14px;
   line-height: 24px;

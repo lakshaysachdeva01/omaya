@@ -57,92 +57,203 @@
 
 
 
+<style>
+	.contact-details .row {
+		align-items: flex-start;
+	}
+	
+	.contact-details__left {
+		background: #fff;
+		padding: 40px 30px;
+	}
+	
+	.contact-details__right {
+		background: #f8f6f3;
+		padding: 40px 30px;
+		border-top: 1px solid #d3bf77;
+	}
+	
+	.contact-details__info {
+		margin-top: 30px;
+	}
+	
+	.contact-details__info li {
+		margin-bottom: 30px;
+		display: flex;
+		align-items: flex-start;
+	}
+	
+	.contact-details__info li:last-child {
+		margin-bottom: 0;
+	}
+	
+	.contact-details__info .icon {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		background: #f8f6f3;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 20px;
+		flex-shrink: 0;
+		transition: all 0.3s ease;
+	}
+	
+	.contact-details__info .icon:hover {
+		background: #d3bf77;
+		transform: scale(1.1);
+	}
+	
+	.contact-details__info .icon img {
+		width: 36px;
+		height: 36px;
+		transition: all 0.3s ease;
+		/* Change SVG color to #aa8453 using CSS filter */
+		filter: brightness(0) saturate(100%) invert(60%) sepia(25%) saturate(800%) hue-rotate(350deg) brightness(95%) contrast(90%);
+	}
+	
+	.contact-details__info .icon:hover img {
+		/* Change to white on hover */
+		filter: brightness(0) invert(1);
+	}
+	
+	.contact-details__info .text h6 {
+		margin-bottom: 8px;
+		font-size: 16px;
+		font-weight: 600;
+		color: #333;
+	}
+	
+	.contact-details__info .text a {
+		color: #666;
+		text-decoration: none;
+		font-size: 14px;
+		line-height: 1.6;
+	}
+	
+	.contact-details__info .text a:hover {
+		color: #d3bf77;
+	}
+	
+	.contact-details__right .form-label {
+		display: block;
+		margin-bottom: 8px;
+		font-weight: 500;
+	}
+	
+	.contact-details__right .form-control {
+		border: 1px solid #ddd;
+		padding: 8px 12px;
+		border-radius: 0;
+		height: auto;
+		min-height: 40px;
+		background: transparent !important;
+		background-color: transparent !important;
+	}
+	
+	.contact-details__right textarea.form-control {
+		min-height: 100px;
+		resize: vertical;
+		background: transparent !important;
+		background-color: transparent !important;
+	}
+	
+	.contact-details__right .form-control:focus {
+		border-color: #d3bf77;
+		outline: none;
+		box-shadow: none;
+	}
+	
+	@media (max-width: 991.98px) {
+		.contact-details__left,
+		.contact-details__right {
+			margin-bottom: 30px;
+		}
+	}
+</style>
+
 	<!--Contact Details Start-->
 	<section class="contact-details">
 		<div class="container pt-110 pb-70">
 			<div class="row">
-				<div class="col-xl-7 col-lg-6">
-					<div class="sec-title">
-						<span class="sub-title before-none">Get in Touch</span>
-						<h2>We’re happy to assist </h2>
-					</div>
-					<!-- Contact Form -->
-
-          <!-- Footer Column -->
-          <form id="contactForm" method="post">
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="mb-3">
-									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name %>" class="form-control" type="text" placeholder="Enter Name" required>
+				<div class="col-12">
+					<div class="row">
+						<!-- Left Side - Contact Information (col-6) -->
+						<div class="col-lg-6 col-md-6">
+							<div class="contact-details__left">
+								<div class="sec-title">
+									<span class="sub-title before-none">CALL TO ACTION</span>
+									<h2>Get in touch with us</h2>
 								</div>
+								<ul class="list-unstyled contact-details__info">
+									<li>
+										<div class="icon">
+											<img src="/assets/images/placeholder.svg" alt="Location">
+										</div>
+										<div class="text">
+											<h6>Visit anytime</h6>
+											<a href="https://www.google.com/maps/place/Omaya+Suites+Raipur/@21.201042521557756,81.60053583955929,17z/data=!3m1!4b1!4m6!3m5!1s0x3a28dd1fe719e437:0x7775670391c54f64!8m2!3d21.201042521557756!4d81.60053583955929!16s%2Fg%2F11v0q8x8x8" target="_blank">15B, Omaya Square, Main Gate Kamal Vihar, Dumartarai, Raipur, Chhattisgarh — 492015</a>
+										</div>
+									</li>
+									<li>
+										<div class="icon">
+											<img src="/assets/images/phone.svg" alt="Phone">
+										</div>
+										<div class="text">
+											<h6>Have any question?</h6>
+											<a href="tel:9201955244">9201955244 | 9201955245</a>
+										</div>
+									</li>
+									<li>
+										<div class="icon">
+											<img src="/assets/images/email.svg" alt="Email">
+										</div>
+										<div class="text">
+											<h6>Write email</h6>
+											<a href="mailto:reservation@omayasuites.com">reservation@omayasuites.com</a>
+										</div>
+									</li>
+								</ul>
 							</div>
-							<div class="col-sm-6">
-								<div class="mb-3">
-									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone %>" class="form-control" type="tel" placeholder="Enter Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
-								</div>
-							</div>
-							
 						</div>
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="mb-3">
-									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email %>" class="form-control required email" type="email" placeholder="Enter Email" required>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="mb-3">
-									<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.address %>" class="form-control required" type="text" placeholder="Enter City" required>
-								</div>
-							</div>
 						
-						</div>
-						<div class="mb-3">
-							<textarea name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.remarks %>" class="form-control required" rows="7" placeholder="Enter Message" required></textarea>
-						</div>
-						<div class="mb-5">
-							<input name="form_botcheck" class="form-control" type="hidden" value="" />
-							<button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait..."><span class="btn-title">Send message</span></button>
-							<!-- <button type="reset" class="theme-btn btn-style-one bg-theme-color5"><span class="btn-title">Reset</span></button> -->
-						</div>
-					</form>
-					<!-- Contact Form Validation-->
-				</div>
-				<div class="col-xl-5 col-lg-6">
+						<!-- Right Side - Contact Form (col-6) -->
+						<div class="col-lg-6 col-md-6">
 					<div class="contact-details__right">
 						<div class="sec-title">
-							<span class="sub-title before-none">Need any help?</span>
-							<h2>Get in touch with us</h2>
-							<div class="text">If you have any questions, feel free to contact our team for quick assistance.</div>
+							<span class="sub-title before-none">CONTACT US</span>
+							<h2>Send us a message</h2>
 						</div>
-						<ul class="list-unstyled contact-details__info">
-							<li>
-								<div class="icon">
-									<span class="lnr-icon-phone-plus"></span>
-								</div>
-								<div class="text">
-									<h6>Have any question?</h6>
-									<a href="tel:9201955244">9201955244 | 9201955245</a>
-								</div>
-							</li>
-							<li>
-								<div class="icon">
-									<span class="lnr-icon-envelope1"></span>
-								</div>
-								<div class="text">
-									<h6>Write email</h6>
-									<a href="mailto:reservation@omayasuites.com">reservation@omayasuites.com</a>
-								</div>
-							</li>
-							<li>
-								<div class="icon">
-									<span class="lnr-icon-location"></span>
-								</div>
-								<div class="text">
-									<h6>Visit anytime</h6>
-									<a>15B, Omaya Square, Main Gate Kamal Vihar, Dumartarai, Raipur, Chhattisgarh — 492015</a>
-								</div>
-							</li>
-						</ul>
+						<!-- Contact Form -->
+						<form id="contactForm" method="post">
+							<div class="mb-3">
+								<label class="form-label">Name</label>
+								<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name %>" class="form-control" type="text" placeholder="Enter Name" required>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Phone</label>
+								<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone %>" class="form-control" type="tel" placeholder="Enter Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Email</label>
+								<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email %>" class="form-control required email" type="email" placeholder="Enter Email" required>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">City</label>
+								<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.address %>" class="form-control required" type="text" placeholder="Enter City" required>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">Message</label>
+								<textarea name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.remarks %>" class="form-control required" rows="5" placeholder="Enter Message" required></textarea>
+							</div>
+							<div class="mb-5">
+								<input name="form_botcheck" class="form-control" type="hidden" value="" />
+								<button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait..."><span class="btn-title">Send message</span></button>
+							</div>
+						</form>
+						<!-- Contact Form Validation-->
+						</div>
 					</div>
 				</div>
 			</div>
