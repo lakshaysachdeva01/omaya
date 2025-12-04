@@ -172,11 +172,11 @@
             <% } %>
             <div class="content-box">
                 <h1 class="title" style="color: #fff; font-size: 48px; margin-bottom: 10px;"><%= currentItem ? currentItem.title : typeLabel + ' Details' %></h1>
-                <ul class="page-breadcrumb">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="<%= typePath %>"><%= typeLabel %></a></li>
-                    <li><%= currentItem ? currentItem.title : 'Details' %></li>
-                </ul>
+            <ul class="page-breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="<%= typePath %>"><%= typeLabel %></a></li>
+                <li><%= currentItem ? currentItem.title : 'Details' %></li>
+            </ul>
             </div>
         </div>
     </div>
@@ -191,27 +191,27 @@
                 <% if (currentItem && currentItem.detailImages && currentItem.detailImages.length > 0) { %>
                     <div class="row image-gallery-wrapper">
                         <div class="col-lg-10 col-md-8">
-                            <div class="bxslider">
-                                <% currentItem.detailImages.forEach((image, index) => { %>
-                                    <div class="slider-content">
-                                        <figure class="image-box popup-trigger" data-type="image" data-src="<%= image %>" data-title="<%= currentItem.title %>" style="cursor: pointer;">
-                                            <img src="<%= image %>" alt="<%= currentItem.title %>">
-                                        </figure>
-                                    </div>
-                                <% }); %>
+                    <div class="bxslider">
+                        <% currentItem.detailImages.forEach((image, index) => { %>
+                            <div class="slider-content">
+                                <figure class="image-box popup-trigger" data-type="image" data-src="<%= image %>" data-title="<%= currentItem.title %>" style="cursor: pointer;">
+                                    <img src="<%= image %>" alt="<%= currentItem.title %>">
+                                </figure>
                             </div>
+                        <% }); %>
+                    </div>
                         </div>
                         <div class="col-lg-2 col-md-4">
-                            <div class="slider-pager">
+                    <div class="slider-pager">
                                 <ul class="thumb-box">
-                                    <% currentItem.detailImages.forEach((thumbImage, thumbIndex) => { %>
+                            <% currentItem.detailImages.forEach((thumbImage, thumbIndex) => { %>
                                         <li>
-                                            <a class="<%= thumbIndex === 0 ? 'active' : '' %>" data-slide-index="<%= thumbIndex %>" href="#">
-                                                <figure><img src="<%= thumbImage %>" alt=""></figure>
-                                            </a>
-                                        </li>
-                                    <% }); %>
-                                </ul>
+                                    <a class="<%= thumbIndex === 0 ? 'active' : '' %>" data-slide-index="<%= thumbIndex %>" href="#">
+                                        <figure><img src="<%= thumbImage %>" alt=""></figure>
+                                    </a>
+                                </li>
+                            <% }); %>
+                        </ul>
                             </div>
                         </div>
                     </div>
@@ -317,14 +317,102 @@
                     </div>
                     
                     <% if (currentItem && currentItem.features && currentItem.features.length > 0) { %>
+                        <%
+                            // Function to map facility names to icon files - COMPLETE MAPPING
+                            function getFacilityIcon(featureName) {
+                                const name = featureName.toLowerCase();
+                                
+                                // Swimming & Water Features
+                                if (name.includes('swimming pool') || name.includes('pool')) return 'swimming-pool.png';
+                                if (name.includes('jacuzzi')) return 'jacuzzi.png';
+                                
+                                // Climate & Air
+                                if (name.includes('ac') || name.includes('air condition') || name.includes('climate') || name.includes('air conditioning')) return 'air-conditioner.png';
+                                
+                                // Entertainment & Media
+                                if (name.includes('tv') || name.includes('television') || name.includes('led tv')) return 'tv-screen.png';
+                                if (name.includes('music') || name.includes('sound system') || name.includes('inbuilt music')) return 'music.png';
+                                if (name.includes('projector') || name.includes('presentation screen') || name.includes('screen')) return 'projector.png';
+                                if (name.includes('video conferencing') || name.includes('video call') || name.includes('video-call')) return 'video-call.png';
+                                if (name.includes('av setup') || name.includes('av equipment') || name.includes('modern av')) return 'projector.png';
+                                
+                                // Connectivity
+                                if (name.includes('wifi') || name.includes('internet') || name.includes('wireless') || name.includes('high-speed')) return 'wifi.png';
+                                
+                                // Food & Beverage
+                                if (name.includes('multi-cuisine menu') || name.includes('wide multi-cuisine')) return 'menu.png';
+                                if (name.includes('coffee') || name.includes('tea') || name.includes('maker') || name.includes('tea/coffee')) return 'coffee-machine.png';
+                                if (name.includes('dining') || name.includes('restaurant') || name.includes('dinner') || name.includes('dining area') || name.includes('dining space')) return 'dinner.png';
+                                if (name.includes('bar') || name.includes('cocktail') || name.includes('bar counter') || name.includes('drinks') || name.includes('beverages')) return 'cocktail.png';
+                                if (name.includes('catering') || name.includes('food') || name.includes('cuisine') || name.includes('snacks') || name.includes('bites')) return 'catering.png';
+                                if (name.includes('buffet') || name.includes('platter')) return 'platter.png';
+                                if (name.includes('menu') && !name.includes('multi-cuisine')) return 'menu.png';
+                                
+                                // Furniture & Seating
+                                if (name.includes('bed') || name.includes('bedroom') || name.includes('sleep')) return 'bed.png';
+                                if (name.includes('chair') || name.includes('seating') || name.includes('executive seating') || name.includes('flexible seating') || name.includes('comfortable seating')) return 'chair.png';
+                                if (name.includes('couch') || name.includes('sofa') || name.includes('lounge seating')) return 'couch.png';
+                                if (name.includes('table') || name.includes('dining table')) return 'table-etiquette.png';
+                                if (name.includes('lounge') || name.includes('lounge area') || name.includes('sitting')) return 'lounge.png';
+                                
+                                // Room Features
+                                if (name.includes('balcony') || name.includes('balconies') || name.includes('terrace')) return 'balcony.png';
+                                if (name.includes('apartment') || name.includes('room') || name.includes('suite') || name.includes('layout')) return 'apartment.png';
+                                if (name.includes('bedroom') || name.includes('spacious bedroom')) return 'bed.png';
+                                
+                                // Parking & Transportation
+                                if (name.includes('parking') || name.includes('valet')) return 'valet-parking.png';
+                                
+                                // Personal Care & Amenities
+                                if (name.includes('hair') || name.includes('dryer') || name.includes('hairdryer')) return 'hairdryer.png';
+                                if (name.includes('iron') || name.includes('ironing') || name.includes('iron board')) return 'ironing-board.png';
+                                if (name.includes('slipper') || name.includes('cotton slippers')) return 'slippers.png';
+                                if (name.includes('toiletry') || name.includes('toilet') || name.includes('bathroom') || name.includes('washroom') || name.includes('attached washroom')) return 'toilet.png';
+                                if (name.includes('dental') || name.includes('shaving') || name.includes('kit')) return 'dental-care.png';
+                                if (name.includes('weighing') || name.includes('scale')) return 'weight-loss.png';
+                                
+                                // Security & Storage
+                                if (name.includes('locker') || name.includes('safety locker') || name.includes('safe')) return 'locker.png';
+                                if (name.includes('security') || name.includes('shield')) return 'shield.png';
+                                
+                                // Business & Office
+                                if (name.includes('office') || name.includes('business') || name.includes('business center') || name.includes('boardroom') || name.includes('meeting')) return 'office-building.png';
+                                if (name.includes('whiteboard') || name.includes('board facilities')) return 'whiteboard.png';
+                                if (name.includes('executive') || name.includes('professional')) return 'office-chair.png';
+                                
+                                // Power & Backup
+                                if (name.includes('generator') || name.includes('power backup') || name.includes('dg power') || name.includes('backup')) return 'electric-generator.png';
+                                
+                                // Accessibility
+                                if (name.includes('disability') || name.includes('accessible') || name.includes('wheelchair')) return 'disability.png';
+                                
+                                // Services
+                                if (name.includes('wake-up') || name.includes('call service') || name.includes('alarm')) return 'alarm-clock.png';
+                                
+                                // Ambience & Setting
+                                if (name.includes('ambience') || name.includes('ambiance') || name.includes('setting') || name.includes('atmosphere') || name.includes('environment')) return 'apartment.png';
+                                if (name.includes('rooftop') || name.includes('open-air')) return 'terrace.png';
+                                if (name.includes('poolside') || name.includes('relaxing')) return 'swimming-pool.png';
+                                
+                                // Events & Celebrations
+                                if (name.includes('celebration') || name.includes('gathering') || name.includes('party') || name.includes('event')) return 'catering.png';
+                                
+                                // Layout & Design
+                                if (name.includes('layout') || name.includes('design') || name.includes('compact') || name.includes('flexible layout')) return 'apartment.png';
+                                if (name.includes('privacy') || name.includes('private') || name.includes('enclosed')) return 'apartment.png';
+                                
+                                // Default icon
+                                return 'apartment.png';
+                            }
+                        %>
                         <div class="mt-40">
                             <h4>Room Facilities</h4>
                             <div class="row room-facility-list mb-40">
                                 <% currentItem.features.forEach((feature, index) => { %>
                                     <div class="col-sm-6 col-xl-4">
                                         <div class="list-one d-flex align-items-center me-sm-4 <%= index < currentItem.features.length - 1 ? 'mb-3' : '' %>">
-                                            <div class="icon text-theme-color1 mr-10 flex-shrink-0">
-                                                <i class="far fa-check-circle"></i>
+                                            <div class="icon facility-icon mr-10 flex-shrink-0">
+                                                <img src="/assets/images/svg/<%= getFacilityIcon(feature) %>" alt="<%= feature %>" />
                                             </div>
                                             <h6 class="title m-0"><%= feature %></h6>
                                         </div>
@@ -457,8 +545,8 @@
     bottom: 10px !important;
     left: auto !important;
     top: auto !important;
-}
-
+    }
+    
     .product-details .bx-prev,
     .product-details .bx-next {
         display: none !important;
@@ -573,6 +661,30 @@
     
     .product-details .slider-pager .thumb-box li a.active:before {
         opacity: 1;
+    }
+    
+    /* Facility icons styling */
+    .room-facility-list .facility-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: none !important;
+        background: none !important;
+    }
+    
+    .room-facility-list .facility-icon img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        /* Change PNG color to #aa8453 using CSS filter (same as contact page) */
+        filter: brightness(0) saturate(100%) invert(60%) sepia(25%) saturate(800%) hue-rotate(350deg) brightness(95%) contrast(90%);
+    }
+    
+    .room-facility-list .list-one:hover .facility-icon {
+        background: none !important;
     }
     
     @media (max-width: 991.98px) {
@@ -898,25 +1010,25 @@
                      
                      try {
                          var viewer = pannellum.viewer('panorama-360', {
-                             "type": "equirectangular",
+                     "type": "equirectangular",
                              "panorama": panoramaUrl,
-                             "autoLoad": true,
-                             "autoRotate": 0,
+                     "autoLoad": true,
+                     "autoRotate": 0,
                              "compass": false,
-                             "showControls": true,
-                             "keyboardZoom": false,
-                             "mouseZoom": false,
-                             "draggable": true,
-                             "disableKeyboardCtrl": true,
-                             "hfov": 100,
-                             "minHfov": 100,
-                             "maxHfov": 100,
-                             "pitch": 0,
-                             "yaw": 0,
-                             "showFullscreenCtrl": true,
-                             "showZoomCtrl": false
-                         });
-                         
+                     "showControls": true,
+                     "keyboardZoom": false,
+                     "mouseZoom": false,
+                     "draggable": true,
+                     "disableKeyboardCtrl": true,
+                     "hfov": 100,
+                     "minHfov": 100,
+                     "maxHfov": 100,
+                     "pitch": 0,
+                     "yaw": 0,
+                     "showFullscreenCtrl": true,
+                     "showZoomCtrl": false
+                 });
+                 
                          // Handle errors from Pannellum
                          if (viewer && viewer.on) {
                              viewer.on('error', function(error) {
@@ -957,7 +1069,7 @@
                                  var errorText = errorElement.textContent.trim();
                                  if (errorText.includes('WebGL')) {
                                      showError(container, 'WebGL is not working. Try: 1) chrome://flags - enable "WebGL Draft Extensions", 2) Restart Chrome, 3) Check chrome://gpu for WebGL status, 4) Update graphics drivers.');
-                                 } else {
+         } else {
                                      showError(container, errorText || '360° view failed to load. Please refresh the page.');
                                  }
                              } else if (viewerElement && viewerElement.offsetHeight > 0) {
@@ -1091,7 +1203,7 @@
                                 }
                             }
                             
-                            setInterval(function() {
+         setInterval(function() {
                                 try {
                                     if (player.getPlayerState() === YT.PlayerState.PAUSED) {
                                         player.playVideo();
