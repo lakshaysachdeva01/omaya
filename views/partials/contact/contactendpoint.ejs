@@ -19,9 +19,9 @@
                 [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name]: contactForm.querySelector(
                     `input[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name}"]`
                 ).value,
-                [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone]: contactForm.querySelector(
+                [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone]: Number(contactForm.querySelector(
                     `input[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone}"]`
-                ).value,
+                ).value.replace(/\D/g, '')), // Remove non-digits and convert to number
                 [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email]: contactForm.querySelector(
                     `input[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email}"]`
                 ).value,

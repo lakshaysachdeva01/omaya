@@ -1,20 +1,396 @@
-<% if (products && products.length > 0) { %>
-   
-                <% products.forEach((item, index) => { %>
-                  <div class="card card-style01 rounded border-0 mt-3 bg-transparent" onclick="window.location.href='/product/<%= item.seoDetails.slug %>'">
+<!-- Service Section Three -->
+<section class="service-section-three">
+  <div class="auto-container">
+    <div class="sec-title wow fadeInUp">
+      <div class="row">
+        <div class="col-lg-6">
+          <span class="sub-title">Hoexr Services</span>
+          <h2>We Provide More Then Just Quality Services</h2>
+        </div>
+        <div class="col-lg-4 offset-lg-2">
+          <div class="text">Hoexr in a powerful way of just not an only professions, however, in a passion for our Company. We have to a tendency to believe the idea that smart.</div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-outer">
+      <!-- Project Carousel -->
+      <div class="swiper service-three-slider">
+        <div class="swiper-wrapper" id="services-container">
+          <!-- Services will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Service Section -->
 
-                          <% if (item.arrays && item.arrays.arrayOne && item.arrays.arrayOne[0]) { %>
-                              <img src="<%= process.env.S3_BASE_URL + item.arrays.arrayOne[0] %>" alt="<%= item.title || 'Product Image' %>" class="rounded-top">
-                          <% } else { %>
-                              <div style="width: 100%; height: 200px; background-color: rgba(198, 164, 70, 0.1); display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;">
-                                  <i class="fa-solid fa-image" style="font-size: 40px; color: #c6a446;"></i>
-                              </div>
-                          <% } %>
-                      
-                          <h3 class="mb-0 h5"><a href="/product/<%= item.seoDetails.slug %>"><%= item.title %></a></h3>
-                      </div>
-             <% }) %>
-            
-          
-     
-      <% } %>
+<!-- JSON Data -->
+<script type="application/json" id="services-data">
+[
+  {
+    "id": 1,
+    "title": "Stays",
+    "link": "/stay",
+    "has360View": true,
+    "view360": "/assets/images/360/executivesuite.webp",
+    "alt": "Luxury Stays"
+  },
+  {
+    "id": 2,
+    "title": "PDR",
+    "link": "/dining/pdr",
+    
+    "has360View": true,
+    "view360": "/assets/images/360/PDR.webp",
+    "alt": "PDR Dining"
+  },
+  {
+    "id": 3,
+    "title": "Oma Air Bar",
+    "link": "/dining/oma-air-bar",
+    "has360View": true,
+    "view360": "/assets/images/360/Omaairbar.webp",
+    "alt": "Oma Air Bar"
+  },
+  {
+    "id": 4,
+    "title": "Oma Kitchen",
+    "link": "/dining/oma-kitchen",
+    "has360View": true,
+    "view360": "/assets/images/360/Omakitchen.webp",
+    "alt": "Oma Kitchen"
+  },
+  {
+    "id": 5,
+    "title": "Oma Pool Bar",
+    "link": "/dining/oma-pool-bar",
+    "has360View": true,
+    "view360": "/assets/images/360/Omapoolbar.webp",
+    "alt": "Oma Pool Bar"
+  },
+  {
+    "id": 6,
+    "title": "Ivory Hall",
+    "link": "/venue/ivory-hall",
+    "has360View": true,
+    "view360": "/assets/images/360/Ivoryhall.webp",
+    "alt": "Ivory Hall"
+  },
+  {
+    "id": 7,
+    "title": "Silver Hall",
+    "link": "/venue/silver-hall",
+    "has360View": true,
+    "view360": "/assets/images/360/Silverhall.webp",
+    "alt": "Silver Hall"
+  },
+  {
+    "id": 8,
+    "title": "Omaya Meet",
+    "link": "/venue/omaya-meet",
+    "has360View": true,
+    "view360": "/assets/images/360/Omayameet.webp",
+    "alt": "Omaya Meet"
+  },
+  {
+    "id": 9,
+    "title": "Zenith",
+    "link": "/venue/zenith",
+    "has360View": true,
+    "view360": "/assets/images/360/Zenith.webp",
+    "alt": "Zenith"
+  }
+]
+</script>
+
+<!-- Pannellum 360 Viewer CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const servicesData = JSON.parse(document.getElementById('services-data').textContent);
+  const container = document.getElementById('services-container');
+  
+  // Clear any existing content
+  container.innerHTML = '';
+  
+  // Create slides
+  servicesData.forEach(service => {
+    const slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    
+    slide.innerHTML = `
+      <div class="service-block-three">
+        <div class="inner-box">
+          ${service.has360View ? `
+            <div class="panorama-container" onclick="window.location.href='${service.link}'" style="width: 100%; height: 458px; border-radius: 8px; overflow: hidden; position: relative; background: #f4f6f8; cursor: pointer;">
+              <div id="panorama-360-${service.id}" style="width: 100%; height: 458px;"></div>
+              <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
+                <div class="panorama-spinner"></div>
+              </div>
+            </div>
+          ` : `
+            <figure style="height: 100%; margin: 0;" class="image">
+              <img style="height: 458px; width: 100%; object-fit: cover;" src="${service.image}" alt="${service.alt}">
+            </figure>
+          `}
+          <div class="content-box">
+            <h4 class="title"><a href="${service.link}">${service.title}</a></h4>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    container.appendChild(slide);
+  });
+  
+  // Initialize or update Swiper after content is loaded
+  initializeSwiper();
+  initialize360Views();
+});
+
+function initializeSwiper() {
+  const swiperEl = document.querySelector('.service-three-slider');
+  if (!swiperEl) {
+    console.warn('Swiper element not found');
+    return;
+  }
+  
+  // Wait for Swiper library to be available
+  if (typeof Swiper === 'undefined') {
+    console.warn('Swiper library not loaded, retrying...');
+    setTimeout(initializeSwiper, 200);
+    return;
+  }
+  
+  // Wait a bit to ensure DOM is ready
+  setTimeout(function() {
+    // Destroy existing swiper if it exists
+    if (swiperEl.swiper) {
+      swiperEl.swiper.destroy(true, true);
+    }
+    
+    const servicesData = JSON.parse(document.getElementById('services-data').textContent);
+    const totalSlides = servicesData.length;
+    
+    // For proper looping, we need at least as many slides as the maximum visible
+    // With 9 slides, we have enough for looping with up to 4 visible slides
+    const maxSlidesPerView = 4;
+    
+    // Initialize new swiper with proper loop configuration
+    const swiper = new Swiper('.service-three-slider', {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true, // Enable loop - we have 9 slides which is enough
+      loopedSlides: maxSlidesPerView, // Duplicate this many slides for seamless loop
+      loopAdditionalSlides: 2, // Additional slides to duplicate for better loop
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: false,
+      },
+      speed: 600,
+      watchSlidesProgress: true,
+      watchSlidesVisibility: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        320: {
+          slidesPerView: 1,
+          loopedSlides: 2,
+        },
+        576: {
+          slidesPerView: 1,
+          loopedSlides: 2,
+        },
+        768: {
+          slidesPerView: 2,
+          loopedSlides: 4,
+        },
+        992: {
+          slidesPerView: 2,
+          loopedSlides: 4,
+        },
+        1023: {
+          slidesPerView: 3,
+          loopedSlides: 6,
+        },
+        1400: {
+          slidesPerView: 4,
+          loopedSlides: 8,
+        },
+      },
+      on: {
+        init: function() {
+          // Force update to ensure loop is properly initialized
+          this.update();
+          this.updateSlides();
+        },
+        slideChangeTransitionEnd: function() {
+          // Ensure loop continues smoothly
+          this.update();
+        }
+      }
+    });
+    
+    // Store swiper instance
+    swiperEl.swiperInstance = swiper;
+    console.log('Swiper initialized with', totalSlides, 'slides, loop enabled');
+  }, 150);
+}
+
+function initialize360Views() {
+  const servicesData = JSON.parse(document.getElementById('services-data').textContent);
+  
+  servicesData.forEach(service => {
+    if (service.has360View && service.view360) {
+      initPannellumViewer(service.id, service.view360);
+    }
+  });
+}
+
+function initPannellumViewer(serviceId, panoramaPath) {
+  const container = document.getElementById(`panorama-360-${serviceId}`);
+  if (!container) return;
+  
+  const preloader = container.parentElement.querySelector('.panorama-preloader');
+  
+  function showError(message) {
+    if (preloader) {
+      preloader.innerHTML = `<div style="text-align: center; color: #666; padding: 20px;"><p style="margin: 0; font-size: 14px;">${message}</p></div>`;
+      preloader.style.display = 'flex';
+    }
+  }
+  
+  // Load Pannellum if not already loaded
+  if (typeof pannellum === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
+    script.onload = function() {
+      setTimeout(() => initPannellumViewer(serviceId, panoramaPath), 200);
+    };
+    script.onerror = function() {
+      showError('Failed to load 360 viewer.');
+    };
+    document.head.appendChild(script);
+    return;
+  }
+  
+  try {
+    let panoramaUrl = panoramaPath;
+    if (panoramaPath && !panoramaPath.startsWith('http://') && !panoramaPath.startsWith('https://')) {
+      panoramaUrl = window.location.origin + (panoramaPath.startsWith('/') ? panoramaPath : '/' + panoramaPath);
+    }
+    
+    const img = new Image();
+    img.onload = function() {
+      if (preloader) {
+        preloader.style.display = 'none';
+      }
+      
+      try {
+        // Auto-rotate enabled with smooth, slow rotation
+        const viewer = pannellum.viewer(`panorama-360-${serviceId}`, {
+          "type": "equirectangular",
+          "panorama": panoramaUrl,
+          "autoLoad": true,
+          "autoRotate": 10, // Slower rotation speed (default is 1)
+          "autoRotateInactivityDelay": 2000, // Start rotating after 2 seconds of inactivity
+          "autoRotateStopDelay": 2000, // Stop rotating 2 seconds after user interaction
+          "compass": false,
+          "showControls": true,
+          "keyboardZoom": false,
+          "mouseZoom": false,
+          "draggable": true,
+          "disableKeyboardCtrl": true,
+          "hfov": 100, // Wider field of view to show more in small window
+          "minHfov": 80,
+          "maxHfov": 120,
+          "pitch": -10, // Slight downward angle for better view
+          "yaw": 0,
+          "showFullscreenCtrl": true,
+          "showZoomCtrl": false,
+          "mouseZoom": false, // Disable mouse wheel zoom
+          "touchZoom": false, // Disable touch zoom
+          "preview": "", // Remove preview title
+          "sceneFadeDuration": 1000 // Smooth transitions
+        });
+        
+        viewer.on('error', function(error) {
+          console.error('Pannellum error:', error);
+          showError('Unable to load 360° view.');
+        });
+        
+        // Enhance auto-rotation on mobile
+        if ('ontouchstart' in window) {
+          viewer.setConfig({
+            autoRotate: 1.5, // Slightly faster on mobile
+            autoRotateInactivityDelay: 1000
+          });
+        }
+        
+      } catch(e) {
+        console.error('Error initializing Pannellum:', e);
+        showError('Error loading 360° view.');
+      }
+    };
+    
+    img.onerror = function() {
+      showError('360° image not available.');
+      const serviceData = JSON.parse(document.getElementById('services-data').textContent).find(s => s.id === serviceId);
+      if (serviceData && serviceData.image) {
+        container.parentElement.innerHTML = `
+          <figure style="height: 100%; margin: 0;" class="image">
+            <img style="height: 458px; width: 100%; object-fit: cover;" src="${serviceData.image}" alt="${serviceData.alt}">
+          </figure>
+        `;
+      }
+    };
+    
+    img.src = panoramaUrl;
+    
+  } catch(e) {
+    console.error('Error setting up 360 view:', e);
+    showError('Error loading 360° view.');
+  }
+}
+
+// Add CSS for spinner and 360 container
+const style = document.createElement('style');
+style.textContent = `
+  .panorama-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Optimize 360 view for small container */
+  .pnlm-container {
+    cursor: grab;
+  }
+  
+  .pnlm-container:active {
+    cursor: grabbing;
+  }
+  
+  .pnlm-controls {
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  
+  .pnlm-controls:hover {
+    opacity: 1;
+  }
+`;
+document.head.appendChild(style);
+</script>

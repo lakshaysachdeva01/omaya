@@ -1,0 +1,28 @@
+<% if (currentItem && currentItem.detailImages && currentItem.detailImages.length > 0) { %>
+    <div class="row image-gallery-wrapper">
+        <div class="col-lg-10 col-md-8">
+            <div class="bxslider">
+                <% currentItem.detailImages.forEach((image, index) => { %>
+                    <div class="slider-content">
+                        <figure class="image-box popup-trigger" data-type="image" data-src="<%= image %>" data-title="<%= currentItem.title %>" style="cursor: pointer;">
+                            <img src="<%= image %>" alt="<%= currentItem.title %>">
+                        </figure>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4">
+            <div class="slider-pager">
+                <ul class="thumb-box">
+                    <% currentItem.detailImages.forEach((thumbImage, thumbIndex) => { %>
+                        <li>
+                            <a class="<%= thumbIndex === 0 ? 'active' : '' %>" data-slide-index="<%= thumbIndex %>" href="#">
+                                <figure><img src="<%= thumbImage %>" alt=""></figure>
+                            </a>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+    </div>
+<% } %>

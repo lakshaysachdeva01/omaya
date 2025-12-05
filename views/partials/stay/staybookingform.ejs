@@ -1,37 +1,45 @@
 <style>
+    .stay-booking-form {
+        position: relative;
+        z-index: 9;
+    }
+    
     .stay-booking-form .form-label {
         display: block;
         margin-bottom: 8px;
         font-weight: 500;
-        color: #333;
+        color: #222222;
+        font-size: 16px;
     }
     
     .stay-booking-form .form-control {
-        border: 1px solid #ddd;
-        padding: 10px 12px;
-        border-radius: 4px;
-        height: auto;
-        min-height: 45px;
-        background: #fff !important;
-        background-color: #fff !important;
         width: 100%;
-        font-size: 14px;
+        height: 70px;
+        color: #222222;
+        font-size: 16px;
+        padding: 0 30px;
+        border: 1px solid #adadad;
+        background: #fff;
+        border-radius: 0;
     }
     
     .stay-booking-form .form-control:focus {
-        border-color: #d3bf77;
+        border-color: #adadad;
         outline: none;
-        box-shadow: 0 0 0 2px rgba(211, 191, 119, 0.1);
+        box-shadow: none;
     }
     
     .stay-booking-form .form-control[readonly] {
-        background-color: #f5f5f5 !important;
-        cursor: not-allowed;
+        background-color: #fff !important;
+        cursor: pointer;
     }
     
     .stay-booking-form textarea.form-control {
         min-height: 100px;
         resize: vertical;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: auto;
     }
     
     .stay-booking-form .date-input-wrapper {
@@ -39,7 +47,7 @@
     }
     
     .stay-booking-form .date-input-wrapper .form-control {
-        padding-right: 40px;
+        padding-right: 60px;
         cursor: pointer;
     }
     
@@ -48,25 +56,11 @@
         font-family: 'Font Awesome 5 Free';
         font-weight: 900;
         position: absolute;
-        right: 15px;
+        right: 30px;
         top: 50%;
         transform: translateY(-50%);
-        color: #999;
+        color: var(--theme-color1);
         pointer-events: none;
-    }
-    
-    .stay-booking-form .custom-select-wrapper {
-        position: relative;
-    }
-    
-    .stay-booking-form .custom-select-wrapper select {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        padding-right: 35px;
     }
     
     .stay-booking-form .form-row {
@@ -77,6 +71,49 @@
     
     .stay-booking-form .form-row .form-group {
         flex: 1;
+    }
+    
+    .stay-booking-form .form-submit {
+        margin-top: 23px;
+    }
+    
+    .stay-booking-form .form-submit button,
+    .stay-booking-form button[type="submit"] {
+        background-color: #222222;
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-family: var(--text-font2);
+        letter-spacing: 2px;
+        width: 100%;
+        height: 70px;
+        line-height: 70px;
+        border: 0;
+        position: relative;
+        z-index: 9;
+        padding: 0;
+    }
+    
+    .stay-booking-form .form-submit button:before,
+    .stay-booking-form button[type="submit"]:before {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        content: "";
+        background-color: var(--bg-theme-color1);
+        border-radius: inherit;
+        transform: scale(0, 1);
+        z-index: -1;
+        transform-origin: top right;
+        transition: transform 500ms cubic-bezier(0.86, 0, 0.07, 1);
+    }
+    
+    .stay-booking-form .form-submit button:hover:before,
+    .stay-booking-form button[type="submit"]:hover:before {
+        transform: scale(1, 1);
+        transform-origin: bottom left;
     }
     
     @media (max-width: 767px) {
@@ -134,31 +171,38 @@
         <div class="form-row">
             <div class="form-group">
                 <label class="form-label">No. of Guests</label>
-                <div class="custom-select-wrapper">
-                    <select name="numberOfGuests" id="numberOfGuests" class="form-control" required>
-                        <option value="">Select Guests</option>
-                        <option value="1">1 Guest</option>
-                        <option value="2">2 Guests</option>
-                        <option value="3">3 Guests</option>
-                        <option value="4">4 Guests</option>
-                        <option value="5">5 Guests</option>
-                        <option value="6">6 Guests</option>
-                        <option value="7">7 Guests</option>
-                        <option value="8">8 Guests</option>
-                    </select>
+                <div class="custom-dropdown" id="stayGuestsDropdown">
+                    <div class="custom-dropdown-selected">
+                        <span class="selected-text">Select Guests</span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <div class="dropdown-option" data-value="1" data-title="1 Guest">1 Guest</div>
+                        <div class="dropdown-option" data-value="2" data-title="2 Guests">2 Guests</div>
+                        <div class="dropdown-option" data-value="3" data-title="3 Guests">3 Guests</div>
+                        <div class="dropdown-option" data-value="4" data-title="4 Guests">4 Guests</div>
+                        <div class="dropdown-option" data-value="5" data-title="5 Guests">5 Guests</div>
+                        <div class="dropdown-option" data-value="6" data-title="6 Guests">6 Guests</div>
+                        <div class="dropdown-option" data-value="7" data-title="7 Guests">7 Guests</div>
+                        <div class="dropdown-option" data-value="8" data-title="8 Guests">8 Guests</div>
+                    </div>
                 </div>
+                <input type="hidden" name="numberOfGuests" id="numberOfGuestsHidden" required>
             </div>
             <div class="form-group">
                 <label class="form-label">No. of Kids</label>
-                <div class="custom-select-wrapper">
-                    <select name="kids" id="kids" class="form-control" required>
-                        <option value="0">0 Kids</option>
-                        <option value="1">1 Kid</option>
-                        <option value="2">2 Kids</option>
-                        <option value="3">3 Kids</option>
-                        <option value="4">4 Kids</option>
-                    </select>
+                <div class="custom-dropdown" id="stayKidsDropdown">
+                    <div class="custom-dropdown-selected">
+                        <span class="selected-text">0 Kids</span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <div class="dropdown-option" data-value="0" data-title="0 Kids">0 Kids</div>
+                        <div class="dropdown-option" data-value="1" data-title="1 Kid">1 Kid</div>
+                        <div class="dropdown-option" data-value="2" data-title="2 Kids">2 Kids</div>
+                        <div class="dropdown-option" data-value="3" data-title="3 Kids">3 Kids</div>
+                        <div class="dropdown-option" data-value="4" data-title="4 Kids">4 Kids</div>
+                    </div>
                 </div>
+                <input type="hidden" name="kids" id="kidsHidden" required value="0">
             </div>
         </div>
         

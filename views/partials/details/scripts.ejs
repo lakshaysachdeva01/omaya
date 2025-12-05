@@ -1,0 +1,318 @@
+<!-- Pannellum 360 Viewer CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+
+<script>
+    // Force remove preloader
+    document.addEventListener('DOMContentLoaded', function() {
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+            preloader.remove();
+        }
+    });
+    
+    // Also remove on window load as backup
+    window.addEventListener('load', function() {
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+            preloader.remove();
+        }
+    });
+    
+     // Initialize bxslider with single image mode
+     $(window).on('load', function() {
+         var $slider = $('.product-details .bxslider');
+         if ($slider.length) {
+             // Destroy existing slider if any
+             if ($slider.data('bxSlider')) {
+                 $slider.destroySlider();
+             }
+             
+             // Function to move active thumbnail to top
+             function moveActiveThumbToTop(currentIndex) {
+                 var $thumbBox = $('.product-details .slider-pager .thumb-box');
+                 var $thumbItems = $thumbBox.find('li');
+                 
+                 // Remove active class from all first
+                 $thumbItems.find('a').removeClass('active');
+                 
+                 // Find thumbnail by data-slide-index attribute (more reliable than eq)
+                 var $activeThumb = $thumbItems.find('a[data-slide-index="' + currentIndex + '"]').closest('li');
+                 
+                 if ($activeThumb.length) {
+                     // Add active class to current
+                     $activeThumb.find('a').addClass('active');
+                     
+                     // If not already at top, move it
+                     if (!$activeThumb.is(':first-child')) {
+                         // Detach and prepend to move to top
+                         $activeThumb.detach();
+                         $thumbBox.prepend($activeThumb);
+                         
+                         // Scroll to top immediately
+                         $thumbBox.scrollTop(0);
+                     }
+                 }
+             }
+             
+             // Remove any existing event handlers to prevent duplicates
+             $('.product-details .slider-pager .thumb-box').off('click', 'a');
+             
+             // Initialize with fade mode for single large image display
+             var sliderInstance = $slider.bxSlider({
+                 mode: 'fade',
+                 auto: true,
+                 autoHover: true,
+                 pause: 1000,
+                 speed: 500,
+                 pagerCustom: '.product-details .slider-pager .thumb-box',
+                 controls: false,
+                 adaptiveHeight: false,
+                 infiniteLoop: true,
+                 useCSS: true,
+                 easing: 'ease-in-out',
+                 onSliderLoad: function(currentIndex) {
+                     // Ensure thumbnails are visible and working
+                     $('.product-details .slider-pager').show();
+                     
+                     // Move initial active thumbnail to top
+                     setTimeout(function() {
+                         moveActiveThumbToTop(currentIndex || 0);
+                     }, 100);
+                     
+                     // Match thumbnail container height to slideshow height
+                     function matchThumbnailHeight() {
+                         var $sliderEl = $('.product-details .bxslider');
+                         var $thumbnailCol = $('.product-details .image-gallery-wrapper .col-lg-2');
+                         if ($sliderEl.length && $thumbnailCol.length) {
+                             var sliderHeight = $sliderEl.outerHeight();
+                             // Only set height if slider has a valid height (greater than 0)
+                             if (sliderHeight && sliderHeight > 0) {
+                                 $thumbnailCol.css({
+                                     'height': sliderHeight + 'px',
+                                     'min-height': sliderHeight + 'px'
+                                 });
+                             }
+                         }
+                     }
+                     
+                     // Run immediately and also after a short delay to ensure slider is fully rendered
+                     matchThumbnailHeight();
+                     setTimeout(matchThumbnailHeight, 100);
+                     setTimeout(matchThumbnailHeight, 300);
+                     
+                     // Update on window resize (remove old handlers first)
+                     $(window).off('resize.product-details-slider');
+                     $(window).on('resize.product-details-slider', function() {
+                         setTimeout(matchThumbnailHeight, 50);
+                     });
+                     
+                     // Reinitialize media items for popup after slider loads
+                     if (typeof initMediaItems === 'function') {
+                         initMediaItems();
+                     }
+                 },
+                 onSlideAfter: function($slideElement, oldIndex, newIndex) {
+                     // Move active thumbnail to top when slide changes
+                     // Use setTimeout to ensure slide transition is complete
+                     var self = this;
+                     setTimeout(function() {
+                         moveActiveThumbToTop(newIndex);
+                     }, 100);
+                 }
+             });
+             
+             // Handle thumbnail clicks - use event delegation
+             $(document).off('click.product-details-thumbs', '.product-details .slider-pager .thumb-box a')
+                        .on('click.product-details-thumbs', '.product-details .slider-pager .thumb-box a', function(e) {
+                 e.preventDefault();
+                 e.stopPropagation();
+                 var slideIndex = parseInt($(this).data('slide-index'), 10);
+                 if (!isNaN(slideIndex) && sliderInstance) {
+                     sliderInstance.goToSlide(slideIndex);
+                 }
+                 return false;
+             });
+         }
+     });
+     
+     // Load Pannellum and initialize 360 view if available
+     <% if (currentItem && currentItem.view360) { %>
+     $(document).ready(function() {
+         function showError(container, message) {
+             var preloader = container.querySelector('.panorama-preloader');
+             if (preloader) {
+                 preloader.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;"><p style="margin: 0; font-size: 14px;">' + message + '</p></div>';
+                 preloader.style.display = 'flex';
+             }
+         }
+         
+         // Check WebGL support with detailed diagnostics
+         function checkWebGLSupport() {
+             try {
+                 var canvas = document.createElement('canvas');
+                 var gl = null;
+                 
+                 // Try WebGL 2.0 first
+                 gl = canvas.getContext('webgl2');
+                 if (gl) {
+                     console.log('WebGL 2.0 supported');
+                     return { supported: true, version: '2.0', context: gl };
+                 }
+                 
+                 // Try WebGL 1.0
+                 gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                 if (gl) {
+                     console.log('WebGL 1.0 supported');
+                     return { supported: true, version: '1.0', context: gl };
+                 }
+                 
+                 return { supported: false, version: null, context: null };
+             } catch(e) {
+                 console.error('WebGL check error:', e);
+                 return { supported: false, version: null, context: null, error: e.message };
+             }
+         }
+         
+         function initPannellumViewer() {
+             var container = document.getElementById('panorama-360');
+             if (!container) {
+                 return;
+             }
+             
+             // Check WebGL before loading Pannellum
+             var webglCheck = checkWebGLSupport();
+             if (!webglCheck.supported) {
+                 showError(container, 'WebGL is not available. Please: 1) Enable hardware acceleration in Chrome (chrome://settings/system), 2) Check chrome://flags and enable "WebGL Draft Extensions", 3) Update your graphics drivers, 4) Try disabling browser extensions.');
+                 return;
+             }
+             
+             if (typeof pannellum === 'undefined') {
+                 // Load Pannellum script dynamically
+                 var script = document.createElement('script');
+                 script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
+                 script.onload = function() {
+                     setTimeout(initPannellumViewer, 200);
+                 };
+                 script.onerror = function() {
+                     showError(container, 'Failed to load 360 viewer. Please refresh the page.');
+                 };
+                 document.head.appendChild(script);
+                 return;
+             }
+             
+             try {
+                 // Construct absolute URL for panorama image
+                 var panoramaPath = "<%= currentItem.view360 %>";
+                 var panoramaUrl = panoramaPath;
+                 if (panoramaPath && !panoramaPath.startsWith('http://') && !panoramaPath.startsWith('https://')) {
+                     // Convert relative path to absolute URL
+                     panoramaUrl = window.location.origin + (panoramaPath.startsWith('/') ? panoramaPath : '/' + panoramaPath);
+                 }
+                 
+                 console.log('Loading 360 view from:', panoramaUrl);
+                 
+                 // Preload image to verify it exists
+                 var img = new Image();
+                 img.onload = function() {
+                     // Image loaded successfully, initialize Pannellum
+                     var preloader = container.querySelector('.panorama-preloader');
+                     if (preloader) {
+                         preloader.style.display = 'none';
+                     }
+                     
+                     try {
+                         var viewer = pannellum.viewer('panorama-360', {
+                             "type": "equirectangular",
+                             "panorama": panoramaUrl,
+                             "autoLoad": true,
+                             "autoRotate": 0,
+                             "compass": false,
+                             "showControls": true,
+                             "keyboardZoom": false,
+                             "mouseZoom": false,
+                             "draggable": true,
+                             "disableKeyboardCtrl": true,
+                             "hfov": 100,
+                             "minHfov": 100,
+                             "maxHfov": 100,
+                             "pitch": 0,
+                             "yaw": 0,
+                             "showFullscreenCtrl": true,
+                             "showZoomCtrl": false
+                         });
+                 
+                         // Handle errors from Pannellum
+                         if (viewer && viewer.on) {
+                             viewer.on('error', function(error) {
+                                 console.error('Pannellum error:', error);
+                                 var errorMsg = 'Unable to load 360° view. ';
+                                 if (error && error.message) {
+                                     if (error.message.includes('WebGL')) {
+                                         errorMsg = 'WebGL error: ' + error.message + '. Try: 1) Refresh page, 2) Clear cache, 3) Check chrome://flags for WebGL settings, 4) Update graphics drivers.';
+                                     } else {
+                                         errorMsg += error.message;
+                                     }
+                                 } else {
+                                     errorMsg += 'Please try refreshing the page.';
+                                 }
+                                 showError(container, errorMsg);
+                             });
+                         }
+                         
+                         // Monitor for WebGL errors in the DOM
+                         var errorCheckInterval = setInterval(function() {
+                             var errorElement = container.querySelector('.pnlm-error');
+                             if (errorElement && errorElement.textContent) {
+                                 var errorText = errorElement.textContent.trim();
+                                 if (errorText.includes('WebGL')) {
+                                     clearInterval(errorCheckInterval);
+                                     showError(container, 'WebGL error detected. Solutions: 1) Go to chrome://flags and search for "WebGL", enable all WebGL options, 2) Restart Chrome, 3) Clear browser cache, 4) Update graphics drivers.');
+                                 }
+                             }
+                         }, 500);
+                         
+                         // Check if viewer loaded successfully
+                         setTimeout(function() {
+                             clearInterval(errorCheckInterval);
+                             var viewerElement = container.querySelector('.pnlm-container');
+                             var errorElement = container.querySelector('.pnlm-error');
+                             
+                             if (errorElement && errorElement.textContent) {
+                                 var errorText = errorElement.textContent.trim();
+                                 if (errorText.includes('WebGL')) {
+                                     showError(container, 'WebGL is not working. Try: 1) chrome://flags - enable "WebGL Draft Extensions", 2) Restart Chrome, 3) Check chrome://gpu for WebGL status, 4) Update graphics drivers.');
+                                 } else {
+                                     showError(container, errorText || '360° view failed to load. Please refresh the page.');
+                                 }
+                             } else if (viewerElement && viewerElement.offsetHeight > 0) {
+                                 container.classList.add('loaded');
+                                 console.log('360 view initialized successfully');
+                             }
+                         }, 2000);
+                         
+                     } catch(e) {
+                         console.error('Error initializing Pannellum:', e);
+                         showError(container, 'Error initializing 360° viewer: ' + (e.message || 'Unknown error'));
+                     }
+                 };
+                 
+                 img.onerror = function() {
+                     console.error('Failed to load image:', panoramaUrl);
+                     showError(container, 'Image file not found: ' + panoramaPath + '. Please check if the file exists at: ' + panoramaUrl);
+                 };
+                 
+                 img.src = panoramaUrl;
+                 
+             } catch(e) {
+                 console.error('Error setting up 360 view:', e);
+                 showError(container, 'Error loading 360° view: ' + (e.message || 'Unknown error') + '. Please refresh the page.');
+             }
+         }
+         
+         // Initialize after a short delay
+         setTimeout(initPannellumViewer, 300);
+     });
+     <% } %>
+</script>

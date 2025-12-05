@@ -1,0 +1,256 @@
+<%
+    // Function to map facility names to icon files - COMPLETE MAPPING
+    function getFacilityIcon(featureName) {
+        const name = featureName.toLowerCase();
+        
+        // Swimming & Water Features
+        if (name.includes('swimming pool') || name.includes('pool')) return 'swimming-pool.png';
+        if (name.includes('jacuzzi')) return 'jacuzzi.png';
+        
+        // Climate & Air
+        if ( name.includes('air condition') || name.includes('climate') || name.includes('air conditioning')) return 'air-conditioner.png';
+        
+        // Entertainment & Media
+        if (name.includes('tv') || name.includes('television') || name.includes('led tv')) return 'tv-screen.png';
+        if (name.includes('music') || name.includes('sound system') || name.includes('inbuilt music')) return 'music.png';
+        if (name.includes('projector') || name.includes('presentation screen') || name.includes('screen')) return 'projector.png';
+        if (name.includes('video conferencing') || name.includes('video call') || name.includes('video-call')) return 'video-call.png';
+        if (name.includes('av setup') || name.includes('av equipment') || name.includes('modern av')) return 'projector.png';
+        
+        // Connectivity
+        if (name.includes('wifi') || name.includes('internet') || name.includes('wireless') || name.includes('high-speed')) return 'wifi.png';
+        
+        // Food & Beverage
+        if (name.includes('multi-cuisine menu') || name.includes('wide multi-cuisine')) return 'menu.png';
+        if (name.includes('coffee') || name.includes('tea') || name.includes('maker') || name.includes('tea/coffee')) return 'coffee-machine.png';
+        if (name.includes('dining') || name.includes('restaurant') || name.includes('dinner') || name.includes('dining area') || name.includes('dining space')) return 'dinner.png';
+        if (name.includes('bar') || name.includes('cocktail') || name.includes('bar counter') || name.includes('drinks') || name.includes('beverages')) return 'cocktail.png';
+        if (name.includes('catering') || name.includes('food') || name.includes('cuisine') || name.includes('snacks') || name.includes('bites')) return 'catering.png';
+        if (name.includes('buffet') || name.includes('platter')) return 'platter.png';
+        if (name.includes('menu') && !name.includes('multi-cuisine')) return 'menu.png';
+        
+        // Furniture & Seating
+        if (name.includes('bed') || name.includes('bedroom') || name.includes('sleep')) return 'bed.png';
+        if (name.includes('chair') || name.includes('seating') || name.includes('executive seating') || name.includes('flexible seating') || name.includes('comfortable seating')) return 'chair.png';
+        if (name.includes('couch') || name.includes('sofa') || name.includes('lounge seating')) return 'couch.png';
+        if (name.includes('table') || name.includes('dining table')) return 'table-etiquette.png';
+        if (name.includes('lounge') || name.includes('lounge area') || name.includes('sitting')) return 'lounge.png';
+        
+        // Room Features
+        if (name.includes('balcony') || name.includes('balconies') || name.includes('terrace')) return 'balcony.png';
+        if (name.includes('apartment') || name.includes('room') || name.includes('suite') || name.includes('layout')) return 'apartment.png';
+        if (name.includes('bedroom') || name.includes('spacious bedroom')) return 'bed.png';
+        
+        // Parking & Transportation
+        if (name.includes('call') || name.includes('dialing')) return 'phone.svg';
+        
+        // Personal Care & Amenities
+        if (name.includes('hair') || name.includes('dryer') || name.includes('hairdryer')) return 'hairdryer.png';
+        if (name.includes('iron') || name.includes('ironing') || name.includes('laundry') || name.includes('iron board')) return 'ironing-board.png';
+        if (name.includes('slipper') || name.includes('cotton slippers')) return 'slippers.png';
+        if (name.includes('toiletry') || name.includes('toilet') || name.includes('bathroom') || name.includes('washroom') || name.includes('attached washroom')) return 'toilet.png';
+        if (name.includes('dental') || name.includes('shaving') || name.includes('kit')) return 'dental-care.png';
+        if (name.includes('weighing') || name.includes('scale')) return 'weight-loss.png';
+        
+        // Security & Storage
+        if (name.includes('locker') || name.includes('safety locker') || name.includes('safe')) return 'locker.png';
+        if (name.includes('security') || name.includes('shield')) return 'shield.png';
+        
+        // Business & Office
+        if (name.includes('office') || name.includes('business') || name.includes('business center') || name.includes('boardroom') || name.includes('meeting')) return 'office-building.png';
+        if (name.includes('whiteboard') || name.includes('board facilities')) return 'whiteboard.png';
+        if (name.includes('executive') || name.includes('professional')) return 'office-chair.png';
+        
+        // Power & Backup
+        if (name.includes('generator') || name.includes('power backup') || name.includes('dg power') || name.includes('backup')) return 'electric-generator.png';
+        
+        // Accessibility
+        if (name.includes('disability') || name.includes('accessible') || name.includes('wheelchair')) return 'disability.png';
+        if (name.includes('valet') || name.includes('parking') || name.includes('valet parking')) return 'valet-parking.png';
+        // Services
+        if (name.includes('wake-up') || name.includes('call service') || name.includes('alarm')) return 'alarm-clock.png';
+        
+        // Ambience & Setting
+        if (name.includes('ambience') || name.includes('ambiance') || name.includes('setting') || name.includes('atmosphere') || name.includes('environment')) return 'apartment.png';
+        if (name.includes('rooftop') || name.includes('open-air')) return 'terrace.png';
+        if (name.includes('poolside') || name.includes('relaxing')) return 'swimming-pool.png';
+        
+        // Events & Celebrations
+        if (name.includes('celebration') || name.includes('gathering') || name.includes('party') || name.includes('event')) return 'catering.png';
+        
+        // Layout & Design
+        if (name.includes('layout') || name.includes('design') || name.includes('compact') || name.includes('flexible layout')) return 'apartment.png';
+        if (name.includes('privacy') || name.includes('private') || name.includes('enclosed')) return 'apartment.png';
+        
+        // Default icon
+        return 'apartment.png';
+    }
+%>
+
+<div class="room-details__left">
+    <div class="wrapper">
+        <% if (currentItem && currentItem.detailDescription) { %>
+            <% 
+                const paragraphs = currentItem.detailDescription.split('\n\n');
+                paragraphs.forEach(paragraph => {
+                    if (paragraph.trim()) {
+            %>
+                <p class="text"><%= paragraph.trim() %></p>
+            <% 
+                    }
+                });
+            %>
+        <% } else { %>
+            <p class="text">No description available.</p>
+        <% } %>
+        
+        <% if (currentItem && (currentItem.venueDetails || currentItem.stayDetails || currentItem.diningDetails)) { %>
+            <% const details = currentItem.venueDetails || currentItem.stayDetails || currentItem.diningDetails; %>
+            <div class="row justify-content-center">
+                <div class="col-xl-12">
+                    <div class="room-details__content-right mb-40 mt-20">
+                        <div class="room-details__details-box">
+                            <div class="row" style="display: flex; justify-content: space-between; ">
+                                <% if (details.roomSize) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Room Size</p>
+                                        <h6><%= details.roomSize %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.bedType) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Bed Type</p>
+                                        <h6><%= details.bedType %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.occupancy) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Occupancy</p>
+                                        <h6><%= details.occupancy %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.category) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Category</p>
+                                        <h6><%= details.category %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.cuisine) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Cuisine</p>
+                                        <h6><%= details.cuisine %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.seating) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Seating</p>
+                                        <h6><%= details.seating %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.timings) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Timings</p>
+                                        <h6><%= details.timings %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.size) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Size</p>
+                                        <h6><%= details.size %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.capacity && !details.seating) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Capacity</p>
+                                        <h6><%= details.capacity %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.flooring) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Flooring</p>
+                                        <h6><%= details.flooring %></h6>
+                                    </div>
+                                <% } %>
+                                <% if (details.airConditioning) { %>
+                                    <div style="width: auto;">
+                                        <p class="text mb-0">Air Conditioning</p>
+                                        <h6><%= details.airConditioning %></h6>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+    
+    <% if (currentItem && currentItem.features && currentItem.features.length > 0) { %>
+        <div class="mt-40">
+            <h4 style="margin-bottom: 25px;">Room Facilities</h4>
+            <div class="row room-facility-list mb-40" style="row-gap: 20px;">
+                <% currentItem.features.forEach((feature, index) => { %>
+                    <div class="col-sm-6 col-xl-4">
+                        <div class="list-one d-flex align-items-center me-sm-4 <%= index < currentItem.features.length - 1 ? 'mb-3' : '' %>">
+                            <div class="icon facility-icon mr-10 flex-shrink-0">
+                                <img src="/assets/images/svg/<%= getFacilityIcon(feature) %>" alt="<%= feature %>" />
+                            </div>
+                            <h6 class="title m-0"><%= feature %></h6>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (currentItem && currentItem.paidServices && currentItem.paidServices.length > 0) { %>
+        <div class="mt-40">
+            <h4 style="margin-bottom: 25px;">Paid Services</h4>
+            <div class="row room-facility-list mb-40" style="row-gap: 20px;">
+                <% currentItem.paidServices.forEach((service, index) => { %>
+                    <div class="col-sm-6 col-xl-4">
+                        <div class="list-one d-flex align-items-center me-sm-4 <%= index < currentItem.paidServices.length - 1 ? 'mb-3' : '' %>">
+                            <div class="icon facility-icon mr-10 flex-shrink-0">
+                                <img src="/assets/images/svg/<%= getFacilityIcon(service) %>" alt="<%= service %>" />
+                            </div>
+                            <h6 class="title m-0"><%= service %></h6>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (currentItem && currentItem.view360) { %>
+        <div class="mt-40">
+            <h4>360° View</h4>
+            <div id="panorama-360" style="width: 100%; height: 650px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; background: #f4f6f8;">
+                <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
+                    <div class="panorama-spinner"></div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    
+    <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-40 pb-40 border-top">
+        <h6 class="my-sm-0">Share Details</h6>
+        <div class="blog-details__social-list">
+            <a href="#"><i class="fa fa-x"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+    
+    <% if (itemType === 'stay') { %>
+        <div class="p-4 p-lg-5 bg-light">
+            <%- include('../stay/staybookingform', { currentItem }) %>
+            <%- include('../stay/staybookingendpoint', { currentItem, websiteID: typeof websiteID !== 'undefined' ? websiteID : '', API_BASE_URL: typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : '' }) %>
+        </div>
+    <% } else if (itemType === 'venue') { %>
+        <div class="p-4 p-lg-5 bg-light">
+            <%- include('../venue/venueenquiryform', { currentItem, venues: typeof venues !== 'undefined' ? venues : [] }) %>
+            <%- include('../venue/venueenquiryendpoint', { currentItem, websiteID: typeof websiteID !== 'undefined' ? websiteID : '', API_BASE_URL: typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : '' }) %>
+        </div>
+    <% } %>
+</div>

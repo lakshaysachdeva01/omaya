@@ -1,0 +1,158 @@
+<%
+    // Get the first image from detailImages, or fallback to bannerImage or image
+    let preloaderImage = '';
+    if (currentItem && currentItem.detailImages && currentItem.detailImages.length > 0) {
+        preloaderImage = currentItem.detailImages[0];
+    } else if (currentItem && currentItem.bannerImage) {
+        preloaderImage = currentItem.bannerImage;
+    } else if (currentItem && currentItem.image) {
+        preloaderImage = currentItem.image;
+    } else {
+        preloaderImage = '/assets/images/background/page-title-bg.png';
+    }
+%>
+
+<style>
+    /* Preloader animation container */
+    .detail-preload-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff;
+        z-index: 2;
+        filter: brightness(0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 0.8s ease-out;
+        will-change: opacity;
+    }
+    
+    /* Hide animation after it's done */
+    .detail-preload-animation.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    /* Image - no fade in, just show immediately */
+    .detail-preload-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 1;
+    }
+</style>
+
+<!-- Detail Page Preload Animation -->
+<div class="detail-preload-animation" id="detailPreloadAnimation">
+    <img src="<%= preloaderImage %>" alt="<%= currentItem ? currentItem.title : 'Loading' %>" class="detail-preload-image" id="detailPreloadImage">
+</div>
+
+<script>
+    // Detail page preloader logic
+    var detailVideoReady = false;
+    var detailAnimationCompleted = false;
+    var detailAnimationDuration = 1000; // 1 second minimum
+    
+    // Function to hide preloader
+    function hideDetailPreloader() {
+        var preloader = document.getElementById('detailPreloadAnimation');
+        if (preloader) {
+            preloader.classList.add('hidden');
+            setTimeout(function() {
+                preloader.style.display = 'none';
+            }, 800);
+        }
+    }
+    
+    // Check if YouTube video is ready (if exists)
+    function checkDetailVideoReady() {
+        <% if (youtubeVideoId) { %>
+        if (typeof detailBannerYouTubePlayer !== 'undefined' && detailBannerYouTubePlayer) {
+            try {
+                var state = detailBannerYouTubePlayer.getPlayerState();
+                // Video is ready if it's playing, cued, or has buffered enough
+                if (state === YT.PlayerState.PLAYING || 
+                    state === YT.PlayerState.CUED || 
+                    state === YT.PlayerState.BUFFERING) {
+                    try {
+                        var buffered = detailBannerYouTubePlayer.getVideoLoadedFraction();
+                        if (buffered > 0.2 || state === YT.PlayerState.PLAYING) {
+                            detailVideoReady = true;
+                            if (detailAnimationCompleted) {
+                                hideDetailPreloader();
+                            }
+                            return true;
+                        }
+                    } catch(e) {
+                        // If we can't get buffer info but video is playing, consider it ready
+                        if (state === YT.PlayerState.PLAYING) {
+                            detailVideoReady = true;
+                            if (detailAnimationCompleted) {
+                                hideDetailPreloader();
+                            }
+                            return true;
+                        }
+                    }
+                }
+            } catch(e) {
+                // If we can't check, wait a bit more
+            }
+        }
+        // Check again in 200ms
+        setTimeout(checkDetailVideoReady, 200);
+        return false;
+        <% } else { %>
+        // No video, just wait for minimum animation time
+        detailVideoReady = true;
+        if (detailAnimationCompleted) {
+            hideDetailPreloader();
+        }
+        return true;
+        <% } %>
+    }
+    
+    // Expose function globally so YouTube player can call it
+    window.detailVideoReadyCallback = function() {
+        detailVideoReady = true;
+        if (detailAnimationCompleted) {
+            hideDetailPreloader();
+        }
+    };
+    
+    // Start animation timer
+    setTimeout(function() {
+        detailAnimationCompleted = true;
+        if (detailVideoReady) {
+            hideDetailPreloader();
+        } else {
+            // Start checking for video
+            checkDetailVideoReady();
+        }
+    }, detailAnimationDuration);
+    
+    // Fallback: hide preloader after max 5 seconds
+    setTimeout(function() {
+        hideDetailPreloader();
+    }, 5000);
+    
+    // Also hide when page is fully loaded
+    if (document.readyState === 'complete') {
+        setTimeout(function() {
+            if (detailAnimationCompleted) {
+                hideDetailPreloader();
+            }
+        }, detailAnimationDuration + 500);
+    } else {
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (detailAnimationCompleted) {
+                    hideDetailPreloader();
+                }
+            }, detailAnimationDuration + 500);
+        });
+    }
+</script>

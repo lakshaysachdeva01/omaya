@@ -249,36 +249,8 @@ var THEMEMASCOT = {};
 	});
 
 	//service-carousel Three
-	if ($('.service-three-slider').length) {
-		var swiper = new Swiper(".service-three-slider", {
-			slidesPerView: 1,
-			spaceBetween: 30,
-			navigation: {
-	            nextEl: '.swiper-button-next',
-	            prevEl: '.swiper-button-prev',
-	        },
-			breakpoints: {
-				320: {
-					slidesPerView: 1,
-				},
-				576: {
-					slidesPerView: 1,
-				},
-				768: {
-					slidesPerView: 2,
-				},
-				992: {
-					slidesPerView: 2,
-				},
-				1023: {
-					slidesPerView: 3,
-				},
-				1400: {
-					slidesPerView: 4,
-				},
-			},
-		});
-	}
+	// Note: Swiper initialization moved to homeproducts.ejs to handle dynamic content
+	// This prevents double initialization and ensures proper loop functionality
 
 	//testimonial-carousel Single
 	if ($('.testimonial-single-slider').length) {

@@ -89,8 +89,8 @@
             // Get form values
             const checkinDate = form.querySelector('input[name="checkinDate"]').value;
             const checkoutDate = form.querySelector('input[name="checkoutDate"]').value;
-            const numberOfGuests = parseInt(form.querySelector('select[name="numberOfGuests"]').value);
-            const kids = parseInt(form.querySelector('select[name="kids"]').value);
+            const numberOfGuests = parseInt(form.querySelector('input[name="numberOfGuests"]').value);
+            const kids = parseInt(form.querySelector('input[name="kids"]').value);
             
             // Convert dates to ISO format
             const checkinDateISO = new Date(checkinDate + 'T00:00:00.000Z').toISOString();

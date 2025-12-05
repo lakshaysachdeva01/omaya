@@ -1,0 +1,106 @@
+  <!-- BOOKING SECTION -->
+  <section class="booking-section">
+    <div class="auto-container">
+      <div class="row">
+        <div class="col-lg-6 booking-form-column wow fadeInUp">
+          <div class="inner-column">
+            <div class="sec-title">
+              <span class="sub-title">CONTACT US</span>
+              <h2>Send us a message</h2>
+            </div>
+            <form class="bk-form" id="homeContactForm" method="post">
+              <div class="frm-field">
+                <input type="text" name="<%= typeof CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS !== 'undefined' ? CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name : 'name' %>" placeholder="Enter Name" required />
+                <!-- <img src="/assets/images/icons/mail.png" alt="" /> -->
+              </div>
+              <div class="frm-field">
+                <input type="tel" name="<%= typeof CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS !== 'undefined' ? CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone : 'phone' %>" placeholder="Enter Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
+               
+              </div>
+              <div class="frm-field">
+                <input type="email" name="<%= typeof CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS !== 'undefined' ? CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email : 'email' %>" placeholder="Enter Email" required />
+                
+              </div>
+              <div class="frm-field">
+                <textarea name="<%= typeof CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS !== 'undefined' ? CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.remarks : 'remarks' %>" placeholder="Enter Message" required rows="3" style="width: 100%; height: 140px; padding: 0 30px; border: 1px solid #adadad; background: #fff; color: #222222; font-size: 16px; resize: vertical; padding-top: 20px; padding-bottom: 20px;"></textarea>
+          
+              </div>
+              <div class="form-submit">
+                <button type="submit">Send message</button>
+              </div>
+              <input name="form_botcheck" type="hidden" value="" />
+            </form>
+          </div>
+        </div>
+        <div class="col-lg-6 booking-content-column wow fadeInRight" data-wow-delay="200ms">
+          <div class="inner-column">
+            <div class="sec-title white">
+              <span class="sub-title">Hoexr HOTEL</span>
+              <h2>Get in Touch </h2>
+            </div>
+            <p>Each of our guest rooms feature a private bath, wi-fi, cable television and include full breakfast.</p>
+            <p>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu.</p>
+            <div class="contact-info">
+              <div class="icon-box"><i class="flaticon-customer-service"></i></div>
+              <span>Contact Now</span>
+              <h4 class="title">956 220 6666</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- BOOKING SECTION END -->
+  
+  <script>
+    // Home contact form submission handler
+    document.addEventListener('DOMContentLoaded', function() {
+      const homeForm = document.getElementById('homeContactForm');
+      if (homeForm) {
+        homeForm.addEventListener('submit', async function (e) { 
+          e.preventDefault();
+          
+          try {
+            const API_BASE_URL = "<%= typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : '' %>";
+            const websiteID = "<%= typeof websiteID !== 'undefined' ? websiteID : '' %>";
+            const WEBSITEIDKEY = "<%= typeof WEBSITE_ID_KEY !== 'undefined' ? WEBSITE_ID_KEY : '' %>";
+            const CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS = <%- typeof CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS !== 'undefined' ? JSON.stringify(CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS) : '{}' %>;
+    
+            const CREATE_CONTACT_ENQUIRY_END_POINT = `${API_BASE_URL}/website/${websiteID}/contact-enquiry/create`;
+    
+            const contactForm = e.target;
+            const WEBSITE_ID_KEY = WEBSITEIDKEY;
+    
+            const payload = {
+              [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name]: contactForm.querySelector(`input[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.name}"]`).value,
+              [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone]: Number(contactForm.querySelector(`input[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.phone}"]`).value.replace(/\D/g, '')),
+              [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email]: contactForm.querySelector(`input[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email}"]`).value,
+              [CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.remarks]: contactForm.querySelector(`textarea[name="${CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.remarks}"]`).value,
+            };
+    
+            const headers = new Headers({
+              "Content-Type": "application/json",
+            });
+    
+            const response = await fetch(CREATE_CONTACT_ENQUIRY_END_POINT, {
+              method: "POST",
+              headers,
+              body: JSON.stringify(payload),
+            });
+    
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+    
+            sessionStorage.setItem("thankYouMessage", "We've Received Your Message and will Contact you soon.");
+            window.location.href = "/thankyou";
+          } catch (error) {
+            console.error("Form submission error", error);
+            alert("There was an error submitting your message. Please try again.");
+          }
+        });
+      }
+    });
+  </script>

@@ -1,0 +1,152 @@
+<script>
+    // Map event type from frontend to backend enum
+    function getEventTypeEnum(eventType) {
+        if (!eventType) return 'OTHERS';
+        
+        const mapping = {
+            'Birthday': 'BIRTHDAY',
+            'Anniversary': 'ANNIVERSARY',
+            'Social Gathering': 'SOCIAL_GATHERING',
+            'Wedding': 'WEDDING',
+            'Corporate Event': 'CORPORATE_EVENT',
+            'Meeting': 'MEETING',
+            'Conference': 'CONFERENCE',
+            'Others': 'OTHERS'
+        };
+        
+        return mapping[eventType] || 'OTHERS';
+    }
+    
+    // Convert venue name to backend format (UPPERCASE with underscores)
+    function convertVenueName(venueName) {
+        if (!venueName) return '';
+        
+        return venueName
+            .toUpperCase()
+            .replace(/\s+/g, '_')
+            .replace(/[^A-Z0-9_]/g, '');
+    }
+    
+    // Initialize Flatpickr for date and time pickers
+    document.addEventListener('DOMContentLoaded', function() {
+        const eventDateInput = document.getElementById('eventDate');
+        const eventTimeInput = document.getElementById('eventTime');
+        
+        // Initialize event date picker
+        const eventDatePicker = flatpickr(eventDateInput, {
+            dateFormat: "Y-m-d",
+            minDate: "today"
+        });
+        
+        // Initialize event time picker
+        const eventTimePicker = flatpickr(eventTimeInput, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            defaultHour: 12,
+            defaultMinute: 0
+        });
+    });
+    
+    // Handle form submission
+    document.getElementById('venueEnquiryForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        
+        try {
+            const API_BASE_URL = "<%= API_BASE_URL %>";
+            const websiteID = "<%= websiteID %>";
+            
+            const CREATE_VENUE_ENQUIRY_END_POINT = `${API_BASE_URL}/website-builder/website/${websiteID}/venue-leads/create`;
+            
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const btnTitle = submitBtn.querySelector('.btn-title');
+            const originalText = btnTitle.textContent;
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            btnTitle.textContent = submitBtn.getAttribute('data-loading-text') || 'Please wait...';
+            
+            // Get form values
+            const fullName = form.querySelector('input[name="fullName"]').value;
+            const phone = form.querySelector('input[name="phone"]').value;
+            const email = form.querySelector('input[name="email"]').value;
+            const eventDate = form.querySelector('input[name="eventDate"]').value;
+            const eventTime = form.querySelector('input[name="eventTime"]').value;
+            const guests = parseInt(form.querySelector('input[name="guests"]').value);
+            const eventType = form.querySelector('input[name="eventType"]').value;
+            const preferredVenue = form.querySelector('input[name="preferredVenue"]').value;
+            const message = form.querySelector('textarea[name="message"]').value;
+            
+            // Validate required fields
+            if (!fullName || !phone || !email || !eventDate || !eventTime || !guests || !eventType || !preferredVenue || !message) {
+                throw new Error('Please fill in all required fields');
+            }
+            
+            // Convert event date to ISO format
+            const eventDateISO = new Date(eventDate + 'T00:00:00.000Z').toISOString();
+            
+            // Combine event date and time for eventTime ISO format
+            const [hours, minutes] = eventTime.split(':');
+            const eventDateTime = new Date(eventDate);
+            eventDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            const eventTimeISO = eventDateTime.toISOString();
+            
+            // Convert event type to backend enum
+            const eventTypeEnum = getEventTypeEnum(eventType);
+            
+            // Convert venue name to backend format
+            const preferredVenueEnum = convertVenueName(preferredVenue);
+            
+            // Prepare payload
+            const payload = {
+                fullName: fullName,
+                mobileNumber: phone,
+                email: email,
+                eventType: eventTypeEnum,
+                remarks: message,
+                eventDate: eventDateISO,
+                eventTime: eventTimeISO,
+                numberOfGuests: guests,
+                preferredVenue: preferredVenueEnum
+            };
+            
+            // Set headers
+            const headers = new Headers({
+                "Content-Type": "application/json",
+            });
+            
+            // Send POST request
+            const response = await fetch(CREATE_VENUE_ENQUIRY_END_POINT, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(payload),
+            });
+            
+            // Handle response
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! Status: ${response.status}. ${errorText}`);
+            }
+            
+            const data = await response.json();
+            
+            // Redirect to thank you page on success
+            sessionStorage.setItem("thankYouMessage", "Your venue enquiry has been submitted successfully. We'll contact you soon!");
+            window.location.href = "/thankyou";
+            
+        } catch (error) {
+            console.error("Form submission error", error);
+            alert("There was an error submitting your enquiry. Please try again.");
+            
+            // Re-enable button
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const btnTitle = submitBtn.querySelector('.btn-title');
+            submitBtn.disabled = false;
+            btnTitle.textContent = "Submit Comment";
+        }
+    });
+</script>
+
+

@@ -1,0 +1,88 @@
+<%
+    // Function to map facility names to icon files - COMPLETE MAPPING
+    function getFacilityIcon(featureName) {
+        const name = featureName.toLowerCase();
+        
+        // Swimming & Water Features
+        if (name.includes('swimming pool') || name.includes('pool')) return 'swimming-pool.png';
+        if (name.includes('jacuzzi')) return 'jacuzzi.png';
+        
+        // Climate & Air
+        if ( name.includes('air condition') || name.includes('climate') || name.includes('air conditioning')) return 'air-conditioner.png';
+        
+        // Entertainment & Media
+        if (name.includes('tv') || name.includes('television') || name.includes('led tv')) return 'tv-screen.png';
+        if (name.includes('music') || name.includes('sound system') || name.includes('inbuilt music')) return 'music.png';
+        if (name.includes('projector') || name.includes('presentation screen') || name.includes('screen')) return 'projector.png';
+        if (name.includes('video conferencing') || name.includes('video call') || name.includes('video-call')) return 'video-call.png';
+        if (name.includes('av setup') || name.includes('av equipment') || name.includes('modern av')) return 'projector.png';
+        
+        // Connectivity
+        if (name.includes('wifi') || name.includes('internet') || name.includes('wireless') || name.includes('high-speed')) return 'wifi.png';
+        
+        // Food & Beverage
+        if (name.includes('multi-cuisine menu') || name.includes('wide multi-cuisine')) return 'menu.png';
+        if (name.includes('coffee') || name.includes('tea') || name.includes('maker') || name.includes('tea/coffee')) return 'coffee-machine.png';
+        if (name.includes('dining') || name.includes('restaurant') || name.includes('dinner') || name.includes('dining area') || name.includes('dining space')) return 'dinner.png';
+        if (name.includes('bar') || name.includes('cocktail') || name.includes('bar counter') || name.includes('drinks') || name.includes('beverages')) return 'cocktail.png';
+        if (name.includes('catering') || name.includes('food') || name.includes('cuisine') || name.includes('snacks') || name.includes('bites')) return 'catering.png';
+        if (name.includes('buffet') || name.includes('platter')) return 'platter.png';
+        if (name.includes('menu') && !name.includes('multi-cuisine')) return 'menu.png';
+        
+        // Furniture & Seating
+        if (name.includes('bed') || name.includes('bedroom') || name.includes('sleep')) return 'bed.png';
+        if (name.includes('chair') || name.includes('seating') || name.includes('executive seating') || name.includes('flexible seating') || name.includes('comfortable seating')) return 'chair.png';
+        if (name.includes('couch') || name.includes('sofa') || name.includes('lounge seating')) return 'couch.png';
+        if (name.includes('table') || name.includes('dining table')) return 'table-etiquette.png';
+        if (name.includes('lounge') || name.includes('lounge area') || name.includes('sitting')) return 'lounge.png';
+        
+        // Room Features
+        if (name.includes('balcony') || name.includes('balconies') || name.includes('terrace')) return 'balcony.png';
+        if (name.includes('apartment') || name.includes('room') || name.includes('suite') || name.includes('layout')) return 'apartment.png';
+        if (name.includes('bedroom') || name.includes('spacious bedroom')) return 'bed.png';
+        
+        // Parking & Transportation
+        if (name.includes('call') || name.includes('dialing')) return 'phone.svg';
+        
+        // Personal Care & Amenities
+        if (name.includes('hair') || name.includes('dryer') || name.includes('hairdryer')) return 'hairdryer.png';
+        if (name.includes('iron') || name.includes('ironing') || name.includes('laundry') || name.includes('iron board')) return 'ironing-board.png';
+        if (name.includes('slipper') || name.includes('cotton slippers')) return 'slippers.png';
+        if (name.includes('toiletry') || name.includes('toilet') || name.includes('bathroom') || name.includes('washroom') || name.includes('attached washroom')) return 'toilet.png';
+        if (name.includes('dental') || name.includes('shaving') || name.includes('kit')) return 'dental-care.png';
+        if (name.includes('weighing') || name.includes('scale')) return 'weight-loss.png';
+        
+        // Security & Storage
+        if (name.includes('locker') || name.includes('safety locker') || name.includes('safe')) return 'locker.png';
+        if (name.includes('security') || name.includes('shield')) return 'shield.png';
+        
+        // Business & Office
+        if (name.includes('office') || name.includes('business') || name.includes('business center') || name.includes('boardroom') || name.includes('meeting')) return 'office-building.png';
+        if (name.includes('whiteboard') || name.includes('board facilities')) return 'whiteboard.png';
+        if (name.includes('executive') || name.includes('professional')) return 'office-chair.png';
+        
+        // Power & Backup
+        if (name.includes('generator') || name.includes('power backup') || name.includes('dg power') || name.includes('backup')) return 'electric-generator.png';
+        
+        // Accessibility
+        if (name.includes('disability') || name.includes('accessible') || name.includes('wheelchair')) return 'disability.png';
+        if (name.includes('valet') || name.includes('parking') || name.includes('valet parking')) return 'valet-parking.png';
+        // Services
+        if (name.includes('wake-up') || name.includes('call service') || name.includes('alarm')) return 'alarm-clock.png';
+        
+        // Ambience & Setting
+        if (name.includes('ambience') || name.includes('ambiance') || name.includes('setting') || name.includes('atmosphere') || name.includes('environment')) return 'apartment.png';
+        if (name.includes('rooftop') || name.includes('open-air')) return 'terrace.png';
+        if (name.includes('poolside') || name.includes('relaxing')) return 'swimming-pool.png';
+        
+        // Events & Celebrations
+        if (name.includes('celebration') || name.includes('gathering') || name.includes('party') || name.includes('event')) return 'catering.png';
+        
+        // Layout & Design
+        if (name.includes('layout') || name.includes('design') || name.includes('compact') || name.includes('flexible layout')) return 'apartment.png';
+        if (name.includes('privacy') || name.includes('private') || name.includes('enclosed')) return 'apartment.png';
+        
+        // Default icon
+        return 'apartment.png';
+    }
+%>

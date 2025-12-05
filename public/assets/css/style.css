@@ -5804,7 +5804,7 @@ Section Title
   visibility: hidden;
 }
 .service-block-two .inner-box:hover {
-  background-color: var(--theme-color-dark);
+  background-color: #aa8453;
 }
 .service-block-two .inner-box:hover::before {
   opacity: 1;
@@ -5858,17 +5858,7 @@ Section Title
     position: static;
   }
 }
-.service-block-two .inner-box .image-box .icon-box::before {
-  content: "";
-  position: absolute;
-  right: -10px;
-  bottom: 0;
-  width: 30px;
-  height: 30px;
-  background-color: #f8f5f0;
-  border-radius: 50%;
-  z-index: -1;
-}
+
 .service-block-two .inner-box .image-box .title {
   margin-bottom: 18px;
 }
@@ -5942,9 +5932,7 @@ Section Title
   -webkit-transition: all 300ms ease;
   transition: all 300ms ease;
 }
-.service-block-three .inner-box:hover {
-  background-color: var(--theme-color-dark);
-}
+
 .service-block-three .inner-box:hover .image img {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
@@ -7556,9 +7544,9 @@ Section Title
   }
 }
 .room-service-block-one .content-box .inner-box {
-  border-bottom: 1px solid rgba(106, 105, 105, 0.2);
-  margin-bottom: 25px;
-  padding-bottom: 20px;
+
+  margin-bottom: 0px;
+  padding-bottom: 0px;
 }
 .room-service-block-one .content-box .title {
   font-family: "Gilda Display";
@@ -15142,4 +15130,9 @@ Sidebar
 .pnlm-lbar{
   display: none !important;
   opacity: 0 !important;
+}
+
+
+.service-section-three .pnlm-controls-container{
+  display: none !important;
 }

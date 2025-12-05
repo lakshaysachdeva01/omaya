@@ -1,0 +1,247 @@
+<style>
+    .venue-enquiry-form {
+        position: relative;
+        z-index: 9;
+    }
+    
+    .venue-enquiry-form .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #222222;
+        font-size: 16px;
+    }
+    
+    .venue-enquiry-form .form-control {
+        width: 100%;
+        height: 70px;
+        color: #222222;
+        font-size: 16px;
+        padding: 0 30px;
+        border: 1px solid #adadad;
+        background: #fff;
+        border-radius: 0;
+    }
+    
+    .venue-enquiry-form .form-control:focus {
+        border-color: #adadad;
+        outline: none;
+        box-shadow: none;
+    }
+    
+    .venue-enquiry-form .form-control[readonly] {
+        background-color: #fff !important;
+        cursor: pointer;
+    }
+    
+    .venue-enquiry-form textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: auto;
+    }
+    
+    .venue-enquiry-form .date-input-wrapper {
+        position: relative;
+    }
+    
+    .venue-enquiry-form .date-input-wrapper .form-control {
+        padding-right: 60px;
+        cursor: pointer;
+    }
+    
+    .venue-enquiry-form .date-input-wrapper::after {
+        content: '\f073';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--theme-color1);
+        pointer-events: none;
+    }
+    
+    .venue-enquiry-form .time-input-wrapper {
+        position: relative;
+    }
+    
+    .venue-enquiry-form .time-input-wrapper .form-control {
+        padding-right: 60px;
+        cursor: pointer;
+    }
+    
+    .venue-enquiry-form .time-input-wrapper::after {
+        content: '\f017';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--theme-color1);
+        pointer-events: none;
+    }
+    
+    .venue-enquiry-form .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .venue-enquiry-form .form-row .form-group {
+        flex: 1;
+    }
+    
+    .venue-enquiry-form .form-submit {
+        margin-top: 23px;
+    }
+    
+    .venue-enquiry-form .form-submit button,
+    .venue-enquiry-form button[type="submit"] {
+        background-color: #222222;
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-family: var(--text-font2);
+        letter-spacing: 2px;
+        width: 100%;
+        height: 70px;
+        line-height: 70px;
+        border: 0;
+        position: relative;
+        z-index: 9;
+        padding: 0;
+    }
+    
+    .venue-enquiry-form .form-submit button:before,
+    .venue-enquiry-form button[type="submit"]:before {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        content: "";
+        background-color: var(--bg-theme-color1);
+        border-radius: inherit;
+        transform: scale(0, 1);
+        z-index: -1;
+        transform-origin: top right;
+        transition: transform 500ms cubic-bezier(0.86, 0, 0.07, 1);
+    }
+    
+    .venue-enquiry-form .form-submit button:hover:before,
+    .venue-enquiry-form button[type="submit"]:hover:before {
+        transform: scale(1, 1);
+        transform-origin: bottom left;
+    }
+    
+    @media (max-width: 767px) {
+        .venue-enquiry-form .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+
+<div class="venue-enquiry-form">
+    <h4 class="mt-0 mb-4">Send Us Your Question</h4>
+    <form id="venueEnquiryForm" method="post">
+        <!-- Name and Phone Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Full Name *</label>
+                <input name="fullName" class="form-control" type="text" placeholder="Enter Full Name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone Number *</label>
+                <input name="phone" class="form-control" type="tel" placeholder="Enter Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+            </div>
+        </div>
+        
+        <!-- Email Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Email Address *</label>
+                <input name="email" class="form-control required email" type="email" placeholder="Enter Email" required>
+            </div>
+        </div>
+        
+        <!-- Event Date and Event Time Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Event Date *</label>
+                <div class="date-input-wrapper">
+                    <input type="text" name="eventDate" id="eventDate" class="form-control" placeholder="Select Event Date" required readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Event Time *</label>
+                <div class="time-input-wrapper">
+                    <input type="text" name="eventTime" id="eventTime" class="form-control" placeholder="Select Event Time" required readonly>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Number of Guests and Event Type Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Number of Guests *</label>
+                <input name="guests" class="form-control" type="number" placeholder="Enter Number of Guests" required min="1">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Event Type *</label>
+                <div class="custom-dropdown" id="venueEventTypeDropdown">
+                    <div class="custom-dropdown-selected">
+                        <span class="selected-text">Select event type</span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <div class="dropdown-option" data-value="Birthday" data-title="Birthday">Birthday</div>
+                        <div class="dropdown-option" data-value="Anniversary" data-title="Anniversary">Anniversary</div>
+                        <div class="dropdown-option" data-value="Social Gathering" data-title="Social Gathering">Social Gathering</div>
+                        <div class="dropdown-option" data-value="Wedding" data-title="Wedding">Wedding</div>
+                        <div class="dropdown-option" data-value="Corporate Event" data-title="Corporate Event">Corporate Event</div>
+                        <div class="dropdown-option" data-value="Meeting" data-title="Meeting">Meeting</div>
+                        <div class="dropdown-option" data-value="Conference" data-title="Conference">Conference</div>
+                        <div class="dropdown-option" data-value="Others" data-title="Others">Others</div>
+                    </div>
+                </div>
+                <input type="hidden" name="eventType" id="eventTypeHidden" required>
+            </div>
+        </div>
+        
+        <!-- Preferred Venue Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Preferred Venue *</label>
+                <div class="custom-dropdown" id="venuePreferredVenueDropdown">
+                    <div class="custom-dropdown-selected">
+                        <span class="selected-text"><%= (typeof currentItem !== 'undefined' && currentItem && currentItem.title) ? currentItem.title : 'Select preferred venue' %></span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <% if (typeof venues !== 'undefined' && Array.isArray(venues) && venues.length > 0) { %>
+                            <% venues.forEach((venue) => { %>
+                                <div class="dropdown-option <%= (typeof currentItem !== 'undefined' && currentItem && currentItem.title === venue.title) ? 'selected' : '' %>" data-value="<%= venue.title %>" data-title="<%= venue.title %>"><%= venue.title %></div>
+                            <% }); %>
+                        <% } %>
+                    </div>
+                </div>
+                <input type="hidden" name="preferredVenue" id="preferredVenueHidden" required value="<%= (typeof currentItem !== 'undefined' && currentItem && currentItem.title) ? currentItem.title : '' %>">
+            </div>
+        </div>
+        
+        <!-- Remarks Row -->
+        <div class="mb-3">
+            <label class="form-label">Remarks / Message *</label>
+            <textarea name="message" class="form-control required" rows="5" placeholder="Enter Message" required></textarea>
+        </div>
+        
+        <div class="mb-0">
+            <input name="form_botcheck" class="form-control" type="hidden" value="">
+            <button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait...">
+                <span class="btn-title">Submit Comment</span>
+            </button>
+        </div>
+    </form>
+</div>

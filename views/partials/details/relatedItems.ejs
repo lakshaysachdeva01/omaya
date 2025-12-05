@@ -1,0 +1,59 @@
+<!-- Room-section two -->
+<section class="room-service-section pt-120 pb-90">
+    <div class="auto-container">
+        <div class="sec-title text-center">
+            <span class="sub-title">Other <%= typeLabel === 'Stay' ? 'Stays' : (typeLabel === 'Dining' ? 'Dinings' : 'Venues') %></span>
+            <% if (typeLabel === 'Stay') { %>
+            <h2>Book your room & <br /> Enjoy the trip.</h2>
+            <% } else if (typeLabel === 'Dining') { %>
+            <h2>Explore our dining & <br /> Culinary experiences.</h2>
+            <% } else { %>
+            <h2>Discover our venues & <br /> Event spaces.</h2>
+            <% } %>
+        </div>
+        <div class="row">
+            <%
+                // Get the appropriate array based on type
+                let itemsList = [];
+                if (itemType === 'stay' && typeof stays !== 'undefined') {
+                    itemsList = stays.filter(item => item.slug !== currentItem.slug);
+                } else if (itemType === 'dining' && typeof diningList !== 'undefined') {
+                    itemsList = diningList.filter(item => item.slug !== currentItem.slug);
+                } else if (itemType === 'venue' && typeof venues !== 'undefined') {
+                    itemsList = venues.filter(item => item.slug !== currentItem.slug);
+                }
+                
+                // Display items
+                if (itemsList && itemsList.length > 0) {
+                    itemsList.forEach((item) => {
+                        const coverImage = item.image;
+                        const itemLink = item.link || (itemType === 'stay' ? `/stay/${item.slug}` : (itemType === 'dining' ? `/dining/${item.slug}` : `/venue/${item.slug}`));
+            %>
+            <!-- News Block -->
+            <div class="room-service-block-one col-lg-4 col-sm-6 wow fadeInUp">
+                <div class="inner-box">
+                    <div class="image-box">
+                        <figure class="image mb-0" style="height: 260px;">
+                            <a href="<%= itemLink %>">
+                                <img src="<%= coverImage %>" alt="<%= item.title %>" style="width: 100%; height: 100%; object-fit: cover;">
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="content-box">
+                        <div class="inner-box">
+                            <div class="price" style="margin-bottom: 16px; font-size: 14px; font-family: 'Barlow', sans-serif;"><%= item.tagline || '' %></div>  
+                            <h4 class="title"><a href="<%= itemLink %>"><%= item.title %></a></h4>
+                            <p style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><%= item.description || '' %></p>
+                            <a href="<%= itemLink %>" style="margin-bottom: 15px; padding: 6px 12px;" class="theme-btn btn-style-one read-more">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%
+                    });
+                }
+            %>
+        </div>
+    </div>
+</section>
+<!-- End Room section -->

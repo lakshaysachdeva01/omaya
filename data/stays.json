@@ -59,21 +59,18 @@
     "tagline": "PREMIUM SUITE",
     "title": "Deluxe Suite",
     "description": "Experience refined elegance with a private Jacuzzi, modern décor, and a calm, relaxing ambience. Ideal for couples, executives, and guests seeking comfort with a touch of luxury.",
-    "image": "/assets/images/resource/feature-2.jpg",
+    "image": "/assets/images/data/Executive/RCP00206.webp",
     "icon": "/assets/images/resource/icon-2.png",
     "link": "/stay/deluxe-suite",
-    "bannerImage": "/assets/images/resource/feature-2.jpg",
+    "bannerImage": "/assets/images/data/Executive/RCP00206.webp",
     "detailImages": [
-      "/assets/images/data/Deluxe/RCP00222.webp",
-      "/assets/images/data/Deluxe/RCP00223.webp",
-      "/assets/images/data/Deluxe/RCP00225.webp",
-      "/assets/images/data/Deluxe/RCP00226.webp",
-      "/assets/images/data/Deluxe/RCP00228.webp",
-      "/assets/images/data/Deluxe/RCP00231.webp",
-      "/assets/images/data/Deluxe/RCP00234.webp",
-      "/assets/images/data/Deluxe/RCP00235.webp",
-      "/assets/images/data/Deluxe/RCP00240.webp",
-      "/assets/images/data/Deluxe/RCP00243.webp"
+      "/assets/images/data/Executive/RCP00206.webp",
+      "/assets/images/data/Executive/RCP00208.webp",
+      "/assets/images/data/Executive/RCP00212.webp",
+      "/assets/images/data/Executive/RCP00213.webp",
+      "/assets/images/data/Executive/RCP00217.webp",
+      "/assets/images/data/Executive/RCP00219.webp",
+      "/assets/images/data/Executive/RCP00220.webp"
     ],
     "listDescription": "Experience refined elegance with a private Jacuzzi, modern décor, and a calm, relaxing ambience.",
     "detailDescription": "The Deluxe Suite offers a warm and stylish setting, making it ideal for both leisure travellers and corporate professionals who prefer comfort with elegance. The soothing interiors and spacious layout create a peaceful atmosphere to unwind after a long day. The private in-room Jacuzzi adds a luxurious spa-like touch, perfect for rejuvenation.\n\nWhether you're a couple celebrating a special moment or an executive on a business trip, the Deluxe Suite offers privacy, comfort, and premium hospitality. Its thoughtfully crafted ambience ensures a refreshing experience for short stays, weekend breaks, and corporate visits.",
@@ -103,7 +100,8 @@
       "Photocopy / Printouts",
       "Direct Dialing Facility"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=cvzsDFUu9o4",
+    "youtubeVideo": "https://www.youtube.com/watch?v=Z-xP0LT2Vno",
+  
     "view360": "/assets/images/360/deluxesuites.webp"
   },
   {
@@ -112,18 +110,22 @@
     "tagline": "BUSINESS SUITE",
     "title": "Executive Suite",
     "description": "Designed for business and leisure, this suite offers a spacious layout, separate dining area, and sophisticated interiors. A perfect blend of productivity and relaxation for corporate travellers.",
-    "image": "/assets/images/resource/feature-3.jpg",
+    "image": "/assets/images/data/Executive/RCP00206.webp",
     "icon": "/assets/images/resource/icon-3.png",
     "link": "/stay/executive-suite",
-    "bannerImage": "/assets/images/resource/feature-3.jpg",
+    "bannerImage": "/assets/images/data/Executive/RCP00206.webp",
+    "youtubeVideo": "https://www.youtube.com/watch?v=cvzsDFUu9o4",
     "detailImages": [
-      "/assets/images/data/Executive/RCP00206.webp",
-      "/assets/images/data/Executive/RCP00208.webp",
-      "/assets/images/data/Executive/RCP00212.webp",
-      "/assets/images/data/Executive/RCP00213.webp",
-      "/assets/images/data/Executive/RCP00217.webp",
-      "/assets/images/data/Executive/RCP00219.webp",
-      "/assets/images/data/Executive/RCP00220.webp"
+      "/assets/images/data/Deluxe/RCP00222.webp",
+      "/assets/images/data/Deluxe/RCP00223.webp",
+      "/assets/images/data/Deluxe/RCP00225.webp",
+      "/assets/images/data/Deluxe/RCP00226.webp",
+      "/assets/images/data/Deluxe/RCP00228.webp",
+      "/assets/images/data/Deluxe/RCP00231.webp",
+      "/assets/images/data/Deluxe/RCP00234.webp",
+      "/assets/images/data/Deluxe/RCP00235.webp",
+      "/assets/images/data/Deluxe/RCP00240.webp",
+      "/assets/images/data/Deluxe/RCP00243.webp"
     ],
     "listDescription": "Designed for business and leisure, this suite offers a spacious layout, separate dining area, and sophisticated interiors.",
     "detailDescription": "The Executive Suite is designed specifically for corporate travellers, business professionals, and long-stay guests, offering the perfect balance of comfort and productivity. Its smart layout, calming décor, and dedicated dining and work-friendly space create an environment ideal for meetings, work calls, or focused tasks. The private balcony and soft ambient lighting make it equally perfect for unwinding after a busy day.\n\nWhether you're visiting Raipur for work, attending conferences, or requiring extended-stay accommodation, the Executive Suite ensures a smooth, efficient, and premium experience. It delivers all the essentials of corporate comfort with a touch of luxury.",
@@ -153,7 +155,7 @@
       "Photocopy / Printouts",
       "Direct Dialing Facility"
     ],
-    "youtubeVideo": "https://www.youtube.com/watch?v=Z-xP0LT2Vno",
+
     "view360": "/assets/images/360/executivesuite.webp"
   },
   {
@@ -162,15 +164,18 @@
     "tagline": "FAMILY SUITE",
     "title": "Duo Suite",
     "description": "A spacious dual-suite experience created for families and groups. Enjoy two connected suites with ample space, privacy, and comfort—ideal for vacations, wedding guests, and long stays.",
-    "image": "/assets/images/resource/feature-1.jpg",
+    "image": "/assets/images/data/Executive/RCP00206.webp",
     "icon": "/assets/images/resource/icon-2.png",
     "link": "/stay/duo-suite",
-    "bannerImage": "/assets/images/resource/feature-1.jpg",
-    "detailImages": [
-      "/assets/images/resource/room-1.jpg",
-      "/assets/images/resource/room-2.jpg",
-      "/assets/images/resource/room-4.jpg",
-      "/assets/images/resource/room-6.jpg"
+    "bannerImage": "/assets/images/data/Executive/RCP00206.webp",
+   "detailImages": [
+      "/assets/images/data/Executive/RCP00206.webp",
+      "/assets/images/data/Executive/RCP00208.webp",
+      "/assets/images/data/Executive/RCP00212.webp",
+      "/assets/images/data/Executive/RCP00213.webp",
+      "/assets/images/data/Executive/RCP00217.webp",
+      "/assets/images/data/Executive/RCP00219.webp",
+      "/assets/images/data/Executive/RCP00220.webp"
     ],
     "listDescription": "A spacious dual-suite experience created for families and groups.",
     "detailDescription": "The Duo Suite is the ideal choice for families, groups, wedding guests, and even corporate teams who prefer staying together with the comfort of individual privacy. Featuring two connected luxury suites, the space is designed for both bonding and personal relaxation. With multiple dining areas and balconies, the suite provides ample room for shared moments and peaceful downtime.\n\nPremium interiors, spacious rooms, and thoughtful amenities make the Duo Suite perfect for extended vacations, family gatherings, group tours, and team stays during corporate events. It brings the comfort of home with the luxury of a premium stay experience.",

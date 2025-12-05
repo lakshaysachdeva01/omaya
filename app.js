@@ -11,7 +11,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-const port = 8000;
+const port = 3000;
 const metaLogoPath = "/assets/images/Omaya_MetaImage.jpg";
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
@@ -264,6 +264,8 @@ app.get('/venue/:slug', async (req, res) => {
         return res.redirect('/venue');
     }
     
+    const websiteID = await getWebsiteID();
+    
     const seoDetails = {
         title: `${venue.title} - Venue Details`,
         metaDescription: venue.listDescription || venue.description,
@@ -272,7 +274,7 @@ app.get('/venue/:slug', async (req, res) => {
         canonical: `${baseUrl}/venue/${slug}`,
     };
     
-    res.render('detailspage', { body: "", seoDetails, venue, venues });
+    res.render('detailspage', { body: "", seoDetails, venue, venues, websiteID, API_BASE_URL });
 });
 
 app.get('/contact', async (req, res) => {
