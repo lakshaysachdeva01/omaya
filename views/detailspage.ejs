@@ -219,7 +219,6 @@
                 
                 <div class="room-details__left">
                     <div class="wrapper">
-                        <h3>Description</h3>
                         <% if (currentItem && currentItem.detailDescription) { %>
                             <% 
                                 const paragraphs = currentItem.detailDescription.split('\n\n');
@@ -457,35 +456,12 @@
                         </div>
                     </div>
                     
-                    <div class="p-4 p-lg-5 bg-light">
-                        <h4 class="mt-0">Send Us Your Question</h4>
-                        <form id="contact_form" name="contact_form" class="" action="#" method="post">
-                            <div class="row">
-                                <div class="col-sm-6 col-xl-4">
-                                    <div class="mb-3">
-                                        <input name="form_name" class="form-control bg-white" type="text" placeholder="Enter Name" required>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-xl-4">
-                                    <div class="mb-3">
-                                        <input name="form_email" class="form-control bg-white required email" type="email" placeholder="Enter Email" required>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4">
-                                    <div class="mb-3">
-                                        <input name="form_phone" class="form-control bg-white required phone" type="tel" placeholder="Enter Phone" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <textarea name="form_message" class="form-control bg-white required" rows="5" placeholder="Enter Message" required></textarea>
-                            </div>
-                            <div class="mb-0">
-                                <input name="form_botcheck" class="form-control" type="hidden" value="">
-                                <button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait..."><span class="btn-title">Submit Comment</span></button>
-                            </div>
-                        </form>
-                    </div>
+                    <% if (itemType === 'stay') { %>
+                        <div class="p-4 p-lg-5 bg-light">
+                            <%- include('./partials/stay/staybookingform', { currentItem }) %>
+                            <%- include('./partials/stay/staybookingendpoint', { currentItem, websiteID, API_BASE_URL }) %>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -665,8 +641,8 @@
     
     /* Facility icons styling */
     .room-facility-list .facility-icon {
-        width: 40px;
-        height: 40px;
+        width: 25px;
+        height: 25px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -676,8 +652,8 @@
     }
     
     .room-facility-list .facility-icon img {
-        width: 40px;
-        height: 40px;
+        width: 25px;
+        height: 25px;
         object-fit: contain;
         /* Change PNG color to #aa8453 using CSS filter (same as contact page) */
         filter: brightness(0) saturate(100%) invert(60%) sepia(25%) saturate(800%) hue-rotate(350deg) brightness(95%) contrast(90%);

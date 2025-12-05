@@ -1,0 +1,181 @@
+<style>
+    .stay-booking-form .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .stay-booking-form .form-control {
+        border: 1px solid #ddd;
+        padding: 10px 12px;
+        border-radius: 4px;
+        height: auto;
+        min-height: 45px;
+        background: #fff !important;
+        background-color: #fff !important;
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .stay-booking-form .form-control:focus {
+        border-color: #d3bf77;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(211, 191, 119, 0.1);
+    }
+    
+    .stay-booking-form .form-control[readonly] {
+        background-color: #f5f5f5 !important;
+        cursor: not-allowed;
+    }
+    
+    .stay-booking-form textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .stay-booking-form .date-input-wrapper {
+        position: relative;
+    }
+    
+    .stay-booking-form .date-input-wrapper .form-control {
+        padding-right: 40px;
+        cursor: pointer;
+    }
+    
+    .stay-booking-form .date-input-wrapper::after {
+        content: '\f073';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        pointer-events: none;
+    }
+    
+    .stay-booking-form .custom-select-wrapper {
+        position: relative;
+    }
+    
+    .stay-booking-form .custom-select-wrapper select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 35px;
+    }
+    
+    .stay-booking-form .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .stay-booking-form .form-row .form-group {
+        flex: 1;
+    }
+    
+    @media (max-width: 767px) {
+        .stay-booking-form .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+
+<div class="stay-booking-form">
+    <h4 class="mt-0 mb-4">Book Your Stay</h4>
+    <form id="stayBookingForm" method="post">
+        <!-- Name and Phone Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Name</label>
+                <input name="fullName" class="form-control" type="text" placeholder="Enter Full Name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input name="mobileNumber" class="form-control" type="tel" placeholder="Enter Mobile Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+            </div>
+        </div>
+        
+        <!-- Email and Room Name Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input name="email" class="form-control required email" type="email" placeholder="Enter Email" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Room Name</label>
+                <input type="text" name="roomName" id="roomName" class="form-control" readonly value="<%= typeof currentItem !== 'undefined' && currentItem && currentItem.title ? currentItem.title : '' %>">
+            </div>
+        </div>
+        
+        <!-- Check-in and Check-out Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Check-in</label>
+                <div class="date-input-wrapper">
+                    <input type="text" name="checkinDate" id="checkinDate" class="form-control" placeholder="Select Check-in Date" required readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Check-out</label>
+                <div class="date-input-wrapper">
+                    <input type="text" name="checkoutDate" id="checkoutDate" class="form-control" placeholder="Select Check-out Date" required readonly>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Number of Guests and Number of Kids Row -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">No. of Guests</label>
+                <div class="custom-select-wrapper">
+                    <select name="numberOfGuests" id="numberOfGuests" class="form-control" required>
+                        <option value="">Select Guests</option>
+                        <option value="1">1 Guest</option>
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5">5 Guests</option>
+                        <option value="6">6 Guests</option>
+                        <option value="7">7 Guests</option>
+                        <option value="8">8 Guests</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">No. of Kids</label>
+                <div class="custom-select-wrapper">
+                    <select name="kids" id="kids" class="form-control" required>
+                        <option value="0">0 Kids</option>
+                        <option value="1">1 Kid</option>
+                        <option value="2">2 Kids</option>
+                        <option value="3">3 Kids</option>
+                        <option value="4">4 Kids</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Remarks Row -->
+        <div class="mb-3">
+            <label class="form-label">Remarks</label>
+            <textarea name="remarks" class="form-control" rows="4" placeholder="Enter any special requests or remarks"></textarea>
+        </div>
+        
+        <input type="hidden" name="typeOfRoom" id="typeOfRoom" value="">
+        
+        <div class="mb-0">
+            <input name="form_botcheck" class="form-control" type="hidden" value="">
+            <button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait...">
+                <span class="btn-title">Book Now</span>
+            </button>
+        </div>
+    </form>
+</div>
+

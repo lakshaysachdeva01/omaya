@@ -1,19 +1,36 @@
 <style>
     .gallery-container {
-        column-count: 3;
-        gap: 20px;
+        position: relative;
+        width: 100%;
     }
     
     .gallery-thumb {
+        width: calc(33.333% - 14px);
         margin-bottom: 20px;
+        display: inline-block;
+        vertical-align: top;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .gallery-thumb.loaded {
+        opacity: 1;
+    }
+    
+    .gallery-thumb img {
+        width: 100%;
+        height: auto;
+        display: block;
     }
     
     @media (max-width:992px) {
         .gallery-container {
             max-width: 800px;
             margin: 2px auto;
-            column-count: 2;
-            gap: 30px;
+        }
+        .gallery-thumb {
+            width: calc(50% - 15px);
+            margin-bottom: 30px;
         }
     }
     
@@ -21,8 +38,10 @@
         .gallery-container {
             max-width: 500px;
             margin: 2px auto;
-            column-count: 1;
-            gap: 30px;
+        }
+        .gallery-thumb {
+            width: 100%;
+            margin-bottom: 30px;
         }
     }
     
@@ -30,10 +49,9 @@
         .gallery-container {
             max-width: 500px;
             margin: 2px auto;
-            column-count: 1;
-            gap: 0px;
         }
         .gallery-thumb {
+            width: 100%;
             margin-bottom: 14px !important;
         }
     }
@@ -143,7 +161,7 @@
                                         const embedUrl = convertToEmbedUrl(video.link);
                                         if (embedUrl) {
                             %>
-                                <div class="gallery-thumb video-item popup-trigger" data-type="video" data-src="<%= embedUrl %>" data-title="videos" style="margin-bottom: 20px; display:flex; flex-direction:column">
+                                <div class="gallery-thumb video-item popup-trigger" data-type="video" data-src="<%= embedUrl %>" data-title="videos" style="display:flex; flex-direction:column">
                                     <div class="thumbnail-container">
                                         <img src="https://img.youtube.com/vi/<%= embedUrl.split('/').pop() %>/0.jpg" 
                                              alt="<%= album.title %>" class="thumbnail-image" />
@@ -163,6 +181,74 @@
 </div>
 
 <script>
+    // Masonry Layout Function - Fills row by row
+    function initMasonry() {
+        const container = document.querySelector('.gallery-container');
+        if (!container) return;
+        
+        const items = Array.from(container.querySelectorAll('.gallery-thumb:not([style*="display: none"])'));
+        if (items.length === 0) return;
+        
+        // Get number of columns based on screen size
+        let cols = 3;
+        if (window.innerWidth <= 992 && window.innerWidth > 700) cols = 2;
+        if (window.innerWidth <= 700) cols = 1;
+        
+        const gap = 20;
+        const containerWidth = container.offsetWidth;
+        const colWidth = (containerWidth - (gap * (cols - 1))) / cols;
+        
+        // Reset positioning
+        items.forEach(item => {
+            item.style.position = 'absolute';
+            item.style.width = colWidth + 'px';
+            item.style.left = '';
+            item.style.top = '';
+        });
+        
+        // Track column heights
+        const colHeights = new Array(cols).fill(0);
+        
+        // Process items in order (row by row)
+        items.forEach((item, index) => {
+            // Find shortest column
+            const shortestCol = colHeights.indexOf(Math.min(...colHeights));
+            
+            // Position item
+            const left = shortestCol * (colWidth + gap);
+            const top = colHeights[shortestCol];
+            
+            item.style.left = left + 'px';
+            item.style.top = top + 'px';
+            
+            // Update column height
+            const img = item.querySelector('img');
+            if (img && img.complete) {
+                colHeights[shortestCol] += img.offsetHeight + gap;
+            } else if (img) {
+                img.onload = function() {
+                    colHeights[shortestCol] += img.offsetHeight + gap;
+                    container.style.height = Math.max(...colHeights) + 'px';
+                };
+                // Fallback height estimate
+                colHeights[shortestCol] += 300 + gap;
+            } else {
+                colHeights[shortestCol] += item.offsetHeight + gap;
+            }
+        });
+        
+        // Set container height
+        container.style.height = Math.max(...colHeights) + 'px';
+        container.style.position = 'relative';
+        
+        // Show items with fade-in
+        items.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('loaded');
+            }, index * 50);
+        });
+    }
+    
     // Filter Gallery Functionality
     function filterGallery(filter) {
         const galleryItems = document.querySelectorAll('.gallery-thumb');
@@ -180,21 +266,26 @@
         galleryItems.forEach(item => {
             const itemTitle = item.getAttribute('data-title');
             if (filter === 'all') {
-                item.style.display = 'flex';
+                item.style.display = 'block';
                 if (item.classList.contains('video-item')) {
                     const title = item.querySelector('.video-title');
                     if (title) title.style.display = 'none';
                 }
             } else if (filter === 'videos' && item.classList.contains('video-item')) {
-                item.style.display = 'flex';
+                item.style.display = 'block';
                 const title = item.querySelector('.video-title');
                 if (title) title.style.display = 'block';
             } else if (filter !== 'videos' && itemTitle === filter && !item.classList.contains('video-item')) {
-                item.style.display = 'flex';
+                item.style.display = 'block';
             } else {
                 item.style.display = 'none';
             }
         });
+
+        // Reinitialize masonry after filter
+        setTimeout(() => {
+            initMasonry();
+        }, 100);
 
         // Reinitialize Media Items for Popup if function exists
         if (typeof initMediaItems === 'function') {
@@ -202,8 +293,49 @@
         }
     }
 
-    // Set default filter to 'All' on page load
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', function () {
-        filterGallery('all');
+        // Wait for images to load
+        const images = document.querySelectorAll('.gallery-thumb img');
+        let loadedCount = 0;
+        
+        if (images.length === 0) {
+            filterGallery('all');
+            setTimeout(initMasonry, 100);
+            return;
+        }
+        
+        images.forEach(img => {
+            if (img.complete) {
+                loadedCount++;
+                if (loadedCount === images.length) {
+                    filterGallery('all');
+                    setTimeout(initMasonry, 100);
+                }
+            } else {
+                img.onload = function() {
+                    loadedCount++;
+                    if (loadedCount === images.length) {
+                        filterGallery('all');
+                        setTimeout(initMasonry, 100);
+                    }
+                };
+            }
+        });
+        
+        // Fallback timeout
+        setTimeout(() => {
+            filterGallery('all');
+            initMasonry();
+        }, 1000);
+    });
+    
+    // Reinitialize on window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            initMasonry();
+        }, 250);
     });
 </script>

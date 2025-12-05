@@ -87,9 +87,10 @@
 		margin-bottom: 0;
 	}
 	
-	.contact-details__info .icon {
-		width: 60px;
-		height: 60px;
+	.contact-details__info li .icon {
+		width: 45px;
+		height: 45px;
+		min-width: 10px;
 		border-radius: 50%;
 		background: #f8f6f3;
 		display: flex;
@@ -106,8 +107,8 @@
 	}
 	
 	.contact-details__info .icon img {
-		width: 36px;
-		height: 36px;
+		width: 22px;
+		height: 22px;
 		transition: all 0.3s ease;
 		/* Change SVG color to #aa8453 using CSS filter */
 		filter: brightness(0) saturate(100%) invert(60%) sepia(25%) saturate(800%) hue-rotate(350deg) brightness(95%) contrast(90%);
@@ -120,7 +121,7 @@
 	
 	.contact-details__info .text h6 {
 		margin-bottom: 8px;
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: 600;
 		color: #333;
 	}
@@ -130,10 +131,19 @@
 		text-decoration: none;
 		font-size: 14px;
 		line-height: 1.6;
+		transition: color 0.2s ease;
 	}
 	
 	.contact-details__info .text a:hover {
-		color: #d3bf77;
+		color: #aa8453;
+	}
+
+	/* Ensure only hovered link changes color (override theme li:hover rule) */
+	.contact-details__left .contact-details__info .text a {
+		color: #666 !important;
+	}
+	.contact-details__left .contact-details__info .text a:hover {
+		color: #a26c26 !important;
 	}
 	
 	.contact-details__right .form-label {
@@ -171,6 +181,12 @@
 			margin-bottom: 30px;
 		}
 	}
+
+	@media (max-width: 640px) {
+		.contact-details .row>* {
+			padding: 0 !important;
+		}
+	}
 </style>
 
 	<!--Contact Details Start-->
@@ -183,35 +199,63 @@
 						<div class="col-lg-6 col-md-6">
 							<div class="contact-details__left">
 								<div class="sec-title">
-									<span class="sub-title before-none">CALL TO ACTION</span>
-									<h2>Get in touch with us</h2>
+									<span class="sub-title before-none">REACH US</span>
+									<h2>We’re Just a Call or Email Away</h2>
 								</div>
 								<ul class="list-unstyled contact-details__info">
-									<li>
-										<div class="icon">
-											<img src="/assets/images/placeholder.svg" alt="Location">
-										</div>
-										<div class="text">
-											<h6>Visit anytime</h6>
-											<a href="https://www.google.com/maps/place/Omaya+Suites+Raipur/@21.201042521557756,81.60053583955929,17z/data=!3m1!4b1!4m6!3m5!1s0x3a28dd1fe719e437:0x7775670391c54f64!8m2!3d21.201042521557756!4d81.60053583955929!16s%2Fg%2F11v0q8x8x8" target="_blank">15B, Omaya Square, Main Gate Kamal Vihar, Dumartarai, Raipur, Chhattisgarh — 492015</a>
-										</div>
-									</li>
+									<!-- Room Booking -->
 									<li>
 										<div class="icon">
 											<img src="/assets/images/phone.svg" alt="Phone">
 										</div>
 										<div class="text">
-											<h6>Have any question?</h6>
-											<a href="tel:9201955244">9201955244 | 9201955245</a>
+											<h6>Room Booking</h6>
+											<div style="margin-bottom: 8px;">
+												<a href="tel:9201955244">9201955244</a> | <a href="tel:9201955245">9201955245</a>
+											</div>
+											<div>
+												<a href="mailto:reservation@omayasuites.com">reservation@omayasuites.com</a>
+											</div>
 										</div>
 									</li>
+									<!-- Restaurant -->
 									<li>
 										<div class="icon">
-											<img src="/assets/images/email.svg" alt="Email">
+											<img src="/assets/images/phone.svg" alt="Phone">
 										</div>
 										<div class="text">
-											<h6>Write email</h6>
-											<a href="mailto:reservation@omayasuites.com">reservation@omayasuites.com</a>
+											<h6>Restaurant</h6>
+											<div style="margin-bottom: 8px;">
+												<a href="tel:9201955240">9201955240</a> | <a href="tel:9201955241">9201955241</a> | <a href="tel:9201955242">9201955242</a>
+											</div>
+											<div>
+												<a href="mailto:fnb@omayasuites.com">fnb@omayasuites.com</a>
+											</div>
+										</div>
+									</li>
+									<!-- Corporate & Events -->
+									<li>
+										<div class="icon">
+											<img src="/assets/images/phone.svg" alt="Phone">
+										</div>
+										<div class="text">
+											<h6>Corporate & Events</h6>
+											<div style="margin-bottom: 8px;">
+												<a href="tel:9201955242">9201955242</a> | <a href="tel:9201955243">9201955243</a>
+											</div>
+											<div>
+												<a href="mailto:gm@omayasuites.com">gm@omayasuites.com</a>
+											</div>
+										</div>
+									</li>
+									<!-- Address -->
+									<li>
+										<div class="icon">
+											<img src="/assets/images/placeholder.svg" alt="Location">
+										</div>
+										<div class="text">
+											<h6>Address</h6>
+											<a href="https://www.google.com/maps/place/Omaya+Suites+Raipur/@21.201042521557756,81.60053583955929,17z/data=!3m1!4b1!4m6!3m5!1s0x3a28dd1fe719e437:0x7775670391c54f64!8m2!3d21.201042521557756!4d81.60053583955929!16s%2Fg%2F11v0q8x8x8" target="_blank">15B, Omaya Square, Main Gate Kamal Vihar,<br>Dumartarai, Raipur, Chhattisgarh — 492015</a>
 										</div>
 									</li>
 								</ul>
@@ -238,10 +282,6 @@
 							<div class="mb-3">
 								<label class="form-label">Email</label>
 								<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.email %>" class="form-control required email" type="email" placeholder="Enter Email" required>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">City</label>
-								<input name="<%= CONTACT_ENQUIRY_DYNAMIC_FIELDS_KEYS.address %>" class="form-control required" type="text" placeholder="Enter City" required>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Message</label>

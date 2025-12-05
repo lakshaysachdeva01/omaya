@@ -51,11 +51,25 @@
 	<header class="main-header header-style-one">
     <div class="auto-container" style="max-width: none;">
       <!-- Main box -->
-      <div class="main-box" style="padding: 0 80px 20px 80px;">
+      <div class="main-box">
         <div class="logo-box">
           <div class="logo"><a href="/"><img src="/assets/images/Omaya_Logo.svg" alt="Omaya Suites Logo white" ></a></div>
         </div>
 
+        <style>
+          .main-box {
+            padding: 0 80px 20px 80px;
+          }
+
+          @media (max-width: 640px) {
+            .main-box {
+              padding: 0 20px 20px 20px;
+          }
+          .logo a img{
+            max-height: 40px;
+          }
+          }
+        </style>
         <!--Nav Box-->
         <div class="nav-outer">
           <nav class="nav main-menu">

@@ -1,9 +1,643 @@
-<% banners.forEach((item) => { %>
+<style>
+  /* Animation container */
+  .video-preload-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
+      will-change: opacity;
+  }
+  
+  /* Hide animation after it's done */
+  .video-preload-animation.hidden {
+      opacity: 0;
+      pointer-events: none;
+  }
+  
+  /* Logo animation */
+  .loading-logo {
+      width: 200px;
+      height: 200px;
+      animation: logoPulse 2s ease-in-out forwards;
+      opacity: 0;
+      transform: scale(0.7);
+  }
+  
+  @keyframes logoPulse {
+      0% {
+          opacity: 0;
+          transform: scale(0.7);
+      }
+     
+      100% {
+          opacity: 1;
+          transform: scale(1);
+          
+      }
+  }
+  
+  /* Banner YouTube video player styles */
+  .banner-section .banner-youtube-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      isolation: isolate;
+      background: transparent !important;
+      background-image: none !important;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+  }
+  
+  .banner-section .banner-youtube-container.loaded {
+      opacity: 1;
+  }
+  
+  .banner-section .banner-youtube-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none !important;
+      -webkit-touch-callout: none;
+      transform: translateZ(0) scale(1.6);
+      -webkit-transform: translateZ(0) scale(1.6);
+      transform-origin: center center;
+      -webkit-transform-origin: center center;
+      opacity: 1;
+      position: relative;
+      z-index: 1;
+      filter: brightness(0.7);
+      background-image: none !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      background-size: unset !important;
+      background-position: unset !important;
+      background-repeat: unset !important;
+  }
+  
+  .banner-section .banner-youtube-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99999 !important;
+      pointer-events: auto !important;
+      background: transparent;
+      cursor: default !important;
+  }
+  
+  /* Video overlay - separate element to ensure visibility */
+  .banner-section .banner-youtube-container .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.1);
+      z-index: 3 !important;
+      pointer-events: none;
+      display: block !important;
+  }
+  
+  .banner-section .banner-youtube-container .youtube-overlay-blocker {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 100000 !important;
+      pointer-events: auto !important;
+      background: transparent !important;
+      cursor: default !important;
+      display: block !important;
+  }
+  
+  .banner-section .banner-youtube-container:hover::before {
+      pointer-events: auto !important;
+      z-index: 99999 !important;
+  }
+  
+  .banner-section .banner-youtube-container:hover .youtube-overlay-blocker {
+      pointer-events: auto !important;
+      z-index: 100000 !important;
+  }
+  
+  .banner-section .banner-slide {
+      position: relative;
+  }
+  
+  .banner-section .content-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      z-index: 100001 !important;
+      text-align: center;
+      min-width: 700px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+  }
+  
+  .banner-section .content-box.visible {
+      opacity: 1;
+  }
+  
+  /* Remove logo/title image from banner sub-title */
+  .banner-section .content-box .sub-title::before {
+      display: none !important;
+      content: none !important;
+  }
+</style>
 
-    <img src="<%= process.env.S3_BASE_URL + item?.bannerImage?.webView %>" alt="">
-    <img src="<%= process.env.S3_BASE_URL + item?.bannerImage?.mobileView %>" alt="">
-      <<%= item?.title %>
-              <%= item?.subTitle %>
+<!-- Video Preload Animation -->
+<div class="video-preload-animation" id="videoPreloadAnimation">
+  <img src="/assets/images/Omaya_Logo_Black.svg" alt="Omaya Logo" class="loading-logo" id="loadingLogo">
+</div>
 
+<!-- banner section -->
+<section class="banner-section">
+  <div class="banner-slider">
+      <div class="banner-slide">
+          <div class="banner-youtube-container" id="banner-youtube-player" style="width: 100%; height: 100%; filter:brightness(0.7); position: relative;">
+              <!-- YouTube Player will be initialized here -->
+              <div class="video-overlay"></div>
+              <div class="youtube-overlay-blocker"></div>
+          </div>
+          <div class="content-box">
+              <span class="sub-title" data-animation-in="fadeInUp" data-delay-in="0.1">Unique Place And Luxury Hotel</span>
+              <h1 data-animation-in="fadeInUp" data-delay-in="0.3">life enjoy with <br>the great moments</h1>
+          </div>
+      </div>
+  </div>
+</section>
+<!-- End banner section -->
 
-            <% }) %>
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+  // Banner YouTube player
+  var bannerYouTubePlayer = null;
+  var bannerVideoId = '5JHHS0oirAs'; // Landing banner video
+  var videoReady = false;
+  var animationCompleted = false;
+  var animationDuration = 1000; // 3 seconds
+  var videoLoadStarted = false;
+
+  // YouTube API ready callback
+  function onYouTubeIframeAPIReady() {
+      // Start animation and initialize player after a short delay
+      setTimeout(initializeBannerYouTubePlayer, 100);
+  }
+
+  // Set optimal quality - prefer highest available, minimum 1440p
+  function setOptimalQuality(player) {
+      if (!player) return;
+      
+      try {
+          // Try to get available quality levels
+          var availableQualities = ['highres', 'hd2160', 'hd1440'];
+          
+          // Try to set highest available quality
+          for (var i = 0; i < availableQualities.length; i++) {
+              try {
+                  player.setPlaybackQuality(availableQualities[i]);
+                  // If successful, break
+                  break;
+              } catch(e) {
+                  // Continue to next quality if this one fails
+                  continue;
+              }
+          }
+          
+          // Fallback: ensure minimum 1440p
+          try {
+              var currentQuality = player.getPlaybackQuality();
+              if (currentQuality !== 'highres' && 
+                  currentQuality !== 'hd2160' && 
+                  currentQuality !== 'hd1440') {
+                  player.setPlaybackQuality('hd1440');
+              }
+          } catch(e) {
+              // Ignore errors
+          }
+      } catch(e) {
+          // Ignore errors
+      }
+  }
+
+  // Initialize banner YouTube player
+  function initializeBannerYouTubePlayer() {
+      var container = document.getElementById('banner-youtube-player');
+      if (!container || bannerYouTubePlayer) {
+          return;
+      }
+
+      // Start the animation timer
+      setTimeout(function() {
+          animationCompleted = true;
+          if (videoReady) {
+              startVideoPlayback();
+          } else {
+              // Show loading state if video isn't ready yet
+              var logo = document.getElementById('loadingLogo');
+              if (logo) {
+                  logo.style.opacity = '0.7';
+                  logo.style.animation = 'logoPulse 3s ease-in-out infinite';
+              }
+          }
+      }, animationDuration);
+
+      bannerYouTubePlayer = new YT.Player('banner-youtube-player', {
+          videoId: bannerVideoId,
+          width: '100%',
+          height: '100%',
+          playerVars: {
+              'autoplay': 0, // Start with autoplay disabled
+              'mute': 1,
+              'loop': 1,
+              'playlist': bannerVideoId,
+              'controls': 0,
+              'rel': 0,
+              'modestbranding': 1,
+              'playsinline': 1,
+              'vq': 'highres', // Prefer highest available quality
+              'enablejsapi': 1,
+              'iv_load_policy': 3,
+              'cc_load_policy': 0,
+              'disablekb': 1,
+              'fs': 0,
+              'showinfo': 0,
+              'origin': window.location.origin,
+              'widget_referrer': window.location.origin
+          },
+          events: {
+              'onReady': function(event) {
+                  var player = event.target;
+                  var iframe = document.getElementById('banner-youtube-player');
+                  
+                  videoLoadStarted = true;
+                  
+                  try {
+                      // Set initial quality - prefer highest, minimum 1440p
+                      setOptimalQuality(player);
+                      player.mute();
+                      
+                      // Load video but don't play yet
+                      player.cueVideoById({
+                          'videoId': bannerVideoId,
+                          'startSeconds': 0,
+                          'suggestedQuality': 'highres'
+                      });
+                      
+                      // Mark video as ready when enough data is loaded
+                      checkVideoBuffered(player);
+                      
+                      // Set quality multiple times for reliability
+                      setTimeout(function() {
+                          setOptimalQuality(player);
+                      }, 50);
+                      setTimeout(function() {
+                          setOptimalQuality(player);
+                      }, 150);
+                      setTimeout(function() {
+                          setOptimalQuality(player);
+                      }, 300);
+                      setTimeout(function() {
+                          setOptimalQuality(player);
+                      }, 600);
+                      
+                      if (iframe && iframe.parentElement) {
+                          var container = iframe.parentElement;
+                          var blocker = container.querySelector('.youtube-overlay-blocker');
+                          if (!blocker) {
+                              blocker = document.createElement('div');
+                              blocker.className = 'youtube-overlay-blocker';
+                              container.appendChild(blocker);
+                          }
+                          
+                          // Find the actual YouTube iframe element
+                          var youtubeIframe = container.querySelector('iframe');
+                          if (youtubeIframe) {
+                              youtubeIframe.style.pointerEvents = 'none';
+                              youtubeIframe.style.opacity = '0';
+                              
+                              // Style iframe
+                              styleYouTubeIframe(youtubeIframe);
+                          }
+                      }
+                      
+                      // Safety check: if video isn't ready after 4 seconds, force it
+                      setTimeout(function() {
+                          if (!videoReady) {
+                              videoReady = true;
+                              if (animationCompleted) {
+                                  startVideoPlayback();
+                              }
+                          }
+                      }, 4000);
+                      
+                  } catch(e) {
+                      console.error('YouTube player error:', e);
+                      // If error, mark as ready after animation
+                      setTimeout(function() {
+                          videoReady = true;
+                          if (animationCompleted) {
+                              startVideoPlayback();
+                          }
+                      }, animationDuration + 500);
+                  }
+              },
+              'onStateChange': function(event) {
+                  var player = event.target;
+                  
+                  if (event.data === YT.PlayerState.BUFFERING) {
+                      // Video is buffering - check if it has enough data
+                      checkVideoBuffered(player);
+                      // Ensure quality during buffering
+                      setOptimalQuality(player);
+                  }
+                  else if (event.data === YT.PlayerState.PLAYING) {
+                      // Video started playing - hide animation and show content
+                      completeLoadingSequence();
+                      // Ensure quality while playing
+                      setOptimalQuality(player);
+                  }
+                  else if (event.data === YT.PlayerState.CUED) {
+                      // Video is cued and ready
+                      videoReady = true;
+                      setOptimalQuality(player);
+                      if (animationCompleted) {
+                          startVideoPlayback();
+                      } else {
+                          // If animation still running, check buffer
+                          checkVideoBuffered(player);
+                      }
+                  }
+                  else if (event.data === YT.PlayerState.PAUSED) {
+                      // If video gets paused, play it (for loop)
+                      try {
+                          player.playVideo();
+                      } catch(e) {
+                          // Ignore errors
+                      }
+                  }
+                  else if (event.data === YT.PlayerState.ENDED) {
+                      // Video ended - restart for loop
+                      try {
+                          player.seekTo(0, true);
+                          player.playVideo();
+                          setOptimalQuality(player);
+                      } catch(e) {
+                          // Ignore errors
+                      }
+                  }
+              },
+              'onPlaybackQualityChange': function(event) {
+                  // Ensure minimum 1440p quality
+                  var currentQuality = event.data;
+                  var player = event.target;
+                  
+                  // Quality hierarchy: highres > hd2160 > hd1440 > hd1080 > hd720
+                  // Accept highres, hd2160, hd1440
+                  // Reject anything below 1440p
+                  if (currentQuality !== 'highres' && 
+                      currentQuality !== 'hd2160' && 
+                      currentQuality !== 'hd1440') {
+                      try {
+                          // Try to set to higher quality
+                          setOptimalQuality(player);
+                      } catch(e) {
+                          // If that fails, force minimum 1440p
+                          try {
+                              player.setPlaybackQuality('hd1440');
+                          } catch(e2) {
+                              // Ignore errors
+                          }
+                      }
+                  }
+              }
+          }
+      });
+  }
+
+  // Check if video has enough data buffered
+  function checkVideoBuffered(player) {
+      try {
+          // Get video buffer status
+          var buffered = player.getVideoLoadedFraction();
+          
+          // Consider video ready if at least 30% is buffered
+          if (buffered > 0.3) {
+              videoReady = true;
+              if (animationCompleted) {
+                  startVideoPlayback();
+              }
+              return true;
+          } else {
+              // Check again in 200ms
+              setTimeout(function() {
+                  checkVideoBuffered(player);
+              }, 200);
+              return false;
+          }
+      } catch(e) {
+          // If we can't check, mark as ready after animation
+          setTimeout(function() {
+              videoReady = true;
+              if (animationCompleted) {
+                  startVideoPlayback();
+              }
+          }, animationDuration + 500);
+          return false;
+      }
+  }
+
+  // Start video playback
+  function startVideoPlayback() {
+      if (!bannerYouTubePlayer || !videoReady) return;
+      
+      try {
+          // Play the video
+          bannerYouTubePlayer.playVideo();
+          
+          // Fade in the video container
+          var container = document.querySelector('.banner-youtube-container');
+          if (container) {
+              container.style.opacity = '1';
+              container.classList.add('loaded');
+          }
+          
+          // Show the YouTube iframe
+          var youtubeIframe = document.querySelector('.banner-youtube-container iframe');
+          if (youtubeIframe) {
+              youtubeIframe.style.opacity = '1';
+          }
+          
+      } catch(e) {
+          console.error('Error starting video:', e);
+          // Try again in 500ms
+          setTimeout(startVideoPlayback, 500);
+      }
+  }
+
+  // Complete loading sequence - hide animation, show content
+  function completeLoadingSequence() {
+      // Hide animation overlay
+      var animationEl = document.getElementById('videoPreloadAnimation');
+      if (animationEl) {
+          // Add class on next frame to ensure transition kicks in
+          requestAnimationFrame(function() {
+              animationEl.classList.add('hidden');
+          });
+          // Remove from DOM after transition
+          setTimeout(function() {
+              if (animationEl.parentNode) {
+                  animationEl.parentNode.removeChild(animationEl);
+              }
+          }, 800);
+      }
+      
+      // Show content
+      var contentBox = document.querySelector('.content-box');
+      if (contentBox) {
+          contentBox.classList.add('visible');
+      }
+      
+      // Start monitoring to keep video playing
+      startVideoMonitoring();
+  }
+
+  // Style YouTube iframe
+  function styleYouTubeIframe(youtubeIframe) {
+      youtubeIframe.style.backgroundImage = 'none';
+      youtubeIframe.style.background = 'transparent';
+      youtubeIframe.style.backgroundColor = 'transparent';
+      youtubeIframe.style.backgroundSize = 'unset';
+      youtubeIframe.style.backgroundPosition = 'unset';
+      youtubeIframe.style.backgroundRepeat = 'unset';
+      
+      youtubeIframe.style.setProperty('background-image', 'none', 'important');
+      youtubeIframe.style.setProperty('background', 'transparent', 'important');
+      youtubeIframe.style.setProperty('background-color', 'transparent', 'important');
+      youtubeIframe.style.setProperty('background-size', 'unset', 'important');
+      youtubeIframe.style.setProperty('background-position', 'unset', 'important');
+      youtubeIframe.style.setProperty('background-repeat', 'unset', 'important');
+      
+      // Force scale 1.6 on iframe
+      youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(1.6)', 'important');
+      youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(1.6)', 'important');
+      youtubeIframe.style.setProperty('transform-origin', 'center center', 'important');
+      youtubeIframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
+  }
+
+  // Monitor and keep video playing
+  function startVideoMonitoring() {
+      if (!bannerYouTubePlayer) return;
+      
+      setInterval(function() {
+          try {
+              var state = bannerYouTubePlayer.getPlayerState();
+              
+              // If paused, play it
+              if (state === YT.PlayerState.PAUSED) {
+                  bannerYouTubePlayer.playVideo();
+              }
+              // If ended, restart for loop
+              else if (state === YT.PlayerState.ENDED) {
+                  bannerYouTubePlayer.seekTo(0, true);
+                  bannerYouTubePlayer.playVideo();
+              }
+              
+              // Ensure muted and optimal quality
+              bannerYouTubePlayer.mute();
+              setOptimalQuality(bannerYouTubePlayer);
+          } catch(e) {
+              // Ignore errors
+          }
+      }, 1000);
+  }
+
+  // Initialize if YouTube API is already loaded
+  if (typeof YT !== 'undefined' && YT.Player) {
+      onYouTubeIframeAPIReady();
+  }
+
+  // Prevent interactions
+  document.addEventListener('contextmenu', function(e) {
+      if (e.target.closest('.banner-youtube-container')) {
+          e.preventDefault();
+          return false;
+      }
+  }, false);
+  
+  document.addEventListener('keydown', function(e) {
+      if (e.target.closest('.banner-youtube-container') || 
+          (e.key === ' ' || e.key === 'k' || e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+          if (document.activeElement && document.activeElement.closest('.banner-youtube-container')) {
+              e.preventDefault();
+              return false;
+          }
+      }
+  }, false);
+  
+  document.addEventListener('dragstart', function(e) {
+      if (e.target.closest('.banner-youtube-container')) {
+          e.preventDefault();
+          return false;
+      }
+  }, false);
+  
+  // Ensure banner YouTube container has overlays and blocked interactions
+  function enforceBannerYouTubeBlocking() {
+      var container = document.querySelector('.banner-youtube-container');
+      if (!container) return;
+      
+      var iframe = container.querySelector('iframe');
+      if (iframe) {
+          iframe.style.pointerEvents = 'none';
+          styleYouTubeIframe(iframe);
+          
+          var blocker = container.querySelector('.youtube-overlay-blocker');
+          if (!blocker) {
+              blocker = document.createElement('div');
+              blocker.className = 'youtube-overlay-blocker';
+              container.appendChild(blocker);
+          }
+          blocker.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100000; pointer-events: auto !important; background: transparent; cursor: default;';
+      }
+  }
+  
+  // Initialize blocking
+  enforceBannerYouTubeBlocking();
+  setTimeout(enforceBannerYouTubeBlocking, 100);
+  setTimeout(enforceBannerYouTubeBlocking, 500);
+  
+  // Monitor DOM for changes
+  if (window.MutationObserver) {
+      var observer = new MutationObserver(function(mutations) {
+          enforceBannerYouTubeBlocking();
+      });
+      observer.observe(document.body, {
+          childList: true,
+          subtree: true
+      });
+  }
+</script>

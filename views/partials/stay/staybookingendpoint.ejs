@@ -1,0 +1,147 @@
+<script>
+    // Map stay titles to typeOfRoom values
+    function getTypeOfRoom(stayTitle) {
+        if (!stayTitle) return 'PRIVATE_VILLA';
+        
+        const title = stayTitle.toLowerCase();
+        
+        // Map common stay types
+        if (title.includes('royal') || title.includes('suite')) {
+            return 'PRIVATE_VILLA';
+        } else if (title.includes('deluxe')) {
+            return 'DELUXE_ROOM';
+        } else if (title.includes('executive')) {
+            return 'EXECUTIVE_SUITE';
+        } else if (title.includes('villa') || title.includes('private')) {
+            return 'PRIVATE_VILLA';
+        } else if (title.includes('premium')) {
+            return 'PREMIUM_ROOM';
+        } else if (title.includes('standard')) {
+            return 'STANDARD_ROOM';
+        }
+        
+        // Default fallback
+        return 'PRIVATE_VILLA';
+    }
+    
+    // Initialize Flatpickr for date pickers
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkinInput = document.getElementById('checkinDate');
+        const checkoutInput = document.getElementById('checkoutDate');
+        const typeOfRoomInput = document.getElementById('typeOfRoom');
+        
+        // Set typeOfRoom based on stay title
+        <% if (typeof currentItem !== 'undefined' && currentItem && currentItem.title) { %>
+            const stayTitle = '<%= currentItem.title %>';
+            typeOfRoomInput.value = getTypeOfRoom(stayTitle);
+        <% } else { %>
+            typeOfRoomInput.value = 'PRIVATE_VILLA';
+        <% } %>
+        
+        // Initialize check-out date picker first
+        const checkoutPicker = flatpickr(checkoutInput, {
+            dateFormat: "Y-m-d",
+            minDate: "today"
+        });
+        
+        // Initialize check-in date picker
+        const checkinPicker = flatpickr(checkinInput, {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+                // Set minimum date for checkout to be day after checkin
+                if (selectedDates.length > 0) {
+                    const minCheckoutDate = new Date(selectedDates[0]);
+                    minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
+                    checkoutPicker.set('minDate', minCheckoutDate);
+                    
+                    // If checkout date is before new minimum, clear it
+                    if (checkoutPicker.selectedDates.length > 0) {
+                        const checkoutDate = checkoutPicker.selectedDates[0];
+                        if (checkoutDate <= selectedDates[0]) {
+                            checkoutPicker.clear();
+                        }
+                    }
+                }
+            }
+        });
+    });
+    
+    // Handle form submission
+    document.getElementById('stayBookingForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        
+        try {
+            const API_BASE_URL = "<%= API_BASE_URL %>";
+            const websiteID = "<%= websiteID %>";
+            
+            const CREATE_STAY_BOOKING_END_POINT = `${API_BASE_URL}/website-builder/website/${websiteID}/staycation-leads/create`;
+            
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const btnTitle = submitBtn.querySelector('.btn-title');
+            const originalText = btnTitle.textContent;
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            btnTitle.textContent = submitBtn.getAttribute('data-loading-text') || 'Please wait...';
+            
+            // Get form values
+            const checkinDate = form.querySelector('input[name="checkinDate"]').value;
+            const checkoutDate = form.querySelector('input[name="checkoutDate"]').value;
+            const numberOfGuests = parseInt(form.querySelector('select[name="numberOfGuests"]').value);
+            const kids = parseInt(form.querySelector('select[name="kids"]').value);
+            
+            // Convert dates to ISO format
+            const checkinDateISO = new Date(checkinDate + 'T00:00:00.000Z').toISOString();
+            const checkoutDateISO = new Date(checkoutDate + 'T00:00:00.000Z').toISOString();
+            
+            // Prepare payload
+            const payload = {
+                fullName: form.querySelector('input[name="fullName"]').value,
+                mobileNumber: form.querySelector('input[name="mobileNumber"]').value,
+                email: form.querySelector('input[name="email"]').value,
+                remarks: form.querySelector('textarea[name="remarks"]').value || '',
+                checkinDate: checkinDateISO,
+                checkoutdate: checkoutDateISO,
+                numberOfGuests: numberOfGuests,
+                kids: kids,
+                typeOfRoom: form.querySelector('input[name="typeOfRoom"]').value
+            };
+            
+            // Set headers
+            const headers = new Headers({
+                "Content-Type": "application/json",
+            });
+            
+            // Send POST request
+            const response = await fetch(CREATE_STAY_BOOKING_END_POINT, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(payload),
+            });
+            
+            // Handle response
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Redirect to thank you page on success
+            sessionStorage.setItem("thankYouMessage", "Your booking request has been submitted successfully. We'll contact you soon!");
+            window.location.href = "/thankyou";
+            
+        } catch (error) {
+            console.error("Form submission error", error);
+            alert("There was an error submitting your booking. Please try again.");
+            
+            // Re-enable button
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const btnTitle = submitBtn.querySelector('.btn-title');
+            submitBtn.disabled = false;
+            btnTitle.textContent = "Book Now";
+        }
+    });
+</script>
+

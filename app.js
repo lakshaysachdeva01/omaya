@@ -160,7 +160,9 @@ app.get('/stay/:slug', async (req, res) => {
         canonical: `${baseUrl}/stay/${slug}`,
     };
     
-    res.render('detailspage', { body: "", seoDetails, stay: stayItem, stays });
+    const websiteID = await getWebsiteID();
+    
+    res.render('detailspage', { body: "", seoDetails, stay: stayItem, stays, websiteID, API_BASE_URL });
 });
 
 app.get('/dining', async (req, res) => {
