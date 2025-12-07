@@ -47,10 +47,10 @@ app.get('/', async (req, res) => {
 //     const popupbanners = await getHomepopupBanner();
 //    const latestImages = await getLatestGalleryImages();
    const seoDetails = {
-    title: " ",
-    metaDescription: "",
+    title: "Omaya Suites Raipur - Luxury Hotel & Resort | Premium Accommodation in Raipur",
+    metaDescription: "Experience luxury at Omaya Suites Raipur. Premium hotel accommodation with elegant rooms, fine dining restaurants, rooftop bar, and world-class event venues. Book your stay in Raipur, Chhattisgarh.",
     metaImage: `${baseUrl}/${metaLogoPath}`,
-    keywords: "",
+    keywords: "Omaya Suites, luxury hotel Raipur, premium accommodation Raipur, hotel in Raipur Chhattisgarh, luxury resort Raipur, fine dining Raipur, event venue Raipur, rooftop bar Raipur, wedding venue Raipur, corporate events Raipur",
     canonical: `${baseUrl}`,
 };
 
@@ -62,10 +62,10 @@ app.get('/', async (req, res) => {
 app.get('/about', async (req, res) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: "About Us - Omaya Suites Raipur | Our Story & Hospitality Excellence",
+        metaDescription: "Discover Omaya Suites Raipur - a luxury hotel committed to exceptional hospitality. Learn about our premium accommodations, fine dining experiences, and world-class event venues in Raipur, Chhattisgarh.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
+        keywords: "Omaya Suites about, luxury hotel Raipur, hospitality Raipur, premium hotel services, hotel amenities Raipur, luxury accommodation Chhattisgarh",
         canonical: `${baseUrl}/about`,
     };
     
@@ -80,10 +80,10 @@ app.get('/gallery', async (req, res) => {
     const gallery = await getgallery();
     
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: "Photo Gallery - Omaya Suites Raipur | Luxury Hotel Images & Virtual Tours",
+        metaDescription: "Explore our photo gallery showcasing luxury rooms, elegant dining spaces, rooftop bar, event venues, and premium amenities at Omaya Suites Raipur. View 360° virtual tours of our facilities.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
+        keywords: "Omaya Suites gallery, hotel photos Raipur, luxury hotel images, room gallery, dining photos, event venue pictures, 360 view Raipur hotel",
         canonical: `${baseUrl}/gallery`,
     };
 
@@ -94,11 +94,12 @@ app.get('/gallery/:filter', async (req, res) => {
     const { filter } = req.params;
     const gallery = await getgallery();
 
+    const filterName = filter.charAt(0).toUpperCase() + filter.slice(1).replace(/-/g, ' ');
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: `${filterName} Gallery - Omaya Suites Raipur | ${filterName} Photos & Images`,
+        metaDescription: `Browse ${filterName} gallery at Omaya Suites Raipur. View high-quality images of our ${filterName} facilities, rooms, and amenities. Experience luxury hospitality through our photo collection.`,
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
+        keywords: `${filterName} gallery Omaya Suites, ${filterName} photos Raipur, ${filterName} images, hotel ${filterName} pictures`,
         canonical: `${baseUrl}/gallery/${filter}`,
     };
 
@@ -122,10 +123,10 @@ app.get('/stay', async (req, res) => {
     }
     
     const seoDetails = {
-        title: "Stay - ",
-        metaDescription: "Experience luxury accommodation at our resort.",
+        title: "Luxury Rooms & Suites - Omaya Suites Raipur | Premium Hotel Accommodation",
+        metaDescription: "Discover luxury accommodation at Omaya Suites Raipur. Choose from Royal Suites, Executive Suites, Deluxe Suites with premium amenities, private pools, and elegant interiors. Book your stay in Raipur, Chhattisgarh.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "stay, accommodation, resort, hotel",
+        keywords: "luxury rooms Raipur, premium suites Raipur, hotel accommodation Raipur, Royal Suite Raipur, Executive Suite, Deluxe Suite, luxury stay Raipur, hotel rooms Chhattisgarh, premium accommodation",
         canonical: `${baseUrl}/stay`,
     };
     res.render('stay', { body: "", seoDetails, stays });
@@ -152,11 +153,14 @@ app.get('/stay/:slug', async (req, res) => {
         return res.redirect('/stay');
     }
     
+    const description = stayItem.listDescription || stayItem.description || stayItem.detailDescription || '';
+    const cleanDescription = description.replace(/<[^>]*>/g, '').substring(0, 160);
+    const features = stayItem.features ? stayItem.features.join(', ') : '';
     const seoDetails = {
-        title: `${stayItem.title} - Stay Details`,
-        metaDescription: stayItem.listDescription || stayItem.description,
+        title: `${stayItem.title} - Omaya Suites Raipur | ${stayItem.tagline} | Luxury Accommodation`,
+        metaDescription: cleanDescription || `Experience luxury in ${stayItem.title} at Omaya Suites Raipur. ${stayItem.tagline} with premium amenities, elegant interiors, and world-class hospitality. Book your stay now.`,
         metaImage: `${baseUrl}${stayItem.bannerImage || stayItem.image}`,
-        keywords: `stay, ${stayItem.title}, ${stayItem.tagline}`,
+        keywords: `${stayItem.title} Raipur, ${stayItem.tagline} Omaya Suites, luxury ${stayItem.title.toLowerCase()}, premium hotel room Raipur, ${stayItem.title} booking, hotel suite Raipur, ${features}`,
         canonical: `${baseUrl}/stay/${slug}`,
     };
     
@@ -179,10 +183,10 @@ app.get('/dining', async (req, res) => {
     }
     
     const seoDetails = {
-        title: "Dining - ",
-        metaDescription: "Discover our exquisite dining experiences and culinary offerings.",
+        title: "Fine Dining Restaurants - Omaya Suites Raipur | Rooftop Bar & Multi-Cuisine",
+        metaDescription: "Experience exquisite dining at Omaya Suites Raipur. Enjoy private dining rooms, rooftop bar with sunset views, multi-cuisine restaurants, and poolside dining. Book your table in Raipur.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "dining, restaurant, food, cuisine",
+        keywords: "fine dining Raipur, rooftop bar Raipur, restaurant Raipur, private dining room Raipur, OMA Air Bar, Oma Kitchen, pool bar Raipur, multi-cuisine restaurant, best restaurant Raipur",
         canonical: `${baseUrl}/dining`,
     };
     res.render('dining', { body: "", seoDetails, dining });
@@ -209,11 +213,14 @@ app.get('/dining/:slug', async (req, res) => {
         return res.redirect('/dining');
     }
     
+    const description = diningItem.listDescription || diningItem.description || diningItem.detailDescription || '';
+    const cleanDescription = description.replace(/<[^>]*>/g, '').substring(0, 160);
+    const cuisine = diningItem.diningDetails?.cuisine || '';
     const seoDetails = {
-        title: `${diningItem.title} - Dining Details`,
-        metaDescription: diningItem.listDescription || diningItem.description,
+        title: `${diningItem.title} - Omaya Suites Raipur | ${diningItem.tagline} | Fine Dining Restaurant`,
+        metaDescription: cleanDescription || `Experience ${diningItem.title} at Omaya Suites Raipur. ${diningItem.tagline} offering ${cuisine} cuisine with elegant ambience and exceptional service. Reserve your table now.`,
         metaImage: `${baseUrl}${diningItem.bannerImage || diningItem.image}`,
-        keywords: `dining, ${diningItem.title}, ${diningItem.tagline}`,
+        keywords: `${diningItem.title} Raipur, ${diningItem.tagline} Omaya Suites, ${diningItem.title} restaurant, ${cuisine} restaurant Raipur, fine dining ${diningItem.title.toLowerCase()}, restaurant booking Raipur, ${diningItem.title} menu`,
         canonical: `${baseUrl}/dining/${slug}`,
     };
     
@@ -234,10 +241,10 @@ app.get('/venue', async (req, res) => {
     }
     
     const seoDetails = {
-        title: "Venue - ",
-        metaDescription: "Host your events at our premium venue spaces.",
+        title: "Event Venues & Banquet Halls - Omaya Suites Raipur | Wedding & Corporate Events",
+        metaDescription: "Host your events at Omaya Suites Raipur. Premium banquet halls, wedding venues, conference rooms, and event spaces with modern amenities. Perfect for weddings, corporate events, and celebrations in Raipur.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "venue, events, conference, meeting",
+        keywords: "event venue Raipur, banquet hall Raipur, wedding venue Raipur, conference hall Raipur, corporate events Raipur, party hall Raipur, meeting room Raipur, event space Chhattisgarh",
         canonical: `${baseUrl}/venue`,
     };
     res.render('venue', { body: "", seoDetails, venues });
@@ -266,11 +273,15 @@ app.get('/venue/:slug', async (req, res) => {
     
     const websiteID = await getWebsiteID();
     
+    const description = venue.listDescription || venue.description || venue.detailDescription || '';
+    const cleanDescription = description.replace(/<[^>]*>/g, '').substring(0, 160);
+    const capacity = venue.venueDetails?.capacity || '';
+    const size = venue.venueDetails?.size || '';
     const seoDetails = {
-        title: `${venue.title} - Venue Details`,
-        metaDescription: venue.listDescription || venue.description,
+        title: `${venue.title} - Omaya Suites Raipur | ${venue.tagline} | Event Venue Booking`,
+        metaDescription: cleanDescription || `Book ${venue.title} at Omaya Suites Raipur for your events. ${venue.tagline} with ${capacity} capacity, ${size} space, and premium amenities. Perfect for weddings, corporate events, and celebrations.`,
         metaImage: `${baseUrl}${venue.bannerImage || venue.image}`,
-        keywords: `venue, ${venue.title}, ${venue.tagline}`,
+        keywords: `${venue.title} Raipur, ${venue.tagline} Omaya Suites, ${venue.title} booking, event venue ${venue.title.toLowerCase()}, ${capacity} capacity venue, ${venue.title} price, wedding hall Raipur, corporate venue Raipur`,
         canonical: `${baseUrl}/venue/${slug}`,
     };
     
@@ -282,10 +293,10 @@ app.get('/contact', async (req, res) => {
     const websiteID = await getWebsiteID(); 
     
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: "Contact Us - Omaya Suites Raipur | Hotel Booking & Enquiry",
+        metaDescription: "Get in touch with Omaya Suites Raipur. Contact us for room bookings, restaurant reservations, event venue enquiries, and corporate bookings. Located in Dumartarai, Raipur, Chhattisgarh.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
+        keywords: "Omaya Suites contact, hotel booking Raipur, contact Omaya Suites, hotel enquiry Raipur, restaurant reservation, event booking Raipur, hotel phone number Raipur, Omaya Suites address",
         canonical: `${baseUrl}/contact`,
     };
 
@@ -315,11 +326,11 @@ app.get('/posts', async (req, res) => {
   
     const blogs = await getBlog();
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: "Blog & News - Omaya Suites Raipur | Hotel Updates & Travel Tips",
+        metaDescription: "Read the latest blog posts and news from Omaya Suites Raipur. Discover travel tips, hotel updates, dining experiences, event highlights, and hospitality insights.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
-        canonical: `${baseUrl}/blogs`,
+        keywords: "Omaya Suites blog, hotel news Raipur, travel blog Raipur, hospitality blog, hotel updates, dining blog, event blog Raipur",
+        canonical: `${baseUrl}/posts`,
     };
 
     res.render('blogs', { body: "", blogs, baseUrl, seoDetails, S3_BASE_URL });
@@ -330,10 +341,10 @@ app.get('/jobs', async (req, res) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
     const jobs = await getjobs();
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: "Career Opportunities - Omaya Suites Raipur | Hotel Jobs & Employment",
+        metaDescription: "Join the Omaya Suites team in Raipur. Explore career opportunities in hospitality, hotel management, restaurant services, and event management. Apply for jobs at our luxury hotel.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
+        keywords: "hotel jobs Raipur, hospitality careers, Omaya Suites jobs, hotel employment Raipur, restaurant jobs, event management jobs, hotel careers Chhattisgarh",
         canonical: `${baseUrl}/jobs`,
     };
     
@@ -347,11 +358,12 @@ app.get('/job/:slug', async (req, res) => {
     const websiteID = await getWebsiteID();
     const job = await getjobdetails(slug);
     // const otherJobs = await getotherjobs(slug);
+    const jobDescription = job?.description?.replace(/<[^>]*>/g, '').substring(0, 160) || '';
     const seoDetails = {
-        title: job?.seoDetails?.title ,
-        metaDescription: job?.seoDetails?.metaDescription || job?.description?.replace(/<[^>]*>/g, '').substring(0, 160) || "View job details and apply for this position at .",
+        title: job?.seoDetails?.title || `${job?.jobTitle || job?.title || 'Job'} - Omaya Suites Raipur | Career Opportunities`,
+        metaDescription: job?.seoDetails?.metaDescription || jobDescription || `Apply for ${job?.jobTitle || job?.title || 'this position'} at Omaya Suites Raipur. Join our luxury hotel team and build your career in hospitality.`,
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: job?.seoDetails?.tags?.join(', ') || "job, career, employment",
+        keywords: job?.seoDetails?.tags?.join(', ') || `${job?.jobTitle || job?.title} Raipur, hotel jobs, hospitality careers, Omaya Suites careers, ${job?.category || 'hotel'} jobs Raipur, employment opportunities`,
         canonical: `${baseUrl}/job/${slug}`,
     };
     
@@ -427,11 +439,11 @@ app.get('/job/:slug', async (req, res) => {
 app.get('/thankyou', async (req, res) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: "Thank You - Omaya Suites Raipur | We'll Contact You Soon",
+        metaDescription: "Thank you for contacting Omaya Suites Raipur. We have received your enquiry and will get back to you shortly. Experience luxury hospitality in Raipur, Chhattisgarh.",
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
-        canonical: "",
+        keywords: "thank you Omaya Suites, enquiry received, contact confirmation",
+        canonical: `${baseUrl}/thankyou`,
     } 
     res.render('thankyou', {body: "",seoDetails});
 });
@@ -467,12 +479,14 @@ app.get('/blog/:slug', async (req, res) => {
     // Set the meta image dynamically
    
   
+    const blogTitle = blogDetails?.title || 'Blog Post';
+    const blogDescription = descriptionText.substring(0, 160) || 'Read our latest blog post from Omaya Suites Raipur.';
     const seoDetails = {
-        title: "",
-        metaDescription: "",
+        title: `${blogTitle} - Omaya Suites Raipur Blog`,
+        metaDescription: blogDescription,
         metaImage: `${baseUrl}/${metaLogoPath}`,
-        keywords: "",
-        canonical:``,
+        keywords: `${blogTitle}, Omaya Suites blog, hotel blog Raipur, hospitality blog, ${blogDetails?.tags?.join(', ') || 'travel, hospitality, hotel'}`,
+        canonical: `${baseUrl}/blog/${slug}`,
     };
 
     res.render('blogpost', {
@@ -521,11 +535,11 @@ app.get('/blog/:slug', async (req, res) => {
 app.use(async (req, res, next) => {
     const baseUrl = req.protocol + '://' + req.get('Host');
     const seoDetails = {
-        title: "",
-        metaDescription: "",
-        metaImage: `${baseUrl}/assets/images/icon/metalogo.png`, // Replace with correct path if needed
-        keywords: "",
-        canonical: baseUrl + req.originalUrl, // You can use the original URL for canonical
+        title: "Page Not Found - Omaya Suites Raipur | 404 Error",
+        metaDescription: "The page you are looking for could not be found. Return to Omaya Suites Raipur homepage to explore our luxury hotel, dining, and event venues.",
+        metaImage: `${baseUrl}/${metaLogoPath}`,
+        keywords: "404 error, page not found, Omaya Suites",
+        canonical: baseUrl + req.originalUrl,
     };
     
 

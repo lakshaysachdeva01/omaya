@@ -5,17 +5,17 @@
     "tagline": "BANQUET HALL",
     "title": "Ivory Hall",
     "description": "A spacious and elegant venue ideal for anniversaries, corporate events, family gatherings, and celebrations. With modern amenities and premium décor, it offers a seamless event experience.",
-    "image": "/assets/images/data/Ivoryhall/RCP00271.webp",
+    "image": "/assets/images/data/Ivoryhall/RCP00273.webp",
     "icon": "/assets/images/resource/icon.png",
     "link": "/venue/ivory-hall",
-    "bannerImage": "/assets/images/data/Ivoryhall/RCP00271.webp",
+    "bannerImage": "/assets/images/data/Ivoryhall/RCP00273.webp",
     "detailImages": [
-      "/assets/images/data/Ivoryhall/RCP00271.webp",
       "/assets/images/data/Ivoryhall/RCP00273.webp",
       "/assets/images/data/Ivoryhall/RCP00274.webp",
       "/assets/images/data/Ivoryhall/RCP00275.webp",
       "/assets/images/data/Ivoryhall/RCP00276.webp",
-      "/assets/images/data/Ivoryhall/RCP00280.webp"
+      "/assets/images/data/Ivoryhall/RCP00277.webp",
+      "/assets/images/data/Ivoryhall/RCP00279.webp"
     ],
     "listDescription": "A spacious and elegant venue ideal for anniversaries, corporate events, family gatherings, and celebrations.",
     "detailDescription": "Ivory Hall is a grand and elegantly designed venue created for events that deserve a refined and memorable setting. With its spacious layout, premium décor, and warm ambience, it is perfect for anniversaries, weddings, corporate gatherings, and large family functions. The hall offers an inviting atmosphere where celebrations feel elevated and seamless.\n\nEquipped with modern amenities, dedicated buffet space, and comfortable guest movement areas, Ivory Hall ensures every event is executed with ease. Whether it's a formal event or a joyous celebration, the venue provides a sophisticated backdrop that enhances every moment.",
@@ -125,6 +125,7 @@
     "link": "/venue/zenith-one-two",
     "bannerImage": "/assets/images/data/Zenith/RCP00293.webp",
     "detailImages": [
+      "/assets/images/data/Zenith/RCP00291.webp",
       "/assets/images/data/Zenith/RCP00293.webp",
       "/assets/images/data/Zenith/RCP00295.webp",
       "/assets/images/data/Zenith/RCP00296.webp"
