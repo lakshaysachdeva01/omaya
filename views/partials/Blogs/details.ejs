@@ -217,7 +217,7 @@ const descriptionsToRender = Array.isArray(blogDetails?.description) && blogDeta
           <div class="blog-details__bottom">
             <div class="blog-details__social-list">
               <% 
-                const blogSlug = blogDetails?.seoconfigs?.slug || blogDetails?.seoDetails?.slug || '';
+                const blogSlug = blogDetails?.seoConfigs?.slug || blogDetails?.seoconfigs?.slug || blogDetails?.seoDetails?.slug || '';
                 const blogTitle = blogDetails?.postTitle || blogDetails?.title || '';
               %>
               <a href="#" id="twitter-share-btn" data-title="<%= blogTitle.replace(/"/g, '&quot;') %>" target="_blank" rel="noopener noreferrer" title="Share on Twitter"><i class="fa fa-x"></i></a>

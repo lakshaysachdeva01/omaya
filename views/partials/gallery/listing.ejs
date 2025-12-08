@@ -106,7 +106,7 @@
                 <button onclick="filterGallery('all')" class="gallery-tab theme-btn btn-style-one active" data-filter="all">All</button>
                 <% if (gallery && Array.isArray(gallery)) { %>
                     <% gallery.forEach((album) => { %>
-                        <% if (album.galleryType === "IMAGE" && album.images && album.images.length > 0) { %>
+                        <% if (album.gallerytype === "IMAGE" && album.images && album.images.length > 0) { %>
                             <button onclick="filterGallery('<%= album.title.toLowerCase() %>')" class="gallery-tab theme-btn btn-style-one" data-filter="<%= album.title.toLowerCase() %>"><%= album.title %></button>
                         <% } %>
                     <% }); %>
@@ -131,7 +131,7 @@
                 <div class="gallery-container state-gallery">
                     <% if (gallery && Array.isArray(gallery)) { %>
                         <% gallery.slice().reverse().forEach((album) => { %>
-                            <% if (album.galleryType === "IMAGE" && album.images && Array.isArray(album.images) && album.images.length > 0) { %>
+                            <% if (album.gallerytype === "IMAGE" && album.images && Array.isArray(album.images) && album.images.length > 0) { %>
                                 <% 
                                     const imageBase = typeof S3_BASE_URL !== 'undefined' && S3_BASE_URL 
                                         ? S3_BASE_URL.replace(/\/$/, '') + '/' 
@@ -145,7 +145,7 @@
                                     </div>
                                 <% }); %>
                             <% } %>
-                            <% if (album.galleryType === "VIDEO" && album.videos && Array.isArray(album.videos) && album.videos.length > 0) { 
+                            <% if (album.gallerytype === "VIDEO" && album.videos && Array.isArray(album.videos) && album.videos.length > 0) { 
                                 function convertToEmbedUrl(url) {
                                     if (!url || url === '') return '';
                                     let videoId = "";

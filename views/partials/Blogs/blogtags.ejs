@@ -1,6 +1,6 @@
 <% 
-  // Get tags from seoconfigs or seoDetails
-  const tags = blogDetails?.seoconfigs?.tags || blogDetails?.seoDetails?.tags || [];
+  // Get tags from seoConfigs, seoconfigs, or seoDetails
+  const tags = blogDetails?.seoConfigs?.tags || blogDetails?.seoconfigs?.tags || blogDetails?.seoDetails?.tags || [];
 %>
 <% if (tags && Array.isArray(tags) && tags.length > 0) { %>
   <div class="sidebar__single sidebar__tags">

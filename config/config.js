@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.API_BASE_URL; 
 // const WEBSITE_UID = process.env.WEBSITE_UID;
-const WEBSITE_UID = "68e4f07869fcbd5c0deab13e";
+const WEBSITE_UID = "6921645810184c94f509ce46";
 const S3_BASE_URL = process.env.S3_BASE_URL;
 const WEBSITE_ID_KEY = "websiteProjectId";
 

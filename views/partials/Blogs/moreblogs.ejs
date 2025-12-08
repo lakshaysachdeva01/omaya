@@ -25,7 +25,7 @@
         </style>
         <% latestblog.forEach(item=> { %>
           <% 
-            const slug = item.seoconfigs?.slug || item.seoDetails?.slug || '';
+            const slug = item.seoConfigs?.slug || item.seoconfigs?.slug || item.seoDetails?.slug || '';
             const imageUrl = item.coverImage || item.uploadBanner || '';
             const title = item.postTitle || item.title || '';
           %>

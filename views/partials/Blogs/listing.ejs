@@ -55,7 +55,7 @@
           <% blogs.slice(0, 3).forEach((item, index) => { %>
             <% 
               const imageUrl = item.coverImage || item.uploadBanner || '';
-              const slug = item.seoconfigs?.slug || item.seoDetails?.slug || '';
+              const slug = item.seoConfigs?.slug || item.seoconfigs?.slug || item.seoDetails?.slug || '';
               const category = item.postCategory || 'BLOG';
               const title = item.postTitle || item.title || '';
               const date = item.postDate || formatDate(item.createdAt);

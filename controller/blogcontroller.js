@@ -39,9 +39,9 @@ exports.getBlogfull = async(slug) => {
         ? apiResponse.data
         : (Array.isArray(apiResponse) ? apiResponse : []);
     
-    // Find the blog by slug (check seoconfigs.slug or seoDetails.slug)
+    // Find the blog by slug (check seoConfigs.slug, seoconfigs.slug, or seoDetails.slug for compatibility)
     const blog = items.find(item => {
-        const itemSlug = item.seoconfigs?.slug || item.seoDetails?.slug || '';
+        const itemSlug = item.seoConfigs?.slug || item.seoconfigs?.slug || item.seoDetails?.slug || '';
         return itemSlug === slug;
     });
 
@@ -76,9 +76,9 @@ exports.getlatestblogs = async (slug) => {
     }
 
     // Filter blogs and exclude the one matching the provided slug
-    // Check both seoconfigs.slug and seoDetails.slug for compatibility
+    // Check seoConfigs.slug, seoconfigs.slug, and seoDetails.slug for compatibility
     const filteredBlogs = items.filter(blog => {
-        const blogSlug = blog.seoconfigs?.slug || blog.seoDetails?.slug || '';
+        const blogSlug = blog.seoConfigs?.slug || blog.seoconfigs?.slug || blog.seoDetails?.slug || '';
         return blogSlug !== slug;
     });
 

@@ -15,21 +15,23 @@ exports.getgallery = async (req, res) => {
 
     return items.reverse();
 };
-
+// Trim spaces for safety
 exports.getgalleryalbum = async (title) => {  
+    const searchTitle = title.trim().toLowerCase();
+    
     const websiteID = await getWebsiteID(); 
     const apiResponse = await fetchData(`${API_BASE_URL}/website/${websiteID}/gallery/get-all`);
     
-    // Handle the API response structure: { message: "...", data: [...] }
     const items = Array.isArray(apiResponse?.data)
         ? apiResponse.data
         : (Array.isArray(apiResponse) ? apiResponse : []);
     
-    // Filter the galleries by the title
-    const filteredAlbums = items.filter(album => album.title.toLowerCase() === title.toLowerCase());
+    // Trim and lowercase comparison
+    const filteredAlbums = items.filter(album => 
+        album.title.trim().toLowerCase() === searchTitle
+    );
 
-    // Return the filtered albums as an array (or empty array if no match)
-    return filteredAlbums.length > 0 ? filteredAlbums : [];
+    return filteredAlbums.length > 0 ? filteredAlbums.reverse() : []; // Added .reverse() for consistency
 };
 
 exports.getLatestGalleryImages = async () => {
