@@ -1,7 +1,7 @@
 <%- include('header', {seoDetails}) %>
 
 <!-- Start main-content -->
-<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+<section class="page-title" style="background-image: url(/assets/images/data/RCP00106.webp);">
     <div class="auto-container">
         <div class="title-outer text-center">
             <h1 class="title">Dining</h1>
@@ -122,6 +122,26 @@
 </section>
 
 <style>
+    .page-title {
+        position: relative;
+    }
+    
+    .page-title::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+    
+    .page-title .auto-container {
+        position: relative;
+        z-index: 2;
+    }
+    
     .feature-section .image-box {
         position: relative;
         width: 100%;

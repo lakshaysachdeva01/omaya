@@ -24,6 +24,10 @@
         height: auto !important;
     }
     
+    .product-details .bxslider {
+        margin-bottom: 0;
+    }
+    
     .product-details .bxslider .slider-content {
         width: 100%;
     }
@@ -111,7 +115,9 @@
         width: 100%;
         margin: 0;
         flex-shrink: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        will-change: transform;
+        transform: translateZ(0);
     }
     
     .product-details .slider-pager .thumb-box li a {
@@ -123,8 +129,7 @@
         transition: all 0.3s ease;
     }
     
-    .product-details .slider-pager .thumb-box li a:hover,
-    .product-details .slider-pager .thumb-box li a.active {
+    .product-details .slider-pager .thumb-box li a:hover {
         border-color: var(--theme-color1);
     }
     
@@ -163,9 +168,6 @@
         border-radius: 4px;
     }
     
-    .product-details .slider-pager .thumb-box li a.active:before {
-        opacity: 1;
-    }
     
     /* Facility icons styling */
     .room-facility-list .facility-icon {

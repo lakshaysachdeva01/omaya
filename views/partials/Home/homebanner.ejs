@@ -22,6 +22,14 @@
       pointer-events: none;
   }
   
+  /* Logo container - allows logo to move freely */
+  .logo-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  
   /* Logo animation */
   .loading-logo {
       width: 200px;
@@ -29,6 +37,7 @@
       animation: logoPulse 2s ease-in-out forwards;
       opacity: 0;
       transform: scale(0.7);
+      position: relative;
   }
   
   @keyframes logoPulse {
@@ -42,6 +51,30 @@
           transform: scale(1);
           
       }
+  }
+  
+  /* Golden loader below logo - absolutely positioned */
+  .loading-spinner {
+      display: none;
+      position: absolute;
+      top: calc(100% + 20px);
+      left: 50%;
+      margin-left: -20px; /* Half of width (40px) to center */
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(212, 175, 55, 0.3);
+      border-top: 3px solid #D4AF37;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+  }
+  
+  .loading-spinner.show {
+      display: block;
+  }
+  
+  @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
   }
   
   /* Banner YouTube video player styles */
@@ -87,6 +120,16 @@
       background-size: unset !important;
       background-position: unset !important;
       background-repeat: unset !important;
+  }
+  
+  /* Mobile: Make video cover full area without black bars */
+  @media (max-width: 768px) {
+      .banner-section .banner-youtube-container iframe {
+          transform: translateZ(0) scale(3.8) !important;
+          -webkit-transform: translateZ(0) scale(3.8) !important;
+          transform-origin: center center;
+          -webkit-transform-origin: center center;
+      }
   }
   
   .banner-section .banner-youtube-container::before {
@@ -154,6 +197,12 @@
       opacity: 0;
       transition: opacity 0.5s ease;
   }
+
+  @media (max-width: 768px) {
+    .banner-section .content-box {
+      min-width: 350px;
+    }
+  }
   
   .banner-section .content-box.visible {
       opacity: 1;
@@ -168,7 +217,10 @@
 
 <!-- Video Preload Animation -->
 <div class="video-preload-animation" id="videoPreloadAnimation">
-  <img src="/assets/images/Omaya_Logo_Black.svg" alt="Omaya Logo" class="loading-logo" id="loadingLogo">
+  <div class="logo-container">
+    <img src="/assets/images/Omaya_Logo_Black.svg" alt="Omaya Logo" class="loading-logo" id="loadingLogo">
+    <div class="loading-spinner" id="loadingSpinner"></div>
+  </div>
 </div>
 
 <!-- banner section -->
@@ -182,7 +234,7 @@
           </div>
           <div class="content-box">
               <span class="sub-title" data-animation-in="fadeInUp" data-delay-in="0.1">Unique Place And Luxury Hotel</span>
-              <h1 data-animation-in="fadeInUp" data-delay-in="0.3">life enjoy with <br>the great moments</h1>
+              <h1 data-animation-in="fadeInUp" data-delay-in="0.3">Enjoy life with <br>the great moments</h1>
           </div>
       </div>
   </div>
@@ -256,11 +308,18 @@
           if (videoReady) {
               startVideoPlayback();
           } else {
-              // Show loading state if video isn't ready yet
+              // Show loading state if video isn't ready yet - animation plays once and stays
               var logo = document.getElementById('loadingLogo');
+              var spinner = document.getElementById('loadingSpinner');
               if (logo) {
-                  logo.style.opacity = '0.7';
-                  logo.style.animation = 'logoPulse 3s ease-in-out infinite';
+                  logo.style.opacity = '1';
+                  logo.style.animation = 'logoPulse 2s ease-in-out forwards';
+                  // Keep logo visible at final state if still loading
+                  logo.style.transform = 'scale(1)';
+              }
+              // Show golden loader below logo after animation completes
+              if (spinner) {
+                  spinner.classList.add('show');
               }
           }
       }, animationDuration);
@@ -474,6 +533,9 @@
   function startVideoPlayback() {
       if (!bannerYouTubePlayer || !videoReady) return;
       
+      // Hide spinner when video starts playing
+      hideLoadingSpinner();
+      
       try {
           // Play the video
           bannerYouTubePlayer.playVideo();
@@ -498,8 +560,19 @@
       }
   }
 
+  // Hide the loading spinner
+  function hideLoadingSpinner() {
+      var spinner = document.getElementById('loadingSpinner');
+      if (spinner) {
+          spinner.classList.remove('show');
+      }
+  }
+
   // Complete loading sequence - hide animation, show content
   function completeLoadingSequence() {
+      // Hide spinner
+      hideLoadingSpinner();
+      
       // Hide animation overlay
       var animationEl = document.getElementById('videoPreloadAnimation');
       if (animationEl) {
@@ -541,12 +614,32 @@
       youtubeIframe.style.setProperty('background-position', 'unset', 'important');
       youtubeIframe.style.setProperty('background-repeat', 'unset', 'important');
       
-      // Force scale 1.6 on iframe
-      youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(1.6)', 'important');
-      youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(1.6)', 'important');
+      // Force scale on iframe - 2.5 for mobile, 1.6 for desktop
+      var isMobile = window.innerWidth <= 768;
+      var scaleValue = isMobile ? 3.8 : 1.6;
+      youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+      youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
       youtubeIframe.style.setProperty('transform-origin', 'center center', 'important');
       youtubeIframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
   }
+  
+  // Update video scale on window resize
+  function updateVideoScale() {
+      var youtubeIframe = document.querySelector('.banner-youtube-container iframe');
+      if (youtubeIframe) {
+          var isMobile = window.innerWidth <= 768;
+          var scaleValue = isMobile ? 3.8 : 1.6;
+          youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+          youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+      }
+  }
+  
+  // Listen for window resize to update scale
+  var resizeTimeout;
+  window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateVideoScale, 100);
+  });
 
   // Monitor and keep video playing
   function startVideoMonitoring() {

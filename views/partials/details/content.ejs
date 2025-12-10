@@ -204,7 +204,7 @@
     <% } %>
     
     <% if (currentItem && currentItem.paidServices && currentItem.paidServices.length > 0) { %>
-        <div class="mt-40">
+        <div class="mt-40" style="padding-top: 20px;">
             <h4 style="margin-bottom: 25px;">Paid Services</h4>
             <div class="row room-facility-list mb-40" style="row-gap: 20px;">
                 <% currentItem.paidServices.forEach((service, index) => { %>
@@ -222,7 +222,7 @@
     <% } %>
     
     <% if (currentItem && currentItem.view360) { %>
-        <div class="mt-40">
+        <div class="mt-40" style="padding-top: 20px;">
             <h4>360° View</h4>
             <div id="panorama-360" style="width: 100%; height: 650px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; background: #f4f6f8;">
                 <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
@@ -243,10 +243,161 @@
     </div>
     
     <% if (itemType === 'stay') { %>
-        <div class="p-4 p-lg-5 bg-light">
-            <%- include('../stay/staybookingform', { currentItem }) %>
-            <%- include('../stay/staybookingendpoint', { currentItem, websiteID: typeof websiteID !== 'undefined' ? websiteID : '', API_BASE_URL: typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : '' }) %>
+        <div class="p-4 p-lg-5 bg-light text-center">
+            <h2 class="mb-4" style="padding-bottom: 20px;">Book Your Stay</h2>
+            <button class="theme-btn btn-style-one" onclick="openStayBookingModal()">
+                <span class="btn-title">Book Now</span>
+            </button>
         </div>
+        
+        <!-- Stay Booking Modal -->
+        <div id="stayBookingModal" class="stay-booking-modal">
+            <div class="stay-booking-modal-content">
+                <button class="stay-booking-modal-close" onclick="closeStayBookingModal()">&times;</button>
+                <%- include('../stay/staybookingform', { currentItem }) %>
+                <%- include('../stay/staybookingendpoint', { currentItem, websiteID: typeof websiteID !== 'undefined' ? websiteID : '', API_BASE_URL: typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : '' }) %>
+            </div>
+        </div>
+        
+        <style>
+            /* Stay Booking Modal Styles */
+            .stay-booking-modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+            
+            .stay-booking-modal.show {
+                display: flex;
+                opacity: 1;
+            }
+            
+            .stay-booking-modal-content {
+                background: white;
+                border-radius: 12px;
+                width: 90%;
+                max-width: 700px;
+                max-height: 90vh;
+                overflow-y: auto;
+                box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.2);
+                transform: scale(0.9);
+                transition: transform 0.3s ease-in-out;
+                position: relative;
+                padding: 50px;
+            }
+            
+            .stay-booking-modal.show .stay-booking-modal-content {
+                transform: scale(1);
+            }
+            
+            .stay-booking-modal-close {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                border: none;
+                background: rgba(0, 0, 0, 0.1);
+                color: #333;
+                font-size: 28px;
+                line-height: 1;
+                cursor: pointer;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.3s;
+                z-index: 1;
+            }
+            
+            .stay-booking-modal-close:hover {
+                background: rgba(0, 0, 0, 0.2);
+            }
+            
+            /* Prevent body scroll when modal is open */
+            body.stay-modal-open {
+                overflow: hidden !important;
+            }
+            
+            /* Hide scrollbar but keep scrolling functional */
+            .stay-booking-modal-content {
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+            }
+            
+            .stay-booking-modal-content::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Opera */
+            }
+            
+            @media (max-width: 768px) {
+                .stay-booking-modal-content {
+                    padding: 30px 20px;
+                    width: 95%;
+                    max-height: 85vh;
+                }
+                
+                .stay-booking-modal-close {
+                    top: 10px;
+                    right: 10px;
+                    width: 35px;
+                    height: 35px;
+                    font-size: 24px;
+                }
+            }
+        </style>
+        
+        <script>
+            var stayModalScrollPosition = 0;
+            
+            function openStayBookingModal() {
+                const modal = document.getElementById('stayBookingModal');
+                if (modal) {
+                    // Save current scroll position
+                    stayModalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    modal.classList.add('show');
+                    document.body.classList.add('stay-modal-open');
+                    // Prevent scroll jump by maintaining position
+                    document.body.style.top = '-' + stayModalScrollPosition + 'px';
+                }
+            }
+            
+            function closeStayBookingModal() {
+                const modal = document.getElementById('stayBookingModal');
+                if (modal) {
+                    modal.classList.remove('show');
+                    document.body.classList.remove('stay-modal-open');
+                    document.body.style.top = '';
+                    // Restore scroll position
+                    window.scrollTo(0, stayModalScrollPosition);
+                    stayModalScrollPosition = 0;
+                }
+            }
+            
+            // Close modal when clicking outside
+            document.getElementById('stayBookingModal')?.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeStayBookingModal();
+                }
+            });
+            
+            // Close modal on ESC key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeStayBookingModal();
+                }
+            });
+        </script>
     <% } else if (itemType === 'venue') { %>
         <div class="p-4 p-lg-5 bg-light">
             <%- include('../venue/venueenquiryform', { currentItem, venues: typeof venues !== 'undefined' ? venues : [] }) %>

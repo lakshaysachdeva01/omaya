@@ -44,6 +44,17 @@
         object-fit: cover;
         opacity: 1;
     }
+    
+    /* Disable scrolling when preloader is visible */
+    body.preloader-active,
+    html.preloader-active {
+        overflow: hidden !important;
+        height: 100% !important;
+        position: fixed !important;
+        width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
 </style>
 
 <!-- Detail Page Preload Animation -->
@@ -57,11 +68,60 @@
     var detailAnimationCompleted = false;
     var detailAnimationDuration = 1000; // 1 second minimum
     
+    // Store original scroll position
+    var scrollPosition = 0;
+    var scrollWasLocked = false;
+    
+    // Disable scrolling
+    function disableScroll() {
+        scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        scrollWasLocked = true;
+        document.body.classList.add('preloader-active');
+        document.documentElement.classList.add('preloader-active');
+        document.body.style.top = '-' + scrollPosition + 'px';
+    }
+    
+    // Enable scrolling
+    function enableScroll() {
+        if (!scrollWasLocked) return;
+        
+        var wasAtTop = scrollPosition === 0;
+        
+        document.body.classList.remove('preloader-active');
+        document.documentElement.classList.remove('preloader-active');
+        document.body.style.top = '';
+        
+        // Only restore scroll if user had scrolled before (not at top)
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(function() {
+            // Don't force scroll if position was 0 (at top)
+            // Let browser handle natural scroll position
+            if (!wasAtTop && scrollPosition > 0) {
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'auto'
+                });
+            }
+            scrollWasLocked = false;
+        });
+    }
+    
+    // Disable scroll immediately when preloader is shown
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', disableScroll);
+    } else {
+        disableScroll();
+    }
+    
     // Function to hide preloader
     function hideDetailPreloader() {
         var preloader = document.getElementById('detailPreloadAnimation');
         if (preloader) {
             preloader.classList.add('hidden');
+            // Enable scrolling when preloader starts hiding
+            setTimeout(function() {
+                enableScroll();
+            }, 200);
             setTimeout(function() {
                 preloader.style.display = 'none';
             }, 800);

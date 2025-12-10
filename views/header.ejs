@@ -101,9 +101,8 @@
                   <li><a href="/venue/zenith-one-two">ZENITH ONE & TWO</a></li>
                 </ul>
               </li>
-              <li><a href="/posts">Posts</a></li>
+             
               <li><a href="/gallery">Gallery</a></li>
-              <li><a href="/jobs">Career</a></li>
               <li><a href="/contact">Contact</a></li>
             </ul>
           </nav>
@@ -111,7 +110,11 @@
         </div>
 
         <div class="outer-box">
-          <a href="/contact" class="header-btn">Book Now</a>
+          <% if (typeof itemType !== 'undefined' && itemType === 'stay') { %>
+            <button class="header-btn" onclick="openStayBookingModal(); return false;" style=" border: none; cursor: pointer;">Book Now</button>
+          <% } else { %>
+            <a href="/contact" class="header-btn">Book Now</a>
+          <% } %>
           <div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
           <!-- Mobile Nav toggler -->
         </div>
@@ -172,6 +175,49 @@
     .header-style-one .outer-box .header-btn {
       font-family: "Barlow", sans-serif !important;
     }
+    
+    /* Make button look like anchor for Book Now */
+    .header-style-one .outer-box .header-btn[onclick] {
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    /* Sticky Header Book Now Button */
+    .sticky-header-book-btn {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      padding-right: 20px;
+    }
+    
+    .sticky-header-book-btn .theme-btn {
+      padding: 12px 30px;
+      font-size: 14px;
+      white-space: nowrap;
+      font-family: "Barlow", sans-serif;
+    }
+    
+    .sticky-header .inner-container {
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    @media (max-width: 991px) {
+      .sticky-header-book-btn {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .sticky-header-book-btn {
+        padding-right: 15px;
+      }
+      
+      .sticky-header-book-btn .theme-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+    }
    </style>
       <!-- End Header Search -->
 
@@ -196,6 +242,14 @@
               <!--Mobile Navigation Toggler-->
               <div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
             </div>
+            <% if (typeof itemType !== 'undefined' && itemType === 'stay') { %>
+            <!-- Book Now Button for Stay Pages -->
+            <div class="sticky-header-book-btn">
+              <button class="theme-btn btn-style-one" onclick="openStayBookingModal()">
+                <span class="btn-title">Book Now</span>
+              </button>
+            </div>
+            <% } %>
           </div>
         </div>
       </div><!-- End Sticky Menu -->

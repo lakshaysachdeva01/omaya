@@ -20,121 +20,125 @@
         }
     });
     
-     // Initialize bxslider with single image mode
+     // Initialize bxslider for product details image gallery
      $(window).on('load', function() {
-         var $slider = $('.product-details .bxslider');
-         if ($slider.length) {
-             // Destroy existing slider if any
-             if ($slider.data('bxSlider')) {
-                 $slider.destroySlider();
-             }
+         // Wait for bxslider to be available
+         function waitForBxSlider(callback, maxAttempts) {
+             maxAttempts = maxAttempts || 20;
+             var attempts = 0;
              
-             // Function to move active thumbnail to top
-             function moveActiveThumbToTop(currentIndex) {
-                 var $thumbBox = $('.product-details .slider-pager .thumb-box');
-                 var $thumbItems = $thumbBox.find('li');
-                 
-                 // Remove active class from all first
-                 $thumbItems.find('a').removeClass('active');
-                 
-                 // Find thumbnail by data-slide-index attribute (more reliable than eq)
-                 var $activeThumb = $thumbItems.find('a[data-slide-index="' + currentIndex + '"]').closest('li');
-                 
-                 if ($activeThumb.length) {
-                     // Add active class to current
-                     $activeThumb.find('a').addClass('active');
-                     
-                     // If not already at top, move it
-                     if (!$activeThumb.is(':first-child')) {
-                         // Detach and prepend to move to top
-                         $activeThumb.detach();
-                         $thumbBox.prepend($activeThumb);
-                         
-                         // Scroll to top immediately
-                         $thumbBox.scrollTop(0);
-                     }
+             function check() {
+                 attempts++;
+                 if (typeof $.fn.bxSlider !== 'undefined') {
+                     callback();
+                 } else if (attempts < maxAttempts) {
+                     setTimeout(check, 100);
                  }
              }
+             check();
+         }
+         
+         waitForBxSlider(function() {
+             var $slider = $('.product-details .bxslider');
+             if (!$slider.length) {
+                 console.log('Product details slider not found');
+                 return;
+             }
              
-             // Remove any existing event handlers to prevent duplicates
-             $('.product-details .slider-pager .thumb-box').off('click', 'a');
+             // Destroy existing slider if any
+             if ($slider.data('bxSlider')) {
+                 $slider.data('bxSlider').destroySlider();
+             }
              
-             // Initialize with fade mode for single large image display
+             // Check slide count
+             var slideCount = $slider.find('.slider-content').length;
+             if (slideCount === 0) {
+                 console.log('No slides found');
+                 return;
+             }
+             
+             var shouldAutoPlay = slideCount > 1;
+             console.log('Initializing slider with', slideCount, 'slides, auto:', shouldAutoPlay);
+             
+             // Initialize bxslider
              var sliderInstance = $slider.bxSlider({
                  mode: 'fade',
-                 auto: true,
+                 auto: shouldAutoPlay,
+                 autoStart: shouldAutoPlay,
                  autoHover: true,
-                 pause: 1000,
-                 speed: 500,
+                 pause: 3000, // 3 seconds
+                 speed: 600,
                  pagerCustom: '.product-details .slider-pager .thumb-box',
                  controls: false,
                  adaptiveHeight: false,
                  infiniteLoop: true,
                  useCSS: true,
                  easing: 'ease-in-out',
+                 preloadImages: 'all',
+                 autoSlideForOnePage: false,
                  onSliderLoad: function(currentIndex) {
-                     // Ensure thumbnails are visible and working
+                     console.log('Slider loaded, current index:', currentIndex);
                      $('.product-details .slider-pager').show();
                      
-                     // Move initial active thumbnail to top
-                     setTimeout(function() {
-                         moveActiveThumbToTop(currentIndex || 0);
-                     }, 100);
-                     
-                     // Match thumbnail container height to slideshow height
-                     function matchThumbnailHeight() {
-                         var $sliderEl = $('.product-details .bxslider');
-                         var $thumbnailCol = $('.product-details .image-gallery-wrapper .col-lg-2');
-                         if ($sliderEl.length && $thumbnailCol.length) {
-                             var sliderHeight = $sliderEl.outerHeight();
-                             // Only set height if slider has a valid height (greater than 0)
-                             if (sliderHeight && sliderHeight > 0) {
-                                 $thumbnailCol.css({
-                                     'height': sliderHeight + 'px',
-                                     'min-height': sliderHeight + 'px'
-                                 });
-                             }
-                         }
-                     }
-                     
-                     // Run immediately and also after a short delay to ensure slider is fully rendered
-                     matchThumbnailHeight();
-                     setTimeout(matchThumbnailHeight, 100);
-                     setTimeout(matchThumbnailHeight, 300);
-                     
-                     // Update on window resize (remove old handlers first)
-                     $(window).off('resize.product-details-slider');
-                     $(window).on('resize.product-details-slider', function() {
-                         setTimeout(matchThumbnailHeight, 50);
-                     });
-                     
-                     // Reinitialize media items for popup after slider loads
+                     // Reinitialize media items for popup
                      if (typeof initMediaItems === 'function') {
-                         initMediaItems();
+                         setTimeout(initMediaItems, 100);
                      }
                  },
                  onSlideAfter: function($slideElement, oldIndex, newIndex) {
-                     // Move active thumbnail to top when slide changes
-                     // Use setTimeout to ensure slide transition is complete
-                     var self = this;
-                     setTimeout(function() {
-                         moveActiveThumbToTop(newIndex);
-                     }, 100);
+                     console.log('Slide changed from', oldIndex, 'to', newIndex);
+                     // Ensure auto continues after each slide
+                     if (shouldAutoPlay) {
+                         var slider = $slider.data('bxSlider');
+                         if (slider && !slider.interval && typeof slider.startAuto === 'function') {
+                             setTimeout(function() {
+                                 slider.startAuto();
+                             }, 100);
+                         }
+                     }
                  }
              });
              
+             // Store globally
+             window.productDetailsSlider = sliderInstance;
+             
              // Handle thumbnail clicks - use event delegation
-             $(document).off('click.product-details-thumbs', '.product-details .slider-pager .thumb-box a')
-                        .on('click.product-details-thumbs', '.product-details .slider-pager .thumb-box a', function(e) {
+             $('.product-details').off('click.product-details-thumbs', '.slider-pager .thumb-box a');
+             $('.product-details').on('click.product-details-thumbs', '.slider-pager .thumb-box a', function(e) {
                  e.preventDefault();
                  e.stopPropagation();
-                 var slideIndex = parseInt($(this).data('slide-index'), 10);
-                 if (!isNaN(slideIndex) && sliderInstance) {
-                     sliderInstance.goToSlide(slideIndex);
+                 var slideIndex = parseInt($(this).attr('data-slide-index'), 10);
+                 console.log('Thumbnail clicked, index:', slideIndex);
+                 if (!isNaN(slideIndex)) {
+                     var slider = $slider.data('bxSlider');
+                     if (slider && typeof slider.goToSlide === 'function') {
+                         slider.goToSlide(slideIndex);
+                     }
                  }
                  return false;
              });
-         }
+             
+             // Ensure auto-play starts and continues
+             if (shouldAutoPlay) {
+                 setTimeout(function() {
+                     var slider = $slider.data('bxSlider');
+                     if (slider && typeof slider.startAuto === 'function') {
+                         if (!slider.interval) {
+                             console.log('Starting auto-play');
+                             slider.startAuto();
+                         }
+                     }
+                 }, 800);
+                 
+                 // Monitor and restart auto if it stops
+                 setInterval(function() {
+                     var slider = $slider.data('bxSlider');
+                     if (slider && shouldAutoPlay && !slider.interval) {
+                         slider.startAuto();
+                     }
+                 }, 5000);
+             }
+         });
      });
      
      // Load Pannellum and initialize 360 view if available

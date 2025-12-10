@@ -1,7 +1,7 @@
 <%- include('header'), {seoDetails} %>
 
 	<!-- Start main-content -->
-	<section class="page-title" style="background-image: url(/assets/images/background/page-title-bg.png);">
+	<section class="page-title" style="background-image: url(/assets/images/data/Omapoolbar/RCP00305.webp);">
 		<div class="auto-container">
 			<div class="title-outer text-center">
 				<h1 class="title">About Us</h1>
@@ -13,6 +13,28 @@
 		</div>
 	</section>
 	<!-- end main-content -->
+
+<style>
+	.page-title {
+		position: relative;
+	}
+	
+	.page-title::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 1;
+	}
+	
+	.page-title .auto-container {
+		position: relative;
+		z-index: 2;
+	}
+</style>
 
   <section class="feature-section-two">
     <div class="auto-container">
@@ -44,7 +66,7 @@
                 <!-- feature-block -->
                 <div class="feature-block-two col-lg-6">
                   <div class="inner-box">
-                    <figure class="image"><img style="height: 440px;" src="/assets/images/Owners/Amit_goyal.jpg" alt="Amit Goyal"></figure>
+                    <figure class="image"><img style="height: 440px;" src="/assets/images/Owners/Amit_goyal.JPG" alt="Amit Goyal"></figure>
                     <div class="content-box">
                       <h4 class="title"><a href="javascript:void(0)">Amit Goyal</a></h4>
                     </div>

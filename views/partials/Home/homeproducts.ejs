@@ -107,6 +107,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
 
 <script>
+// Store all viewer instances globally
+const panoramaViewers = {};
+
 document.addEventListener('DOMContentLoaded', function() {
   const servicesData = JSON.parse(document.getElementById('services-data').textContent);
   const container = document.getElementById('services-container');
@@ -124,7 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="inner-box">
           ${service.has360View ? `
             <div class="panorama-container" onclick="window.location.href='${service.link}'" style="width: 100%; height: 458px; border-radius: 8px; overflow: hidden; position: relative; background: #f4f6f8; cursor: pointer;">
-              <div id="panorama-360-${service.id}" style="width: 100%; height: 458px;"></div>
+              <div id="panorama-360-${service.id}" style="width: 100%; height: 458px; position: relative; z-index: 0;"></div>
+              <div class="panorama-overlay" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 100%); pointer-events: none; z-index: 1;"></div>
               <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
                 <div class="panorama-spinner"></div>
               </div>
@@ -134,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
               <img style="height: 458px; width: 100%; object-fit: cover;" src="${service.image}" alt="${service.alt}">
             </figure>
           `}
-          <div class="content-box">
+          <div class="content-box" style="z-index: 2;">
             <h4 class="title"><a href="${service.link}">${service.title}</a></h4>
           </div>
         </div>
@@ -185,7 +189,7 @@ function initializeSwiper() {
       loopedSlides: maxSlidesPerView, // Duplicate this many slides for seamless loop
       loopAdditionalSlides: 2, // Additional slides to duplicate for better loop
       autoplay: {
-        delay: 2500,
+        delay: 11000,
         disableOnInteraction: false,
         pauseOnMouseEnter: false,
       },
@@ -227,28 +231,222 @@ function initializeSwiper() {
           // Force update to ensure loop is properly initialized
           this.update();
           this.updateSlides();
+          // Update auto-rotation for the initial active slide after a delay to ensure viewers are loaded
+          setTimeout(() => {
+            updateAutoRotation(this);
+          }, 1000);
         },
         slideChangeTransitionEnd: function() {
           // Ensure loop continues smoothly
           this.update();
+          // Update auto-rotation when slide changes
+          setTimeout(() => {
+            updateAutoRotation(this);
+          }, 100);
+        },
+        slideChange: function() {
+          // Also update on slide change (before transition ends) for faster response
+          updateAutoRotation(this);
         }
       }
     });
     
-    // Store swiper instance
+    // Store swiper instance globally for access
     swiperEl.swiperInstance = swiper;
-    console.log('Swiper initialized with', totalSlides, 'slides, loop enabled');
+    window.serviceSwiperInstance = swiper; // Also store globally for easier access
   }, 150);
 }
 
 function initialize360Views() {
   const servicesData = JSON.parse(document.getElementById('services-data').textContent);
   
-  servicesData.forEach(service => {
+  servicesData.forEach((service, index) => {
     if (service.has360View && service.view360) {
       initPannellumViewer(service.id, service.view360);
     }
   });
+}
+
+function updateAutoRotation(swiper) {
+  if (!swiper) return;
+  
+  const servicesData = JSON.parse(document.getElementById('services-data').textContent);
+  
+  // Try to get active service ID from slide element first
+  let activeServiceId = null;
+  
+  // Method 1: Get from active slide element
+  if (swiper.slides && swiper.slides[swiper.activeIndex]) {
+    const activeSlide = swiper.slides[swiper.activeIndex];
+    const panoramaContainer = activeSlide.querySelector('[id^="panorama-360-"]');
+    if (panoramaContainer) {
+      const serviceIdMatch = panoramaContainer.id.match(/panorama-360-(\d+)/);
+      if (serviceIdMatch) {
+        activeServiceId = parseInt(serviceIdMatch[1]);
+      }
+    }
+  }
+  
+  // Method 2: Fallback to using realIndex
+  if (!activeServiceId) {
+    const activeIndex = swiper.realIndex !== undefined ? swiper.realIndex : (swiper.activeIndex || 0);
+    const activeService = servicesData[activeIndex];
+    if (activeService) {
+      activeServiceId = activeService.id;
+    }
+  }
+  
+  if (!activeServiceId) return;
+  
+  // Disable auto-rotation for ALL viewers first
+  servicesData.forEach(service => {
+    if (service.has360View && panoramaViewers[service.id]) {
+      try {
+        const viewer = panoramaViewers[service.id];
+        // Try multiple methods to stop auto-rotate
+        if (typeof viewer.setConfig === 'function') {
+          viewer.setConfig({ autoRotate: 0 });
+        }
+        if (typeof viewer.updateScene === 'function') {
+          viewer.updateScene('scene', { autoRotate: 0 });
+        }
+        if (typeof viewer.stopAutoRotate === 'function') {
+          viewer.stopAutoRotate();
+        }
+        // Direct property access as fallback
+        if (viewer.config && viewer.config.scene) {
+          viewer.config.scene.autoRotate = 0;
+        }
+      } catch(e) {
+        // Viewer might not be fully initialized yet, ignore error
+      }
+    }
+  });
+  
+  // Enable auto-rotation ONLY for the active slide
+  if (panoramaViewers[activeServiceId]) {
+    try {
+      const isMobile = 'ontouchstart' in window;
+      const rotateSpeed = isMobile ? 1.5 : 10;
+      const viewer = panoramaViewers[activeServiceId];
+      
+      // Clear any existing pitch lock interval
+      if (viewer._pitchLockInterval) {
+        clearInterval(viewer._pitchLockInterval);
+        viewer._pitchLockInterval = null;
+      }
+      
+      // Reset pitch to 0 ONLY (don't reset yaw - let auto-rotate handle it continuously)
+      try {
+        if (typeof viewer.setPitch === 'function') {
+          viewer.setPitch(0);
+        }
+      } catch(e) {
+        try {
+          viewer.setConfig({ pitch: 0, minPitch: 0, maxPitch: 0 });
+        } catch(e2) {}
+      }
+      
+      // Enable auto-rotate WITHOUT resetting yaw (let it rotate continuously)
+      if (typeof viewer.setConfig === 'function') {
+        viewer.setConfig({
+          autoRotate: rotateSpeed,
+          autoRotateInactivityDelay: 0, // Start immediately
+          autoRotateStopDelay: 0, // Never stop
+          minPitch: 0, // Lock pitch
+          maxPitch: 0 // Lock pitch
+        });
+      }
+      if (typeof viewer.updateScene === 'function') {
+        viewer.updateScene('scene', {
+          autoRotate: rotateSpeed,
+          autoRotateInactivityDelay: 0,
+          autoRotateStopDelay: 0,
+          minPitch: 0,
+          maxPitch: 0
+        });
+      }
+      if (typeof viewer.startAutoRotate === 'function') {
+        viewer.startAutoRotate(rotateSpeed, 0); // 0 delay = continuous
+      }
+      // Direct property access as fallback
+      if (viewer.config && viewer.config.scene) {
+        viewer.config.scene.autoRotate = rotateSpeed;
+        viewer.config.scene.autoRotateInactivityDelay = 0;
+        viewer.config.scene.autoRotateStopDelay = 0;
+        viewer.config.scene.minPitch = 0;
+        viewer.config.scene.maxPitch = 0;
+      }
+      
+      // Continuously ensure pitch stays at 0 (ONLY pitch, never touch yaw)
+      const pitchLockInterval = setInterval(() => {
+        try {
+          if (viewer.getPitch && Math.abs(viewer.getPitch()) > 0.1) {
+            viewer.setPitch(0);
+          }
+          // DO NOT touch yaw here - let auto-rotate handle it continuously
+        } catch(e) {
+          clearInterval(pitchLockInterval);
+        }
+      }, 100);
+      
+      // Store interval to clear it later if needed
+      viewer._pitchLockInterval = pitchLockInterval;
+    } catch(e) {
+      // Viewer might not be fully initialized yet, retry after a short delay
+      setTimeout(() => {
+        if (panoramaViewers[activeServiceId]) {
+          try {
+            const isMobile = 'ontouchstart' in window;
+            const rotateSpeed = isMobile ? 1.5 : 10;
+            const viewer = panoramaViewers[activeServiceId];
+            // Clear existing pitch lock
+            if (viewer._pitchLockInterval) {
+              clearInterval(viewer._pitchLockInterval);
+            }
+            
+            // Reset pitch ONLY (don't reset yaw - let auto-rotate continue)
+            try {
+              if (typeof viewer.setPitch === 'function') {
+                viewer.setPitch(0);
+              }
+            } catch(e3) {
+              try {
+                viewer.setConfig({ pitch: 0, minPitch: 0, maxPitch: 0 });
+              } catch(e4) {}
+            }
+            
+            if (typeof viewer.setConfig === 'function') {
+              viewer.setConfig({
+                autoRotate: rotateSpeed,
+                autoRotateInactivityDelay: 0, // Start immediately
+                autoRotateStopDelay: 0, // Never stop
+                minPitch: 0,
+                maxPitch: 0
+              });
+            }
+            if (typeof viewer.startAutoRotate === 'function') {
+              viewer.startAutoRotate(rotateSpeed, 0); // 0 delay = continuous
+            }
+            
+            // Continuously lock pitch ONLY (never touch yaw)
+            const pitchLockInterval = setInterval(() => {
+              try {
+                if (viewer.getPitch && Math.abs(viewer.getPitch()) > 0.1) {
+                  viewer.setPitch(0);
+                }
+              } catch(e) {
+                clearInterval(pitchLockInterval);
+              }
+            }, 100);
+            viewer._pitchLockInterval = pitchLockInterval;
+          } catch(e2) {
+            // Error setting auto-rotate
+          }
+        }
+      }, 1000);
+    }
+  }
 }
 
 function initPannellumViewer(serviceId, panoramaPath) {
@@ -291,45 +489,194 @@ function initPannellumViewer(serviceId, panoramaPath) {
       }
       
       try {
-        // Auto-rotate enabled with smooth, slow rotation
-        const viewer = pannellum.viewer(`panorama-360-${serviceId}`, {
+        // Check if this is the first service to enable auto-rotate initially
+        const servicesData = JSON.parse(document.getElementById('services-data').textContent);
+        const isFirstService = servicesData[0] && servicesData[0].id === serviceId;
+        const isMobile = 'ontouchstart' in window;
+        const rotateSpeed = isMobile ? 1.5 : 10;
+        
+        const viewerConfig = {
           "type": "equirectangular",
           "panorama": panoramaUrl,
           "autoLoad": true,
-          "autoRotate": 10, // Slower rotation speed (default is 1)
-          "autoRotateInactivityDelay": 2000, // Start rotating after 2 seconds of inactivity
-          "autoRotateStopDelay": 2000, // Stop rotating 2 seconds after user interaction
+          "autoRotate": isFirstService ? rotateSpeed : 0, // Enable for first slide
+          "autoRotateInactivityDelay": 0, // Start immediately, no delay
+          "autoRotateStopDelay": 0, // Never stop, rotate continuously
           "compass": false,
           "showControls": true,
           "keyboardZoom": false,
           "mouseZoom": false,
           "draggable": true,
           "disableKeyboardCtrl": true,
-          "hfov": 100, // Wider field of view to show more in small window
+          "hfov": 100,
           "minHfov": 80,
           "maxHfov": 120,
-          "pitch": -10, // Slight downward angle for better view
-          "yaw": 0,
+          "pitch": 0, // Horizontal view (0 = straight ahead, no up/down tilt)
+          "yaw": 0, // Starting rotation angle
+          "minPitch": 0, // Lock pitch at 0 (no up/down movement)
+          "maxPitch": 0, // Lock pitch at 0 (no up/down movement)
           "showFullscreenCtrl": true,
           "showZoomCtrl": false,
-          "mouseZoom": false, // Disable mouse wheel zoom
-          "touchZoom": false, // Disable touch zoom
-          "preview": "", // Remove preview title
-          "sceneFadeDuration": 1000 // Smooth transitions
-        });
+          "mouseZoom": false,
+          "touchZoom": false,
+          "preview": "",
+          "sceneFadeDuration": 1000
+        };
+        
+        const viewer = pannellum.viewer(`panorama-360-${serviceId}`, viewerConfig);
+        
+        // Store viewer instance globally
+        panoramaViewers[serviceId] = viewer;
         
         viewer.on('error', function(error) {
           console.error('Pannellum error:', error);
           showError('Unable to load 360° view.');
         });
         
-        // Enhance auto-rotation on mobile
-        if ('ontouchstart' in window) {
-          viewer.setConfig({
-            autoRotate: 1.5, // Slightly faster on mobile
-            autoRotateInactivityDelay: 1000
-          });
-        }
+        // Wait for panorama to load before enabling auto-rotate
+        viewer.on('load', function() {
+          if (isFirstService) {
+            // Enable auto-rotation for the first slide after it loads
+            setTimeout(() => {
+              try {
+                const isMobile = 'ontouchstart' in window;
+                const rotateSpeed = isMobile ? 1.5 : 10;
+                // Clear existing pitch lock
+                if (viewer._pitchLockInterval) {
+                  clearInterval(viewer._pitchLockInterval);
+                }
+                
+                // Reset pitch ONLY (don't reset yaw)
+                try {
+                  if (typeof viewer.setPitch === 'function') {
+                    viewer.setPitch(0);
+                  }
+                } catch(e3) {
+                  try {
+                    viewer.setConfig({ pitch: 0, minPitch: 0, maxPitch: 0 });
+                  } catch(e4) {}
+                }
+                
+                // Try multiple methods (don't set yaw - let auto-rotate handle it)
+                if (typeof viewer.setConfig === 'function') {
+                  viewer.setConfig({
+                    autoRotate: rotateSpeed,
+                    autoRotateInactivityDelay: 0, // Start immediately
+                    autoRotateStopDelay: 0, // Never stop
+                    minPitch: 0,
+                    maxPitch: 0
+                  });
+                }
+                if (typeof viewer.startAutoRotate === 'function') {
+                  viewer.startAutoRotate(rotateSpeed, 0); // 0 delay = continuous
+                }
+                if (viewer.config && viewer.config.scene) {
+                  viewer.config.scene.autoRotate = rotateSpeed;
+                  viewer.config.scene.autoRotateInactivityDelay = 0;
+                  viewer.config.scene.autoRotateStopDelay = 0;
+                  viewer.config.scene.minPitch = 0;
+                  viewer.config.scene.maxPitch = 0;
+                }
+                
+                // Continuously lock pitch ONLY (never touch yaw)
+                const pitchLockInterval = setInterval(() => {
+                  try {
+                    if (viewer.getPitch && Math.abs(viewer.getPitch()) > 0.1) {
+                      viewer.setPitch(0);
+                    }
+                  } catch(e) {
+                    clearInterval(pitchLockInterval);
+                  }
+                }, 100);
+                viewer._pitchLockInterval = pitchLockInterval;
+              } catch(e) {
+                // Retry if failed
+                setTimeout(() => {
+                  try {
+                    const isMobile = 'ontouchstart' in window;
+                    const rotateSpeed = isMobile ? 1.5 : 10;
+                    // Clear existing pitch lock
+                    if (viewer._pitchLockInterval) {
+                      clearInterval(viewer._pitchLockInterval);
+                    }
+                    
+                    // Reset pitch ONLY (don't reset yaw)
+                    try {
+                      if (typeof viewer.setPitch === 'function') {
+                        viewer.setPitch(0);
+                      }
+                    } catch(e5) {
+                      try {
+                        viewer.setConfig({ pitch: 0, minPitch: 0, maxPitch: 0 });
+                      } catch(e6) {}
+                    }
+                    
+                    if (typeof viewer.setConfig === 'function') {
+                      viewer.setConfig({
+                        autoRotate: rotateSpeed,
+                        autoRotateInactivityDelay: 0, // Start immediately
+                        autoRotateStopDelay: 0, // Never stop
+                        minPitch: 0,
+                        maxPitch: 0
+                      });
+                    }
+                    if (typeof viewer.startAutoRotate === 'function') {
+                      viewer.startAutoRotate(rotateSpeed, 0); // 0 delay = continuous
+                    }
+                    
+                    // Continuously lock pitch ONLY (never touch yaw)
+                    const pitchLockInterval = setInterval(() => {
+                      try {
+                        if (viewer.getPitch && Math.abs(viewer.getPitch()) > 0.1) {
+                          viewer.setPitch(0);
+                        }
+                      } catch(e) {
+                        clearInterval(pitchLockInterval);
+                      }
+                    }, 100);
+                    viewer._pitchLockInterval = pitchLockInterval;
+                  } catch(e2) {}
+                }, 1000);
+              }
+            }, 1000);
+          } else {
+            // Ensure non-first slides have auto-rotate disabled
+            try {
+              if (typeof viewer.setConfig === 'function') {
+                viewer.setConfig({ autoRotate: 0 });
+              }
+              if (typeof viewer.stopAutoRotate === 'function') {
+                viewer.stopAutoRotate();
+              }
+            } catch(e) {}
+          }
+        });
+        
+        // After viewer is loaded, check if it should auto-rotate
+        // Try multiple ways to get swiper instance
+        setTimeout(() => {
+          let swiperInstance = null;
+          
+          // Try method 1: from element
+          const swiperEl = document.querySelector('.service-three-slider');
+          if (swiperEl && swiperEl.swiperInstance) {
+            swiperInstance = swiperEl.swiperInstance;
+          }
+          
+          // Try method 2: from global
+          if (!swiperInstance && window.serviceSwiperInstance) {
+            swiperInstance = window.serviceSwiperInstance;
+          }
+          
+          // Try method 3: from swiper property
+          if (!swiperInstance && swiperEl && swiperEl.swiper) {
+            swiperInstance = swiperEl.swiper;
+          }
+          
+          if (swiperInstance) {
+            updateAutoRotation(swiperInstance);
+          }
+        }, 1500);
         
       } catch(e) {
         console.error('Error initializing Pannellum:', e);

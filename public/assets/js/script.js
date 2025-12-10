@@ -273,6 +273,11 @@ var THEMEMASCOT = {};
 			centeredSlides: true,
 			loop: true,
 			loopedSlides: 6,
+			autoplay: {
+				delay: 3000, // 3 seconds
+				disableOnInteraction: false,
+				pauseOnMouseEnter: false,
+			},
 			navigation: {
 				nextEl: '.swiper-button-next',
 				prevEl: '.swiper-button-prev',
@@ -320,6 +325,11 @@ var THEMEMASCOT = {};
 			var $slider = slider.element;
 			
 			if (!$slider || !$slider.length) {
+				return;
+			}
+			
+			// Skip product-details slider - it has its own management
+			if ($slider.closest('.product-details').length > 0) {
 				return;
 			}
 			
@@ -379,6 +389,11 @@ var THEMEMASCOT = {};
 	function initBxslidersWithViewport() {
 		$('.bxslider').each(function() {
 			var $slider = $(this);
+			
+			// Skip product-details slider - it has its own initialization
+			if ($slider.closest('.product-details').length > 0) {
+				return;
+			}
 			
 			// Skip if already initialized
 			if ($slider.data('bxSlider')) {

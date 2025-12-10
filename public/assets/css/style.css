@@ -159,7 +159,7 @@ body {
 }
 
 p, .text {
-  color: var(--text-color);
+  color: #000;
   font-size: var(--body-font-size);
   font-family: var(--text-font);
   font-weight: var(--body-font-weight);
@@ -1943,9 +1943,7 @@ Main Header
   
   padding-bottom: 20px;
 }
-.header-style-one .main-box .nav-outer {
-  margin-left: 113px;
-}
+
 .header-style-one .main-box .nav-outer .nav .navigation li a {
   color: var(--theme-color-light);
 }
@@ -5825,7 +5823,7 @@ Section Title
   background-color: var(--theme-color1);
 }
 .service-block-two .inner-box:hover .content-box .text {
-  color: #adadad;
+  color: #fff;
 }
 .service-block-two .inner-box .image-box {
   position: relative;
@@ -12927,7 +12925,7 @@ Page Title
   background-position: center;
   background-size: cover;
   padding: 120px 0 0;
-  min-height: 450px;
+  min-height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -12954,6 +12952,11 @@ Page Title
   .page-title .title {
     font-size: 34px;
   }
+}
+
+
+.page-title .auto-container {
+margin-top: -100px;
 }
 .page-title .text {
   position: relative;
@@ -15115,12 +15118,6 @@ Sidebar
   height: 380px !important;
 }
 
-.image-box{
-  background-image: url(/assets/images/resource/room-1.jpg);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
 
 
 .pnlm-load-box{
@@ -15135,4 +15132,9 @@ Sidebar
 
 .service-section-three .pnlm-controls-container{
   display: none !important;
+}
+
+
+::-webkit-scrollbar{
+  display: none;
 }

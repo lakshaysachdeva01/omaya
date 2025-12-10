@@ -1,12 +1,14 @@
-<%- include('header', {seoDetails}) %>
-
 <% 
     // Determine the type and current item
     const currentItem = typeof venue !== 'undefined' && venue ? venue : (typeof stay !== 'undefined' && stay ? stay : (typeof dining !== 'undefined' && dining ? dining : null));
     const itemType = typeof venue !== 'undefined' && venue ? 'venue' : (typeof stay !== 'undefined' && stay ? 'stay' : (typeof dining !== 'undefined' && dining ? 'dining' : 'venue'));
     const typePath = itemType === 'venue' ? '/venue' : (itemType === 'stay' ? '/stay' : '/dining');
     const typeLabel = itemType === 'venue' ? 'Venue' : (itemType === 'stay' ? 'Stay' : 'Dining');
-    
+%>
+
+<%- include('header', {seoDetails, itemType, currentItem}) %>
+
+<% 
     // Extract YouTube video ID from currentItem.youtubeVideo
     let youtubeVideoId = '';
     if (currentItem && currentItem.youtubeVideo) {
