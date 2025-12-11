@@ -9966,12 +9966,11 @@ Section Title
 ***/
 .offer-banner {
   position: relative;
-  margin-top: -120px;
 }
 .offer-banner .outer-box {
   position: relative;
   background-color: #f8f5f0;
-  padding: 74px 103px 78px;
+  padding: 74px 74px 78px;
   overflow: hidden;
 }
 @media (max-width: 991.98px) {

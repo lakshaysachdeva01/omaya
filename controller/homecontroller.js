@@ -41,7 +41,6 @@ exports.gettestimonial = async(req, res) => {
     const websiteID = await getWebsiteID(); 
     const apiResponse = await fetchData(`${API_BASE_URL}/website/${websiteID}/testimonials/get-all`);
     
-    console.log('Testimonial API response:', apiResponse);
     
     // Handle the API response structure: { message: "...", data: [...] }
     const items = Array.isArray(apiResponse?.data)

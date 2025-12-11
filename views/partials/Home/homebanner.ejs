@@ -250,8 +250,11 @@
   var bannerVideoId = 'sDXBgKB7IS8'; // Landing banner video
   var bannerVideoReady = false; // Renamed to be banner-specific
   var bannerAnimationCompleted = false; // Renamed to be banner-specific
-  var animationDuration = 1000; // 3 seconds
+  var animationDuration = 1000; // 1 second
   var bannerVideoLoadStarted = false; // Renamed to be banner-specific
+  var preloaderForceHideTimeout = null; // Force hide preloader after max time
+  var maxPreloaderTime = 5000; // Maximum 5 seconds before forcing hide
+  var preloaderHidden = false; // Track if preloader is already hidden
 
   // YouTube API ready callback - BANNER SPECIFIC
   function onYouTubeIframeAPIReadyBanner() {
@@ -267,14 +270,70 @@
       // API already loaded
       onYouTubeIframeAPIReadyBanner();
   } else {
-      // API not loaded yet, set up callback
-      window.onYouTubeIframeAPIReady = function() {
+      // Store the banner callback
+      var bannerCallback = function() {
           if (originalYouTubeCallback) {
               originalYouTubeCallback();
           }
           onYouTubeIframeAPIReadyBanner();
       };
+      
+      // Set up callback - but also check periodically if API loads
+      if (window.onYouTubeIframeAPIReady) {
+          // If callback already exists, wrap it
+          var existingCallback = window.onYouTubeIframeAPIReady;
+          window.onYouTubeIframeAPIReady = function() {
+              existingCallback();
+              bannerCallback();
+          };
+      } else {
+          window.onYouTubeIframeAPIReady = bannerCallback;
+      }
+      
+      // Periodically check if API loaded (in case callback was overwritten)
+      var apiCheckInterval = setInterval(function() {
+          if (typeof YT !== 'undefined' && YT.Player && !bannerYouTubePlayer) {
+              clearInterval(apiCheckInterval);
+              onYouTubeIframeAPIReadyBanner();
+          }
+      }, 500);
+      
+      // Stop checking after 10 seconds
+      setTimeout(function() {
+          clearInterval(apiCheckInterval);
+      }, 10000);
+      
+      // Fallback: if API doesn't load within 4 seconds, force hide preloader
+      setTimeout(function() {
+          if (!bannerYouTubePlayer && !preloaderHidden) {
+              forceHidePreloader();
+          }
+      }, 4000);
   }
+  
+  // Additional safety: check on window load
+  window.addEventListener('load', function() {
+      setTimeout(function() {
+          if (!preloaderHidden) {
+              var animationEl = document.getElementById('videoPreloadAnimation');
+              if (animationEl && !animationEl.classList.contains('hidden')) {
+                  // If preloader still visible after page load + 2 seconds, force hide
+                  setTimeout(function() {
+                      if (!preloaderHidden) {
+                          forceHidePreloader();
+                      }
+                  }, 2000);
+              }
+          }
+      }, 1000);
+  });
+  
+  // Ultimate fallback: force hide after 6 seconds no matter what
+  setTimeout(function() {
+      if (!preloaderHidden) {
+          forceHidePreloader();
+      }
+  }, 6000);
 
   // Set optimal quality - prefer highest available, minimum 1440p
   function setOptimalQuality(player) {
@@ -312,12 +371,102 @@
       }
   }
 
-  // Initialize banner YouTube player
-  function initializeBannerYouTubePlayer() {
-      var container = document.getElementById('banner-youtube-player');
-      if (!container || bannerYouTubePlayer) {
+  // Force hide preloader after maximum time
+  function forceHidePreloader() {
+      if (preloaderHidden) {
           return;
       }
+      preloaderHidden = true;
+      
+      var animationEl = document.getElementById('videoPreloadAnimation');
+      if (animationEl) {
+          hideLoadingSpinner();
+          requestAnimationFrame(function() {
+              animationEl.classList.add('hidden');
+          });
+          setTimeout(function() {
+              if (animationEl && animationEl.parentNode) {
+                  animationEl.parentNode.removeChild(animationEl);
+              }
+          }, 800);
+      }
+      
+      // Show content box
+      var contentBox = document.querySelector('.content-box');
+      if (contentBox) {
+          contentBox.classList.add('visible');
+      }
+      
+      // Also try to start video playback
+      if (bannerYouTubePlayer) {
+          try {
+              bannerYouTubePlayer.playVideo();
+              var container = document.querySelector('.banner-youtube-container');
+              if (container) {
+                  container.style.opacity = '1';
+                  container.classList.add('loaded');
+              }
+          } catch(e) {
+              console.error('Error forcing video playback:', e);
+          }
+      } else {
+          // If player not initialized, at least show the container
+          var container = document.querySelector('.banner-youtube-container');
+          if (container) {
+              container.style.opacity = '1';
+              container.classList.add('loaded');
+          }
+      }
+      
+      // Start monitoring if player exists
+      if (bannerYouTubePlayer) {
+          startVideoMonitoring();
+      }
+  }
+
+  // Initialize banner YouTube player
+  function initializeBannerYouTubePlayer() {
+      // Check if API is actually available
+      if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+          setTimeout(function() {
+              if (typeof YT !== 'undefined' && typeof YT.Player !== 'undefined') {
+                  initializeBannerYouTubePlayer();
+              } else {
+                  if (!preloaderHidden) {
+                      forceHidePreloader();
+                  }
+              }
+          }, 1000);
+          return;
+      }
+      
+      var container = document.getElementById('banner-youtube-player');
+      if (!container) {
+          setTimeout(function() {
+              if (!preloaderHidden) {
+                  forceHidePreloader();
+              }
+          }, 1000);
+          return;
+      }
+      
+      if (bannerYouTubePlayer) {
+          return;
+      }
+
+      // Set maximum timeout to force hide preloader
+      preloaderForceHideTimeout = setTimeout(function() {
+          forceHidePreloader();
+      }, maxPreloaderTime);
+      
+      // Also set a shorter fallback (3 seconds) in case video never loads
+      setTimeout(function() {
+          if (!bannerVideoReady && !preloaderHidden) {
+              bannerVideoReady = true;
+              bannerAnimationCompleted = true;
+              startVideoPlayback();
+          }
+      }, 3000);
 
       // Start the animation timer - BANNER ONLY
       setTimeout(function() {
@@ -421,15 +570,19 @@
                           }
                       }
                       
-                      // Safety check: if video isn't ready after 4 seconds, force it - BANNER ONLY
+                      // Safety check: if video isn't ready after 3 seconds, force it - BANNER ONLY
                       setTimeout(function() {
                           if (!bannerVideoReady) {
                               bannerVideoReady = true;
                               if (bannerAnimationCompleted) {
                                   startVideoPlayback();
+                              } else {
+                                  // If animation not completed, complete it and start playback
+                                  bannerAnimationCompleted = true;
+                                  startVideoPlayback();
                               }
                           }
-                      }, 4000);
+                      }, 3000);
                       
                   } catch(e) {
                       console.error('YouTube player error:', e);
@@ -516,13 +669,18 @@
   }
 
   // Check if video has enough data buffered
+  var bufferCheckAttempts = 0;
+  var maxBufferChecks = 30; // Maximum 6 seconds of checking (30 * 200ms)
+  
   function checkVideoBuffered(player) {
       try {
+          bufferCheckAttempts++;
+          
           // Get video buffer status
           var buffered = player.getVideoLoadedFraction();
           
-          // Consider video ready if at least 30% is buffered - BANNER ONLY
-          if (buffered > 0.3) {
+          // Consider video ready if at least 20% is buffered (lowered threshold) - BANNER ONLY
+          if (buffered > 0.2 || bufferCheckAttempts >= maxBufferChecks) {
               bannerVideoReady = true;
               if (bannerAnimationCompleted) {
                   startVideoPlayback();
@@ -536,20 +694,31 @@
               return false;
           }
       } catch(e) {
-          // If we can't check, mark as ready after animation
+          // If we can't check, mark as ready after animation with shorter timeout
           setTimeout(function() {
               bannerVideoReady = true;
               if (bannerAnimationCompleted) {
                   startVideoPlayback();
               }
-          }, animationDuration + 500);
+          }, animationDuration + 1000);
           return false;
       }
   }
 
   // Start video playback - BANNER ONLY
   function startVideoPlayback() {
-      if (!bannerYouTubePlayer || !bannerVideoReady) return;
+      if (!bannerYouTubePlayer) {
+          setTimeout(function() {
+              if (!preloaderHidden) {
+                  forceHidePreloader();
+              }
+          }, 2000);
+          return;
+      }
+      
+      if (!bannerVideoReady) {
+          bannerVideoReady = true;
+      }
       
       // Hide spinner when video starts playing
       hideLoadingSpinner();
@@ -573,8 +742,12 @@
           
       } catch(e) {
           console.error('Error starting video:', e);
-          // Try again in 500ms
-          setTimeout(startVideoPlayback, 500);
+          // If error, force hide preloader
+          setTimeout(function() {
+              if (!preloaderHidden) {
+                  forceHidePreloader();
+              }
+          }, 1000);
       }
   }
 
@@ -588,6 +761,16 @@
 
   // Complete loading sequence - hide animation, show content
   function completeLoadingSequence() {
+      if (preloaderHidden) return;
+      
+      preloaderHidden = true;
+      
+      // Clear force hide timeout since we're hiding normally
+      if (preloaderForceHideTimeout) {
+          clearTimeout(preloaderForceHideTimeout);
+          preloaderForceHideTimeout = null;
+      }
+      
       // Hide spinner
       hideLoadingSpinner();
       
@@ -600,7 +783,7 @@
           });
           // Remove from DOM after transition
           setTimeout(function() {
-              if (animationEl.parentNode) {
+              if (animationEl && animationEl.parentNode) {
                   animationEl.parentNode.removeChild(animationEl);
               }
           }, 800);

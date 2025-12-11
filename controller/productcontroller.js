@@ -2,11 +2,8 @@ const { API_BASE_URL } = require('../config/config');
 const { getWebsiteID, fetchData } = require('../utils/helper');
 
 exports.getProducts = async(req, res) => {  
-    console.log('📦 getProducts called');
     const websiteID = await getWebsiteID(); 
-    console.log('✅ Website ID for products:', websiteID);
     const data = await fetchData(`${API_BASE_URL}/website/product-management/get-all-products/${websiteID}`);
-    console.log('✅ Products fetched:', data);
     
     // Reverse the array to show products in reverse order
     if (data && Array.isArray(data)) {
@@ -18,11 +15,8 @@ exports.getProducts = async(req, res) => {
 };
 
 exports.getProductDetails = async(slug) => {
-    console.log('🔍 getProductDetails called with slug:', slug);
     const websiteID = await getWebsiteID(); 
-    console.log('✅ Website ID for product details:', websiteID);
     const data = await fetchData(`${API_BASE_URL}/website/product-management/get-product-by-slug/${websiteID}?slug=${slug}`);
-    console.log('✅ Product details fetched:', data ? 'Found' : 'Not found');
     return data || null
 }
 
@@ -30,7 +24,6 @@ exports.getProductDetails = async(slug) => {
 exports.getjobs = async (req, res) => {  
     const websiteID = await getWebsiteID(); 
     const apiResponse = await fetchData(`${API_BASE_URL}/website/${websiteID}/job-postings/get-all`);
-    console.log('jobs fetched (raw):', apiResponse);
 
     // Handle both { data: [...] } and plain array responses
     const items = Array.isArray(apiResponse?.data)
@@ -43,7 +36,6 @@ exports.getjobs = async (req, res) => {
 exports.getjobdetails = async (slug) => {  
     const websiteID = await getWebsiteID(); 
     const apiResponse = await fetchData(`${API_BASE_URL}/website/${websiteID}/job-postings/get-all`);
-    console.log('job details fetched (raw):', apiResponse);
 
     const items = Array.isArray(apiResponse?.data)
         ? apiResponse.data
@@ -76,12 +68,9 @@ exports.getotherjobs = async (slug) => {
 };
 
 exports.getProductsByCategory = async(categoryId) => {  
-    console.log('📦 getProductsByCategory called with categoryId:', categoryId);
     const websiteID = await getWebsiteID(); 
-    console.log('✅ Website ID for category products:', websiteID);
     
     const data = await fetchData(`${API_BASE_URL}/website/product-management/get-all-products/${websiteID}?categories=${categoryId}`);
-    console.log('✅ Category products fetched:', data);
     
     // Reverse the array to show products in reverse order
     if (data && Array.isArray(data)) {
@@ -92,24 +81,18 @@ exports.getProductsByCategory = async(categoryId) => {
 };
 
 exports.getCategories = async() => {  
-    console.log('📦 getCategories called');
     const websiteID = await getWebsiteID(); 
-    console.log('✅ Website ID for categories:', websiteID);
     
     try {
         // First try the categories endpoint
         const categoriesData = await fetchData(`${API_BASE_URL}/website/category/get-all-categories/${websiteID}`);
-        console.log('✅ Categories endpoint result:', categoriesData);
         
         if (categoriesData && categoriesData.length > 0) {
-            console.log('✅ Categories count:', categoriesData.length);
             return categoriesData;
         }
         
         // If categories endpoint doesn't work, extract from products
-        console.log('📦 Categories endpoint empty, trying to extract from products...');
         const productsData = await fetchData(`${API_BASE_URL}/website/product-management/get-all-products/${websiteID}`);
-        console.log('✅ Products data for categories:', productsData);
         
         if (productsData && productsData.length > 0) {
             // Extract unique categories from products
@@ -125,8 +108,6 @@ exports.getCategories = async() => {
                 }
             });
             
-            console.log('✅ Extracted categories from products:', uniqueCategories.length);
-            console.log('✅ Categories:', uniqueCategories);
             return uniqueCategories;
         }
         

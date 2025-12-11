@@ -6,7 +6,6 @@ exports.getgallery = async (req, res) => {
     const websiteID = await getWebsiteID(); 
     const apiResponse = await fetchData(`${API_BASE_URL}/website/${websiteID}/gallery/get-all`);
     
-    console.log('Gallery API response:', apiResponse);
     
     // Handle the API response structure: { message: "...", data: [...] }
     const items = Array.isArray(apiResponse?.data)
