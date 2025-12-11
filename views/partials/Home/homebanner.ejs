@@ -233,8 +233,8 @@
               <div class="youtube-overlay-blocker"></div>
           </div>
           <div class="content-box">
-              <span class="sub-title" data-animation-in="fadeInUp" data-delay-in="0.1">Unique Place And Luxury Hotel</span>
-              <h1 data-animation-in="fadeInUp" data-delay-in="0.3">Enjoy life with <br>the great moments</h1>
+              <span class="sub-title" data-animation-in="fadeInUp" data-delay-in="0.1">Stay • Dine • Relax • Celebrate</span>
+              <h1 data-animation-in="fadeInUp" data-delay-in="0.3">Indulge In Omaya’s Elegant Living</h1>
           </div>
       </div>
   </div>
@@ -245,18 +245,35 @@
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-  // Banner YouTube player
+  // Banner YouTube player - SCOPED TO BANNER ONLY
   var bannerYouTubePlayer = null;
   var bannerVideoId = 'sDXBgKB7IS8'; // Landing banner video
-  var videoReady = false;
-  var animationCompleted = false;
+  var bannerVideoReady = false; // Renamed to be banner-specific
+  var bannerAnimationCompleted = false; // Renamed to be banner-specific
   var animationDuration = 1000; // 3 seconds
-  var videoLoadStarted = false;
+  var bannerVideoLoadStarted = false; // Renamed to be banner-specific
 
-  // YouTube API ready callback
-  function onYouTubeIframeAPIReady() {
-      // Start animation and initialize player after a short delay
+  // YouTube API ready callback - BANNER SPECIFIC
+  function onYouTubeIframeAPIReadyBanner() {
+      // Only initialize banner player, not other videos
       setTimeout(initializeBannerYouTubePlayer, 100);
+  }
+  
+  // Store original callback if it exists
+  var originalYouTubeCallback = window.onYouTubeIframeAPIReady;
+  
+  // Set up banner-specific callback
+  if (typeof YT !== 'undefined' && YT.Player) {
+      // API already loaded
+      onYouTubeIframeAPIReadyBanner();
+  } else {
+      // API not loaded yet, set up callback
+      window.onYouTubeIframeAPIReady = function() {
+          if (originalYouTubeCallback) {
+              originalYouTubeCallback();
+          }
+          onYouTubeIframeAPIReadyBanner();
+      };
   }
 
   // Set optimal quality - prefer highest available, minimum 1440p
@@ -302,23 +319,24 @@
           return;
       }
 
-      // Start the animation timer
+      // Start the animation timer - BANNER ONLY
       setTimeout(function() {
-          animationCompleted = true;
-          if (videoReady) {
+          bannerAnimationCompleted = true;
+          if (bannerVideoReady) {
               startVideoPlayback();
           } else {
               // Show loading state if video isn't ready yet - animation plays once and stays
+              // ONLY show preloader for banner video
               var logo = document.getElementById('loadingLogo');
               var spinner = document.getElementById('loadingSpinner');
-              if (logo) {
+              if (logo && document.getElementById('banner-youtube-player')) {
                   logo.style.opacity = '1';
                   logo.style.animation = 'logoPulse 2s ease-in-out forwards';
                   // Keep logo visible at final state if still loading
                   logo.style.transform = 'scale(1)';
               }
               // Show golden loader below logo after animation completes
-              if (spinner) {
+              if (spinner && document.getElementById('banner-youtube-player')) {
                   spinner.classList.add('show');
               }
           }
@@ -352,7 +370,7 @@
                   var player = event.target;
                   var iframe = document.getElementById('banner-youtube-player');
                   
-                  videoLoadStarted = true;
+                  bannerVideoLoadStarted = true;
                   
                   try {
                       // Set initial quality - prefer highest, minimum 1440p
@@ -403,11 +421,11 @@
                           }
                       }
                       
-                      // Safety check: if video isn't ready after 4 seconds, force it
+                      // Safety check: if video isn't ready after 4 seconds, force it - BANNER ONLY
                       setTimeout(function() {
-                          if (!videoReady) {
-                              videoReady = true;
-                              if (animationCompleted) {
+                          if (!bannerVideoReady) {
+                              bannerVideoReady = true;
+                              if (bannerAnimationCompleted) {
                                   startVideoPlayback();
                               }
                           }
@@ -415,10 +433,10 @@
                       
                   } catch(e) {
                       console.error('YouTube player error:', e);
-                      // If error, mark as ready after animation
+                      // If error, mark as ready after animation - BANNER ONLY
                       setTimeout(function() {
-                          videoReady = true;
-                          if (animationCompleted) {
+                          bannerVideoReady = true;
+                          if (bannerAnimationCompleted) {
                               startVideoPlayback();
                           }
                       }, animationDuration + 500);
@@ -440,10 +458,10 @@
                       setOptimalQuality(player);
                   }
                   else if (event.data === YT.PlayerState.CUED) {
-                      // Video is cued and ready
-                      videoReady = true;
+                      // Video is cued and ready - BANNER ONLY
+                      bannerVideoReady = true;
                       setOptimalQuality(player);
-                      if (animationCompleted) {
+                      if (bannerAnimationCompleted) {
                           startVideoPlayback();
                       } else {
                           // If animation still running, check buffer
@@ -503,10 +521,10 @@
           // Get video buffer status
           var buffered = player.getVideoLoadedFraction();
           
-          // Consider video ready if at least 30% is buffered
+          // Consider video ready if at least 30% is buffered - BANNER ONLY
           if (buffered > 0.3) {
-              videoReady = true;
-              if (animationCompleted) {
+              bannerVideoReady = true;
+              if (bannerAnimationCompleted) {
                   startVideoPlayback();
               }
               return true;
@@ -520,8 +538,8 @@
       } catch(e) {
           // If we can't check, mark as ready after animation
           setTimeout(function() {
-              videoReady = true;
-              if (animationCompleted) {
+              bannerVideoReady = true;
+              if (bannerAnimationCompleted) {
                   startVideoPlayback();
               }
           }, animationDuration + 500);
@@ -529,9 +547,9 @@
       }
   }
 
-  // Start video playback
+  // Start video playback - BANNER ONLY
   function startVideoPlayback() {
-      if (!bannerYouTubePlayer || !videoReady) return;
+      if (!bannerYouTubePlayer || !bannerVideoReady) return;
       
       // Hide spinner when video starts playing
       hideLoadingSpinner();
@@ -668,9 +686,9 @@
       }, 1000);
   }
 
-  // Initialize if YouTube API is already loaded
+  // Initialize if YouTube API is already loaded - BANNER ONLY
   if (typeof YT !== 'undefined' && YT.Player) {
-      onYouTubeIframeAPIReady();
+      onYouTubeIframeAPIReadyBanner();
   }
 
   // Prevent interactions

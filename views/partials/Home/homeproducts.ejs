@@ -4,11 +4,11 @@
     <div class="sec-title wow fadeInUp">
       <div class="row">
         <div class="col-lg-6">
-          <span class="sub-title">Hoexr Services</span>
-          <h2>We Provide More Then Just Quality Services</h2>
+          <span class="sub-title">Our Services</span>
+          <h2>A Collection of Experiences Beyond Ordinary</h2>
         </div>
         <div class="col-lg-4 offset-lg-2">
-          <div class="text">Hoexr in a powerful way of just not an only professions, however, in a passion for our Company. We have to a tendency to believe the idea that smart.</div>
+          <div class="text">True luxury lies in the details — in the quiet moments, personal touches, and thoughtfully designed experiences that elevate your stay. Explore our curated offerings crafted to complement your lifestyle.</div>
         </div>
       </div>
     </div>
@@ -110,47 +110,92 @@
 // Store all viewer instances globally
 const panoramaViewers = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-  const servicesData = JSON.parse(document.getElementById('services-data').textContent);
-  const container = document.getElementById('services-container');
-  
-  // Clear any existing content
-  container.innerHTML = '';
-  
-  // Create slides
-  servicesData.forEach(service => {
-    const slide = document.createElement('div');
-    slide.className = 'swiper-slide';
+function createServiceCards() {
+  try {
+    const servicesDataElement = document.getElementById('services-data');
+    if (!servicesDataElement) {
+      console.error('services-data element not found');
+      return false;
+    }
     
-    slide.innerHTML = `
-      <div class="service-block-three">
-        <div class="inner-box">
-          ${service.has360View ? `
-            <div class="panorama-container" onclick="window.location.href='${service.link}'" style="width: 100%; height: 458px; border-radius: 8px; overflow: hidden; position: relative; background: #f4f6f8; cursor: pointer;">
-              <div id="panorama-360-${service.id}" style="width: 100%; height: 458px; position: relative; z-index: 0;"></div>
-              <div class="panorama-overlay" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 100%); pointer-events: none; z-index: 1;"></div>
-              <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
-                <div class="panorama-spinner"></div>
+    const servicesData = JSON.parse(servicesDataElement.textContent);
+    const container = document.getElementById('services-container');
+    
+    if (!container) {
+      console.error('services-container element not found');
+      return false;
+    }
+    
+    if (!servicesData || !Array.isArray(servicesData) || servicesData.length === 0) {
+      console.error('servicesData is not a valid array or is empty:', servicesData);
+      return false;
+    }
+    
+    console.log('Creating', servicesData.length, 'service cards');
+    
+    // Clear any existing content
+    container.innerHTML = '';
+    
+    // Create slides
+    servicesData.forEach(service => {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      
+      slide.innerHTML = `
+        <div class="service-block-three">
+          <div class="inner-box">
+            ${service.has360View ? `
+              <div class="panorama-container" onclick="window.location.href='${service.link}'" style="width: 100%; height: 458px; border-radius: 8px; overflow: hidden; position: relative; background: #f4f6f8; cursor: pointer;">
+                <div id="panorama-360-${service.id}" style="width: 100%; height: 458px; position: relative; z-index: 0;"></div>
+                <div class="panorama-overlay" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 100%); pointer-events: none; z-index: 1;"></div>
+                <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
+                  <div class="panorama-spinner"></div>
+                </div>
               </div>
+            ` : `
+              <figure style="height: 100%; margin: 0;" class="image">
+                <img style="height: 458px; width: 100%; object-fit: cover;" src="${service.image}" alt="${service.alt}">
+              </figure>
+            `}
+            <div class="content-box" style="z-index: 2;">
+              <h4 class="title"><a href="${service.link}">${service.title}</a></h4>
             </div>
-          ` : `
-            <figure style="height: 100%; margin: 0;" class="image">
-              <img style="height: 458px; width: 100%; object-fit: cover;" src="${service.image}" alt="${service.alt}">
-            </figure>
-          `}
-          <div class="content-box" style="z-index: 2;">
-            <h4 class="title"><a href="${service.link}">${service.title}</a></h4>
           </div>
         </div>
-      </div>
-    `;
+      `;
+      
+      container.appendChild(slide);
+    });
     
-    container.appendChild(slide);
-  });
-  
-  // Initialize or update Swiper after content is loaded
-  initializeSwiper();
-  initialize360Views();
+    console.log('Service cards created, total slides:', container.children.length);
+    return true;
+  } catch(error) {
+    console.error('Error creating service cards:', error);
+    return false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (createServiceCards()) {
+    setTimeout(function() {
+      initializeSwiper();
+      initialize360Views();
+    }, 200);
+  }
+});
+
+// Also try on window load as backup
+window.addEventListener('load', function() {
+  const container = document.getElementById('services-container');
+  if (container && container.children.length === 0) {
+    console.log('Window load: No cards found, creating them...');
+    if (createServiceCards()) {
+      setTimeout(function() {
+        initializeSwiper();
+        initialize360Views();
+      }, 300);
+    }
+  }
 });
 
 function initializeSwiper() {
@@ -704,40 +749,43 @@ function initPannellumViewer(serviceId, panoramaPath) {
   }
 }
 
-// Add CSS for spinner and 360 container
-const style = document.createElement('style');
-style.textContent = `
-  .panorama-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Optimize 360 view for small container */
-  .pnlm-container {
-    cursor: grab;
-  }
-  
-  .pnlm-container:active {
-    cursor: grabbing;
-  }
-  
-  .pnlm-controls {
-    opacity: 0.7;
-    transition: opacity 0.3s;
-  }
-  
-  .pnlm-controls:hover {
-    opacity: 1;
-  }
-`;
-document.head.appendChild(style);
+// Add CSS for spinner and 360 container (only if not already added)
+if (!document.getElementById('panorama-styles-homeproducts')) {
+  const panoramaStyle = document.createElement('style');
+  panoramaStyle.id = 'panorama-styles-homeproducts';
+  panoramaStyle.textContent = `
+    .panorama-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Optimize 360 view for small container */
+    .pnlm-container {
+      cursor: grab;
+    }
+    
+    .pnlm-container:active {
+      cursor: grabbing;
+    }
+    
+    .pnlm-controls {
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    
+    .pnlm-controls:hover {
+      opacity: 1;
+    }
+  `;
+  document.head.appendChild(panoramaStyle);
+}
 </script>

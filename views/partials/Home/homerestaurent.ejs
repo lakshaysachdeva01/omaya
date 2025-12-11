@@ -4,42 +4,37 @@
         <div class="image-column col-lg-4">
           <div class="inner-column">
             <div class="image-box">
-              <figure class="image overlay-anim"><img src="/assets/images/data/RCP00551.webp" alt=""></figure>
-              <div class="inner-column" style="margin-top: 120px;">
-                <div class="image-box product-details rd-page">
-                    <% 
-                        // Use detailImages if available, otherwise use single image
-                        const itemImages = [
-                            "/assets/images/data/RCP00551.webp",
-                            "/assets/images/data/RCP00066.webp",
-                        ];
-                    %>
-                    <% if (itemImages.length > 0) { %>
-                        <div class="bxslider">
-                            <% itemImages.forEach((img, imgIndex)=> { %>
-                                <div class="slider-content">
-                                    <figure class="image-box">
-                                        <img style="height: 380px;" src="<%= img %>" alt="">
-                                    </figure>
-                                </div>
-                            <% }); %>
-                        </div>
-                    <% } %>
-                </div>
+              <% 
+                  // Extract YouTube video ID from URL for OMA Kitchen
+                  const omakitchenVideoUrl = "https://www.youtube.com/watch?v=OHjnbkoNors";
+                  let youtubeVideoId = null;
+                  if (omakitchenVideoUrl.includes('youtube.com/watch?v=')) {
+                      youtubeVideoId = omakitchenVideoUrl.split('v=')[1]?.split('&')[0];
+                  } else if (omakitchenVideoUrl.includes('youtu.be/')) {
+                      youtubeVideoId = omakitchenVideoUrl.split('youtu.be/')[1]?.split('?')[0];
+                  } else if (omakitchenVideoUrl.includes('youtube.com/embed/')) {
+                      youtubeVideoId = omakitchenVideoUrl.split('embed/')[1]?.split('?')[0];
+                  }
+              %>
+              <% if (youtubeVideoId) { %>
+                  <div class="youtube-player-container" id="youtube-player-restaurant-main" style="width: 100%; height: 100%; position: relative;">
+                      <!-- YouTube Player will be initialized here -->
+                      <div class="youtube-overlay-blocker"></div>
+                  </div>
+              <% } %>
             </div>
-            </div>
+           
           </div>
         </div>
         <div class="content-column col-lg-8" >
           <div class="inner-column">
             <div class="content-box">
               <div class="sec-title">
-                <span class="sub-title">Food</span>
-                <h2>The Restaurent</h2>
-                <div class="text">Restaurant inilla duiman at elit finibus viverra nec a  lacus themo the <br>nesudea seneoice misuscipit non sagie the fermen ziverra tristiue duru <br>the ivite dianne onen nivami acsestion augue artine.</div>
+                <span class="sub-title">Taste Elevated</span>
+                <h2>Luxury Dining</h2>
+                <div class="text">Experience a refined blend of taste and presentation at Omaya Suites. Crafted with premium ingredients and authentic flavours, every dish delivers a memorable dining experience designed to delight your senses.</div>
               </div>
-              <a href="room-details.html" class="theme-btn btn-style-one read-more">Discover More</a>
-              <figure class="image-2"><img src="/assets/images/resource/icon.png" alt=""></figure>
+              <a href="/dining" class="theme-btn btn-style-one read-more">EXPLORE DINNING</a>
             </div>
           </div>
         </div>
@@ -48,3 +43,305 @@
      
     </div>
   </section>
+
+<style>
+    /* YouTube video player styles - ONLY for the container DIV, NOT iframe */
+    .feature-section .image-box > div.youtube-player-container:not(iframe) {
+        width: 100%;
+        height: 380px;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+    }
+    
+    /* CRITICAL: EXPLICITLY prevent iframe from getting background styles - target iframe directly */
+    .feature-section iframe.youtube-player-container,
+    .feature-section iframe[id^="youtube-player"],
+    .feature-section .youtube-player-container iframe,
+    .feature-section iframe {
+        background: transparent !important;
+        background-image: none !important;
+        background-color: transparent !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
+    }
+    
+    /* Block ALL interactions with iframe - no hover, no clicks, nothing */
+    .feature-section .youtube-player-container iframe,
+    .feature-section iframe.youtube-player-container,
+    .feature-section iframe[id^="youtube-player"],
+    .feature-section .image-box iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        pointer-events: none !important;
+        -webkit-touch-callout: none;
+        transform: translateZ(0) scale(1.45);
+        -webkit-transform: translateZ(0) scale(1.45);
+        transform-origin: center center;
+        -webkit-transform-origin: center center;
+        opacity: 1;
+        position: relative;
+        z-index: 1;
+        background-image: none !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
+    }
+    
+    /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
+    .feature-section .youtube-player-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999 !important;
+        pointer-events: auto !important;
+        background: transparent;
+        cursor: default !important;
+    }
+    
+    /* Additional overlay blocker element - ALWAYS ACTIVE */
+    .feature-section .youtube-player-container .youtube-overlay-blocker {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 100000 !important;
+        pointer-events: auto !important;
+        background: transparent !important;
+        cursor: default !important;
+        display: block !important;
+    }
+    
+    /* Prevent any hover effects - overlays stay active on hover */
+    .feature-section .youtube-player-container:hover::before {
+        pointer-events: auto !important;
+        z-index: 99999 !important;
+    }
+    
+    .feature-section .youtube-player-container:hover .youtube-overlay-blocker {
+        pointer-events: auto !important;
+        z-index: 100000 !important;
+    }
+    
+    /* Ensure overlays are always on top, even when YouTube adds elements */
+    .feature-section .youtube-player-container * {
+        z-index: auto;
+    }
+</style>
+
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    // Store YouTube player instances
+    var youtubePlayers = {};
+    var youtubeVideoIds = {};
+    
+    // Set video ID for OMA Kitchen
+    youtubeVideoIds['youtube-player-restaurant-main'] = 'OHjnbkoNors';
+    
+    // YouTube API ready callback
+    function onYouTubeIframeAPIReady() {
+        setTimeout(initializeYouTubePlayers, 500);
+    }
+    
+    // Initialize YouTube players
+    function initializeYouTubePlayers() {
+        var containers = document.querySelectorAll('.feature-section .youtube-player-container');
+        
+        containers.forEach(function(container) {
+            var containerId = container.id;
+            if (!containerId || youtubePlayers[containerId]) {
+                return;
+            }
+            
+            var videoId = youtubeVideoIds[containerId];
+            if (!videoId) {
+                return;
+            }
+            
+            youtubePlayers[containerId] = new YT.Player(containerId, {
+                videoId: videoId,
+                width: '100%',
+                height: '380',
+                playerVars: {
+                    'autoplay': 1,
+                    'mute': 1,
+                    'loop': 1,
+                    'playlist': videoId,
+                    'controls': 0,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'playsinline': 1,
+                    'vq': 'hd2160',
+                    'enablejsapi': 1,
+                    'iv_load_policy': 3,
+                    'cc_load_policy': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'showinfo': 0,
+                    'origin': window.location.origin,
+                    'widget_referrer': window.location.origin
+                },
+                events: {
+                    'onReady': function(event) {
+                        var player = event.target;
+                        var iframe = document.getElementById(containerId);
+                        
+                        try {
+                            player.setPlaybackQuality('hd2160');
+                            player.mute();
+                            
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 50);
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 150);
+                            setTimeout(function() {
+                                player.setPlaybackQuality('hd2160');
+                            }, 300);
+                            
+                            if (iframe && iframe.parentElement) {
+                                var container = iframe.parentElement;
+                                var blocker = container.querySelector('.youtube-overlay-blocker');
+                                if (!blocker) {
+                                    blocker = document.createElement('div');
+                                    blocker.className = 'youtube-overlay-blocker';
+                                    container.appendChild(blocker);
+                                }
+                                iframe.style.pointerEvents = 'none';
+                                
+                                iframe.style.backgroundImage = 'none';
+                                iframe.style.background = 'transparent';
+                                iframe.style.backgroundColor = 'transparent';
+                                iframe.style.backgroundSize = 'unset';
+                                iframe.style.backgroundPosition = 'unset';
+                                iframe.style.backgroundRepeat = 'unset';
+                                
+                                iframe.style.setProperty('background-image', 'none', 'important');
+                                iframe.style.setProperty('background', 'transparent', 'important');
+                                iframe.style.setProperty('background-color', 'transparent', 'important');
+                                iframe.style.setProperty('background-size', 'unset', 'important');
+                                iframe.style.setProperty('background-position', 'unset', 'important');
+                                iframe.style.setProperty('background-repeat', 'unset', 'important');
+                            }
+                            
+                            setInterval(function() {
+                                try {
+                                    if (player.getPlayerState() === YT.PlayerState.PAUSED) {
+                                        player.playVideo();
+                                    }
+                                    player.mute();
+                                } catch(e) {
+                                }
+                            }, 500);
+                        } catch(e) {
+                        }
+                    },
+                    'onStateChange': function(event) {
+                        var player = event.target;
+                        
+                        if (event.data === YT.PlayerState.PAUSED) {
+                            try {
+                                player.playVideo();
+                            } catch(e) {
+                            }
+                        }
+                        if (event.data === YT.PlayerState.BUFFERING || 
+                            event.data === YT.PlayerState.CUED || 
+                            event.data === YT.PlayerState.PLAYING) {
+                            try {
+                                player.setPlaybackQuality('hd2160');
+                                player.mute();
+                            } catch(e) {
+                            }
+                        }
+                    },
+                    'onPlaybackQualityChange': function(event) {
+                        if (event.data !== 'hd2160' && event.data !== 'highres') {
+                            try {
+                                event.target.setPlaybackQuality('hd2160');
+                            } catch(e) {
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    }
+    
+    // Initialize if YouTube API is already loaded
+    if (typeof YT !== 'undefined' && YT.Player) {
+        onYouTubeIframeAPIReady();
+    }
+    
+    // Prevent interactions
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.youtube-player-container')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+    
+    document.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.youtube-player-container') || 
+            (document.activeElement && document.activeElement.closest('.youtube-player-container'))) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (document.activeElement && document.activeElement.closest('.youtube-player-container')) {
+                document.activeElement.blur();
+            }
+            return false;
+        }
+    }, true);
+    
+    document.addEventListener('mouseup', function(e) {
+        if (e.target.closest('.youtube-player-container')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+    
+    // Enforce YouTube blocking
+    function enforceYouTubeBlocking() {
+        var containers = document.querySelectorAll('.feature-section .youtube-player-container');
+        
+        containers.forEach(function(container) {
+            var iframe = container.querySelector('iframe');
+            if (iframe) {
+                iframe.style.setProperty('pointer-events', 'none', 'important');
+                
+                var blocker = container.querySelector('.youtube-overlay-blocker');
+                if (!blocker) {
+                    blocker = document.createElement('div');
+                    blocker.className = 'youtube-overlay-blocker';
+                    container.appendChild(blocker);
+                }
+                blocker.style.setProperty('display', 'block', 'important');
+                blocker.style.setProperty('z-index', '100000', 'important');
+                blocker.style.setProperty('pointer-events', 'auto', 'important');
+            }
+        });
+    }
+    
+    enforceYouTubeBlocking();
+    setTimeout(enforceYouTubeBlocking, 100);
+    setTimeout(enforceYouTubeBlocking, 500);
+    setTimeout(enforceYouTubeBlocking, 1000);
+    setInterval(enforceYouTubeBlocking, 2000);
+    
+    window.addEventListener('resize', function() {
+        enforceYouTubeBlocking();
+    });
+</script>

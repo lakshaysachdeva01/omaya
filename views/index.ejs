@@ -11,30 +11,465 @@
 
 
   <!-- video-section -->
-  <section class="video-section">
-    <div class="bg bg-image" style="background-image: url(/assets/images/background/1.jpg);"></div>
-    <div class="auto-container">
+  <section class="video-section" style="position: relative; overflow: hidden;">
+    <div class="bg-youtube-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+      <div class="bg-youtube-container" id="youtube-player-video-section" style="width: 100%; height: 100%; position: relative;">
+        <!-- YouTube Player will be initialized here -->
+      </div>
+      <div class="youtube-overlay-blocker"></div>
+    </div>
+    <div class="video-section-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1; pointer-events: none;"></div>
+    <div class="auto-container" style="position: relative; z-index: 2;">
       <div class="row">
         <div class="content-column col-lg-9 col-md-12 col-sm-12">
           <div class="inner-column">
             <div class="sec-title-two light wow slideInUp">
-              <span class="sub-title">Promotional Video</span>
-              <h2> Book Hotal Rooms, <br>et Deals & Book Flights Online.</h2>
+              <span class="sub-title" style="color: #ffc780;">Celebrate in Style</span>
+              <h2>Luxury spaces crafted to elevate every event beautifully</h2>
             </div>
           </div>
         </div>
-        <div class="btn-column col-lg-3 col-md-12 col-sm-12">
-          <div class="inner-column">
-            <a href="https://www.youtube.com/watch?v=Fvae8nxzVz4" class="play-now-two" data-fancybox="gallery" data-caption="">
-              <img src="/assets/images/icons/play.png" alt="" />
-              <span class="ripple"></span>
-            </a>
-          </div>
-        </div>
+       
       </div>
     </div>
   </section>
   <!-- End video section -->
+
+<style>
+  /* Video section YouTube background styles */
+  .video-section {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .video-section .bg-youtube-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .video-section .bg-youtube-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .video-section .bg-youtube-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none !important;
+    -webkit-touch-callout: none;
+    transform: translateZ(0) scale(2) !important;
+    -webkit-transform: translateZ(0) scale(2) !important;
+    transform-origin: center center !important;
+    -webkit-transform-origin: center center !important;
+    opacity: 1;
+    position: relative;
+    z-index: 1;
+    background-image: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-size: unset !important;
+    background-position: unset !important;
+    background-repeat: unset !important;
+  }
+  
+  /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
+  .video-section .bg-youtube-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+    background: transparent;
+    cursor: default !important;
+  }
+  
+  /* Additional overlay blocker element - ALWAYS ACTIVE */
+  .video-section .bg-youtube-wrapper .youtube-overlay-blocker {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 100000 !important;
+    pointer-events: auto !important;
+    background: transparent !important;
+    cursor: default !important;
+    display: block !important;
+  }
+  
+  /* Prevent any hover effects - overlays stay active on hover */
+  .video-section .bg-youtube-wrapper:hover::before {
+    pointer-events: auto !important;
+    z-index: 99999 !important;
+  }
+  
+  .video-section .bg-youtube-wrapper:hover .youtube-overlay-blocker {
+    pointer-events: auto !important;
+    z-index: 100000 !important;
+  }
+  
+  /* Ensure overlays are always on top, even when YouTube adds elements */
+  .video-section .bg-youtube-wrapper * {
+    z-index: auto;
+  }
+</style>
+
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+  // Store YouTube player instance for video section
+  var videoSectionPlayer = null;
+  var videoSectionVideoId = 'PkhiFW7RTLE'; // Silver Hall video ID
+  
+  // YouTube API ready callback
+  function onYouTubeIframeAPIReadyVideoSection() {
+    setTimeout(initializeVideoSectionPlayer, 500);
+  }
+  
+  // Set optimal quality function
+  function setOptimalQuality(player) {
+    try {
+      // Try highest quality first
+      var qualities = ['highres', 'hd2160', 'hd1440', 'hd1080'];
+      for (var i = 0; i < qualities.length; i++) {
+        try {
+          player.setPlaybackQuality(qualities[i]);
+          break;
+        } catch(e) {
+          continue;
+        }
+      }
+    } catch(e) {
+      // Ignore errors
+    }
+  }
+  
+  // Initialize YouTube player for video section
+  function initializeVideoSectionPlayer() {
+    var container = document.getElementById('youtube-player-video-section');
+    if (!container || videoSectionPlayer) {
+      return;
+    }
+    
+    try {
+      videoSectionPlayer = new YT.Player('youtube-player-video-section', {
+        videoId: videoSectionVideoId,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          'autoplay': 1,
+          'mute': 1,
+          'loop': 1,
+          'playlist': videoSectionVideoId,
+          'controls': 0,
+          'rel': 0,
+          'modestbranding': 1,
+          'playsinline': 1,
+          'vq': 'hd2160',
+          'enablejsapi': 1,
+          'iv_load_policy': 3,
+          'cc_load_policy': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'showinfo': 0,
+          'origin': window.location.origin,
+          'widget_referrer': window.location.origin
+        },
+        events: {
+          'onReady': function(event) {
+            var player = event.target;
+            var iframe = container.querySelector('iframe');
+            
+            try {
+              // Set optimal quality multiple times
+              setOptimalQuality(player);
+              player.mute();
+              
+              setTimeout(function() {
+                setOptimalQuality(player);
+              }, 50);
+              setTimeout(function() {
+                setOptimalQuality(player);
+              }, 150);
+              setTimeout(function() {
+                setOptimalQuality(player);
+              }, 300);
+              setTimeout(function() {
+                setOptimalQuality(player);
+              }, 500);
+              setTimeout(function() {
+                setOptimalQuality(player);
+              }, 1000);
+              
+              // Get wrapper for blocker
+              var wrapper = container.parentElement;
+              if (!wrapper) wrapper = container.closest('.bg-youtube-wrapper');
+              
+              if (iframe) {
+                // Block all interactions
+                iframe.style.pointerEvents = 'none';
+                iframe.style.setProperty('pointer-events', 'none', 'important');
+                
+                // Remove background styles
+                iframe.style.backgroundImage = 'none';
+                iframe.style.background = 'transparent';
+                iframe.style.backgroundColor = 'transparent';
+                iframe.style.backgroundSize = 'unset';
+                iframe.style.backgroundPosition = 'unset';
+                iframe.style.backgroundRepeat = 'unset';
+                
+                iframe.style.setProperty('background-image', 'none', 'important');
+                iframe.style.setProperty('background', 'transparent', 'important');
+                iframe.style.setProperty('background-color', 'transparent', 'important');
+                iframe.style.setProperty('background-size', 'unset', 'important');
+                iframe.style.setProperty('background-position', 'unset', 'important');
+                iframe.style.setProperty('background-repeat', 'unset', 'important');
+                
+                // Set scale to 2 - CRITICAL
+                iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
+                iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+                iframe.style.setProperty('transform-origin', 'center center', 'important');
+                iframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
+              }
+              
+              // Ensure blocker exists in wrapper
+              if (wrapper) {
+                var blocker = wrapper.querySelector('.youtube-overlay-blocker');
+                if (!blocker) {
+                  blocker = document.createElement('div');
+                  blocker.className = 'youtube-overlay-blocker';
+                  wrapper.appendChild(blocker);
+                }
+                blocker.style.setProperty('display', 'block', 'important');
+                blocker.style.setProperty('z-index', '100000', 'important');
+                blocker.style.setProperty('pointer-events', 'auto', 'important');
+              }
+              
+              // Force apply scale multiple times
+              setTimeout(function() {
+                if (iframe) {
+                  iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
+                  iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+                }
+                enforceVideoSectionBlocking();
+              }, 100);
+              setTimeout(function() {
+                if (iframe) {
+                  iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
+                  iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+                }
+                enforceVideoSectionBlocking();
+              }, 500);
+              
+              setInterval(function() {
+                try {
+                  if (player.getPlayerState() === YT.PlayerState.PAUSED) {
+                    player.playVideo();
+                  }
+                  if (player.getPlayerState() === YT.PlayerState.ENDED) {
+                    player.seekTo(0, true);
+                    player.playVideo();
+                  }
+                  player.mute();
+                  setOptimalQuality(player);
+                } catch(e) {
+                }
+              }, 500);
+            } catch(e) {
+            }
+          },
+          'onStateChange': function(event) {
+            var player = event.target;
+            
+            if (event.data === YT.PlayerState.PAUSED) {
+              try {
+                player.playVideo();
+              } catch(e) {
+              }
+            }
+            if (event.data === YT.PlayerState.ENDED) {
+              try {
+                player.seekTo(0, true);
+                player.playVideo();
+                setOptimalQuality(player);
+              } catch(e) {
+              }
+            }
+            if (event.data === YT.PlayerState.BUFFERING || 
+                event.data === YT.PlayerState.CUED || 
+                event.data === YT.PlayerState.PLAYING) {
+              try {
+                setOptimalQuality(player);
+                player.mute();
+              } catch(e) {
+              }
+            }
+          },
+          'onPlaybackQualityChange': function(event) {
+            var currentQuality = event.data;
+            var player = event.target;
+            
+            // Quality hierarchy: highres > hd2160 > hd1440 > hd1080 > hd720
+            // Accept highres, hd2160, hd1440
+            // Reject anything below 1440p
+            if (currentQuality !== 'highres' && 
+                currentQuality !== 'hd2160' && 
+                currentQuality !== 'hd1440') {
+              try {
+                setOptimalQuality(player);
+              } catch(e) {
+                try {
+                  player.setPlaybackQuality('hd1440');
+                } catch(e2) {
+                }
+              }
+            }
+          }
+        }
+      });
+    } catch(e) {
+      console.error('Error initializing video section YouTube player:', e);
+    }
+  }
+  
+  // Initialize if YouTube API is already loaded
+  if (typeof YT !== 'undefined' && YT.Player) {
+    onYouTubeIframeAPIReadyVideoSection();
+  } else {
+    // Wait for API to load
+    if (window.onYouTubeIframeAPIReady) {
+      var oldCallback = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function() {
+        if (oldCallback) oldCallback();
+        onYouTubeIframeAPIReadyVideoSection();
+      };
+    } else {
+      window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReadyVideoSection;
+    }
+  }
+  
+  // Prevent interactions
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.bg-youtube-container')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }, true);
+  
+  document.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.bg-youtube-container') || 
+        (document.activeElement && document.activeElement.closest('.bg-youtube-container'))) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (document.activeElement && document.activeElement.closest('.bg-youtube-container')) {
+        document.activeElement.blur();
+      }
+      return false;
+    }
+  }, true);
+  
+  document.addEventListener('mouseup', function(e) {
+    if (e.target.closest('.bg-youtube-container')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }, true);
+  
+  // Enforce YouTube blocking and scaling
+  function enforceVideoSectionBlocking() {
+    var container = document.getElementById('youtube-player-video-section');
+    if (!container) return;
+    
+    var wrapper = container.parentElement;
+    if (!wrapper) return;
+    
+    var iframe = container.querySelector('iframe');
+    if (!iframe) {
+      // Check if YouTube API replaced container with iframe directly
+      if (container.tagName === 'IFRAME') {
+        iframe = container;
+        // Move iframe back into wrapper structure
+        var newContainer = document.createElement('div');
+        newContainer.id = 'youtube-player-video-section';
+        newContainer.className = 'bg-youtube-container';
+        newContainer.style.cssText = 'width: 100%; height: 100%; position: relative;';
+        wrapper.insertBefore(newContainer, container);
+        newContainer.appendChild(iframe);
+      } else {
+        return;
+      }
+    }
+    
+    // Block all interactions
+    iframe.style.setProperty('pointer-events', 'none', 'important');
+    
+    // Set scale to 2
+    iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
+    iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+    iframe.style.setProperty('transform-origin', 'center center', 'important');
+    iframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
+    
+    // Remove background styles
+    iframe.style.setProperty('background-image', 'none', 'important');
+    iframe.style.setProperty('background', 'transparent', 'important');
+    iframe.style.setProperty('background-color', 'transparent', 'important');
+    iframe.style.setProperty('background-size', 'unset', 'important');
+    iframe.style.setProperty('background-position', 'unset', 'important');
+    iframe.style.setProperty('background-repeat', 'unset', 'important');
+    
+    // Ensure blocker exists in wrapper
+    var blocker = wrapper.querySelector('.youtube-overlay-blocker');
+    if (!blocker) {
+      blocker = document.createElement('div');
+      blocker.className = 'youtube-overlay-blocker';
+      wrapper.appendChild(blocker);
+    }
+    blocker.style.setProperty('display', 'block', 'important');
+    blocker.style.setProperty('z-index', '100000', 'important');
+    blocker.style.setProperty('pointer-events', 'auto', 'important');
+  }
+  
+  // Run enforcement immediately and repeatedly
+  enforceVideoSectionBlocking();
+  setTimeout(enforceVideoSectionBlocking, 100);
+  setTimeout(enforceVideoSectionBlocking, 300);
+  setTimeout(enforceVideoSectionBlocking, 500);
+  setTimeout(enforceVideoSectionBlocking, 1000);
+  setTimeout(enforceVideoSectionBlocking, 2000);
+  setInterval(enforceVideoSectionBlocking, 1000);
+  
+  window.addEventListener('resize', function() {
+    enforceVideoSectionBlocking();
+  });
+  
+  // Also enforce on DOM mutations (when iframe is added)
+  if (typeof MutationObserver !== 'undefined') {
+    var observer = new MutationObserver(function(mutations) {
+      enforceVideoSectionBlocking();
+    });
+    var container = document.getElementById('youtube-player-video-section');
+    if (container) {
+      observer.observe(container, {
+        childList: true,
+        subtree: true
+      });
+    }
+  }
+</script>
 
 
 

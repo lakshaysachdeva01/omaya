@@ -6,24 +6,688 @@
         <div class="content-column col-lg-7 wow fadeInRight" data-wow-delay="600ms">
           <div class="inner-column">
             <div class="sec-title">
-              <span class="sub-title">HOEXR LUXURY HOTEL</span>
-              <h2>Our goal is Ensure Hotel Booking Accessibility.</h2>
-              <div class="text">Hoexr in a powerful way of just not an only professions, however, in a passion <br>for our Company. We have to a tendency to believe the idea that smart <br>looking of any website.</div>
+              <span class="sub-title">OMAYA SUITES</span>
+              <h2>Where Luxury Finds Its True Expression</h2>
+              <div class="text" style="width: 530px;">At Omaya Suites, luxury is not merely a style — it is an experience thoughtfully shaped through refined spaces, attentive service, and an unmistakable sense of sophistication. Every element of our design and hospitality reflects a commitment to comfort, elegance, and elevated living, ensuring guests feel welcomed, valued, and immersed in a world of contemporary luxury.</div>
             </div>
             <div class="btn-box">
-              <a href="page-about.html" class="theme-btn btn-style-one"><span class="btn-title">Discover More</span></a>
+              <a href="/stay" class="theme-btn btn-style-one"><span class="btn-title">Explore Stays</span></a>
             </div>
-            <figure class="image-1 overlay-anim wow fadeInUp"><img style="max-width: 510px;" src="/assets/images/data/Omapoolbar/RCP00305.webp" alt=""></figure>
+            <div class="youtube-video-container" style="width: 510px; height: 390px; overflow: hidden; position: relative; background: #000; margin-top: 150px;">
+              <div class="youtube-player-container" id="youtube-player-about-omayameet" style="width: 100%; height: 100%; position: relative;">
+                <!-- YouTube Player will be initialized here -->
+                <div class="youtube-overlay-blocker"></div>
+              </div>
+            </div>
           </div>
         </div>
         <!-- Image Column -->
         <div class="image-column col-lg-5">
           <div class="inner-column wow fadeInLeft">
-            <figure class="image-1 overlay-anim wow fadeInUp"><img style="max-width: 510px;" src="/assets/images/data/Omapoolbar/Rcp.jpg" alt=""></figure>
-            <div class="text">We've been in the industry for over two decades now. Consequently, some of our partnerships have stood the test of time, much like some <br>of our colleagues.</div>
+            <div class="panorama-container" style="width: 510px; height: 610px; overflow: hidden; position: relative; background: #f4f6f8; margin-bottom: 20px;">
+              <div id="panorama-360-about" style="width: 100%; height: 610px; position: relative; z-index: 0;"></div>
+              <div class="panorama-overlay" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0) 100%); pointer-events: none; z-index: 1;"></div>
+              <div class="panorama-preloader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; background: #f4f6f8;">
+                <div class="panorama-spinner"></div>
+              </div>
+            </div>
+            <div class="text">Celebrated for our premium stays, curated dining, and the vibrant rooftop air bar overlooking the cityscape, Omaya Suites redefines modern hospitality in Raipur. Whether you're here to relax, celebrate, or explore, every moment is crafted to be memorable, distinctive, and seamlessly premium — a stay that stays with you long after your visit.</div>
           </div>
         </div>
       </div>
     </div>
   </section>
   <!--Emd About Section -->
+
+<!-- YouTube IFrame API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<!-- Pannellum 360 Viewer CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+
+<script>
+// Store viewer instances
+let aboutPanoramaViewer = null;
+let aboutAirBarViewer = null;
+let aboutOmayaMeetPlayer = null;
+
+function initAboutAirBar360View() {
+  const container = document.getElementById('panorama-360-about-airbar');
+  if (!container) return;
+  
+  const preloader = container.parentElement.querySelector('.panorama-preloader');
+  
+  function showError(message) {
+    if (preloader) {
+      preloader.innerHTML = `<div style="text-align: center; color: #666; padding: 20px;"><p style="margin: 0; font-size: 14px;">${message}</p></div>`;
+      preloader.style.display = 'flex';
+    }
+  }
+  
+  // Load Pannellum if not already loaded
+  if (typeof pannellum === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
+    script.onload = function() {
+      setTimeout(() => initAboutAirBar360View(), 200);
+    };
+    script.onerror = function() {
+      showError('Failed to load 360 viewer.');
+    };
+    document.head.appendChild(script);
+    return;
+  }
+  
+  try {
+    const panoramaPath = '/assets/images/360/Omaairbar.webp';
+    let panoramaUrl = panoramaPath;
+    if (panoramaPath && !panoramaPath.startsWith('http://') && !panoramaPath.startsWith('https://')) {
+      panoramaUrl = window.location.origin + (panoramaPath.startsWith('/') ? panoramaPath : '/' + panoramaPath);
+    }
+    
+    const img = new Image();
+    img.onload = function() {
+      if (preloader) {
+        preloader.style.display = 'none';
+      }
+      
+      try {
+        const isMobile = 'ontouchstart' in window;
+        const rotateSpeed = isMobile ? 1.5 : 10;
+        
+        const viewerConfig = {
+          "type": "equirectangular",
+          "panorama": panoramaUrl,
+          "autoLoad": true,
+          "autoRotate": rotateSpeed,
+          "autoRotateInactivityDelay": 0,
+          "autoRotateStopDelay": 0,
+          "compass": false,
+          "showControls": true,
+          "keyboardZoom": false,
+          "mouseZoom": false,
+          "draggable": true,
+          "disableKeyboardCtrl": true,
+          "hfov": 100,
+          "minHfov": 80,
+          "maxHfov": 120,
+          "pitch": 0,
+          "yaw": 0,
+          "minPitch": 0,
+          "maxPitch": 0,
+          "showFullscreenCtrl": true,
+          "showZoomCtrl": false,
+          "mouseZoom": false,
+          "touchZoom": false,
+          "preview": "",
+          "sceneFadeDuration": 1000
+        };
+        
+        const viewer = pannellum.viewer('panorama-360-about-airbar', viewerConfig);
+        aboutAirBarViewer = viewer;
+        
+        viewer.on('error', function(error) {
+          console.error('Pannellum error:', error);
+          showError('Unable to load 360° view.');
+        });
+        
+        viewer.on('load', function() {
+          setTimeout(() => {
+            try {
+              const isMobile = 'ontouchstart' in window;
+              const rotateSpeed = isMobile ? 1.5 : 10;
+              
+              if (viewer._pitchLockInterval) {
+                clearInterval(viewer._pitchLockInterval);
+              }
+              
+              try {
+                if (typeof viewer.setPitch === 'function') {
+                  viewer.setPitch(0);
+                }
+              } catch(e3) {
+                try {
+                  viewer.setConfig({ pitch: 0, minPitch: 0, maxPitch: 0 });
+                } catch(e4) {}
+              }
+              
+              if (typeof viewer.setConfig === 'function') {
+                viewer.setConfig({
+                  autoRotate: rotateSpeed,
+                  autoRotateInactivityDelay: 0,
+                  autoRotateStopDelay: 0,
+                  minPitch: 0,
+                  maxPitch: 0
+                });
+              }
+              if (typeof viewer.startAutoRotate === 'function') {
+                viewer.startAutoRotate(rotateSpeed, 0);
+              }
+              if (viewer.config && viewer.config.scene) {
+                viewer.config.scene.autoRotate = rotateSpeed;
+                viewer.config.scene.autoRotateInactivityDelay = 0;
+                viewer.config.scene.autoRotateStopDelay = 0;
+                viewer.config.scene.minPitch = 0;
+                viewer.config.scene.maxPitch = 0;
+              }
+              
+              const pitchLockInterval = setInterval(() => {
+                try {
+                  if (viewer.getPitch && Math.abs(viewer.getPitch()) > 0.1) {
+                    viewer.setPitch(0);
+                  }
+                } catch(e) {
+                  clearInterval(pitchLockInterval);
+                }
+              }, 100);
+              viewer._pitchLockInterval = pitchLockInterval;
+            } catch(e2) {
+              console.error('Error enabling auto-rotate:', e2);
+            }
+          }, 500);
+        });
+      } catch(e) {
+        console.error('Error initializing Pannellum:', e);
+        showError('Error initializing 360° viewer.');
+      }
+    };
+    
+    img.onerror = function() {
+      console.error('Failed to load image:', panoramaUrl);
+      showError('360° image not available.');
+    };
+    
+    img.src = panoramaUrl;
+  } catch(e) {
+    console.error('Error setting up 360 view:', e);
+    showError('Error loading 360° view.');
+  }
+}
+
+function initAbout360View() {
+  const container = document.getElementById('panorama-360-about');
+  if (!container) return;
+  
+  const preloader = container.parentElement.querySelector('.panorama-preloader');
+  
+  function showError(message) {
+    if (preloader) {
+      preloader.innerHTML = `<div style="text-align: center; color: #666; padding: 20px;"><p style="margin: 0; font-size: 14px;">${message}</p></div>`;
+      preloader.style.display = 'flex';
+    }
+  }
+  
+  // Load Pannellum if not already loaded
+  if (typeof pannellum === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
+    script.onload = function() {
+      setTimeout(() => initAbout360View(), 200);
+    };
+    script.onerror = function() {
+      showError('Failed to load 360 viewer.');
+    };
+    document.head.appendChild(script);
+    return;
+  }
+  
+  try {
+    const panoramaPath = '/assets/images/360/executivesuite.webp';
+    let panoramaUrl = panoramaPath;
+    if (panoramaPath && !panoramaPath.startsWith('http://') && !panoramaPath.startsWith('https://')) {
+      panoramaUrl = window.location.origin + (panoramaPath.startsWith('/') ? panoramaPath : '/' + panoramaPath);
+    }
+    
+    const img = new Image();
+    img.onload = function() {
+      if (preloader) {
+        preloader.style.display = 'none';
+      }
+      
+      try {
+        const isMobile = 'ontouchstart' in window;
+        const rotateSpeed = isMobile ? 1.5 : 10;
+        
+        const viewerConfig = {
+          "type": "equirectangular",
+          "panorama": panoramaUrl,
+          "autoLoad": true,
+          "autoRotate": rotateSpeed, // Enable auto-rotate
+          "autoRotateInactivityDelay": 0, // Start immediately, no delay
+          "autoRotateStopDelay": 0, // Never stop, rotate continuously
+          "compass": false,
+          "showControls": true,
+          "keyboardZoom": false,
+          "mouseZoom": false,
+          "draggable": true,
+          "disableKeyboardCtrl": true,
+          "hfov": 100,
+          "minHfov": 80,
+          "maxHfov": 120,
+          "pitch": 0, // Horizontal view
+          "yaw": 0, // Starting rotation angle
+          "minPitch": 0, // Lock pitch at 0
+          "maxPitch": 0, // Lock pitch at 0
+          "showFullscreenCtrl": true,
+          "showZoomCtrl": false,
+          "mouseZoom": false,
+          "touchZoom": false,
+          "preview": "",
+          "sceneFadeDuration": 1000
+        };
+        
+        const viewer = pannellum.viewer('panorama-360-about', viewerConfig);
+        aboutPanoramaViewer = viewer;
+        
+        viewer.on('error', function(error) {
+          console.error('Pannellum error:', error);
+          showError('Unable to load 360° view.');
+        });
+        
+        // Wait for panorama to load before ensuring auto-rotate
+        viewer.on('load', function() {
+          setTimeout(() => {
+            try {
+              const isMobile = 'ontouchstart' in window;
+              const rotateSpeed = isMobile ? 1.5 : 10;
+              
+              // Clear existing pitch lock
+              if (viewer._pitchLockInterval) {
+                clearInterval(viewer._pitchLockInterval);
+              }
+              
+              // Reset pitch ONLY (don't reset yaw)
+              try {
+                if (typeof viewer.setPitch === 'function') {
+                  viewer.setPitch(0);
+                }
+              } catch(e3) {
+                try {
+                  viewer.setConfig({ pitch: 0, minPitch: 0, maxPitch: 0 });
+                } catch(e4) {}
+              }
+              
+              // Enable auto-rotate
+              if (typeof viewer.setConfig === 'function') {
+                viewer.setConfig({
+                  autoRotate: rotateSpeed,
+                  autoRotateInactivityDelay: 0,
+                  autoRotateStopDelay: 0,
+                  minPitch: 0,
+                  maxPitch: 0
+                });
+              }
+              if (typeof viewer.startAutoRotate === 'function') {
+                viewer.startAutoRotate(rotateSpeed, 0);
+              }
+              if (viewer.config && viewer.config.scene) {
+                viewer.config.scene.autoRotate = rotateSpeed;
+                viewer.config.scene.autoRotateInactivityDelay = 0;
+                viewer.config.scene.autoRotateStopDelay = 0;
+                viewer.config.scene.minPitch = 0;
+                viewer.config.scene.maxPitch = 0;
+              }
+              
+              // Continuously ensure pitch stays at 0
+              const pitchLockInterval = setInterval(() => {
+                try {
+                  if (viewer.getPitch && Math.abs(viewer.getPitch()) > 0.1) {
+                    viewer.setPitch(0);
+                  }
+                } catch(e) {
+                  clearInterval(pitchLockInterval);
+                }
+              }, 100);
+              viewer._pitchLockInterval = pitchLockInterval;
+            } catch(e2) {
+              console.error('Error enabling auto-rotate:', e2);
+            }
+          }, 500);
+        });
+      } catch(e) {
+        console.error('Error initializing Pannellum:', e);
+        showError('Error initializing 360° viewer.');
+      }
+    };
+    
+    img.onerror = function() {
+      console.error('Failed to load image:', panoramaUrl);
+      showError('360° image not available.');
+    };
+    
+    img.src = panoramaUrl;
+  } catch(e) {
+    console.error('Error setting up 360 view:', e);
+    showError('Error loading 360° view.');
+  }
+}
+
+// Initialize YouTube video for OmayaMeet
+function initOmayaMeetYouTube() {
+  const container = document.getElementById('youtube-player-about-omayameet');
+  if (!container) return;
+  
+  // Wait for YouTube API
+  if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+    if (window.onYouTubeIframeAPIReady) {
+      var oldCallback = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function() {
+        if (oldCallback) oldCallback();
+        setTimeout(initOmayaMeetYouTube, 500);
+      };
+    } else {
+      window.onYouTubeIframeAPIReady = function() {
+        setTimeout(initOmayaMeetYouTube, 500);
+      };
+    }
+    return;
+  }
+  
+  try {
+    const videoId = '76KIjb-GFRM'; // OmayaMeet video ID
+    
+    aboutOmayaMeetPlayer = new YT.Player('youtube-player-about-omayameet', {
+      videoId: videoId,
+      width: '100%',
+      height: '390',
+      playerVars: {
+        'autoplay': 1,
+        'mute': 1,
+        'loop': 1,
+        'playlist': videoId, // Required for loop
+        'controls': 0,
+        'rel': 0,
+        'modestbranding': 1,
+        'playsinline': 1,
+        'vq': 'hd2160',
+        'enablejsapi': 1,
+        'iv_load_policy': 3,
+        'cc_load_policy': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'showinfo': 0,
+        'origin': window.location.origin,
+        'widget_referrer': window.location.origin
+      },
+      events: {
+        'onReady': function(event) {
+          var player = event.target;
+          var iframe = container.querySelector('iframe');
+          
+          try {
+            player.setPlaybackQuality('hd2160');
+            player.mute();
+            
+            setTimeout(function() {
+              player.setPlaybackQuality('hd2160');
+            }, 50);
+            setTimeout(function() {
+              player.setPlaybackQuality('hd2160');
+            }, 150);
+            setTimeout(function() {
+              player.setPlaybackQuality('hd2160');
+            }, 300);
+            
+            if (iframe && iframe.parentElement) {
+              var containerElement = iframe.parentElement;
+              var blocker = containerElement.querySelector('.youtube-overlay-blocker');
+              if (!blocker) {
+                blocker = document.createElement('div');
+                blocker.className = 'youtube-overlay-blocker';
+                containerElement.appendChild(blocker);
+              }
+              iframe.style.pointerEvents = 'none';
+              
+              iframe.style.backgroundImage = 'none';
+              iframe.style.background = 'transparent';
+              iframe.style.backgroundColor = 'transparent';
+              iframe.style.backgroundSize = 'unset';
+              iframe.style.backgroundPosition = 'unset';
+              iframe.style.backgroundRepeat = 'unset';
+              
+              iframe.style.setProperty('background-image', 'none', 'important');
+              iframe.style.setProperty('background', 'transparent', 'important');
+              iframe.style.setProperty('background-color', 'transparent', 'important');
+              iframe.style.setProperty('background-size', 'unset', 'important');
+              iframe.style.setProperty('background-position', 'unset', 'important');
+              iframe.style.setProperty('background-repeat', 'unset', 'important');
+              
+              // Scale the iframe like other videos
+              iframe.style.setProperty('transform', 'translateZ(0) scale(1.45)', 'important');
+              iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(1.45)', 'important');
+              iframe.style.setProperty('transform-origin', 'center center', 'important');
+              iframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
+            }
+            
+            setInterval(function() {
+              try {
+                if (player.getPlayerState() === YT.PlayerState.PAUSED) {
+                  player.playVideo();
+                }
+                player.mute();
+              } catch(e) {
+              }
+            }, 500);
+          } catch(e) {
+          }
+        },
+        'onStateChange': function(event) {
+          var player = event.target;
+          
+          if (event.data === YT.PlayerState.PAUSED) {
+            try {
+              player.playVideo();
+            } catch(e) {
+            }
+          }
+          if (event.data === YT.PlayerState.BUFFERING || 
+              event.data === YT.PlayerState.CUED || 
+              event.data === YT.PlayerState.PLAYING) {
+            try {
+              player.setPlaybackQuality('hd2160');
+              player.mute();
+            } catch(e) {
+            }
+          }
+        },
+        'onPlaybackQualityChange': function(event) {
+          if (event.data !== 'hd2160' && event.data !== 'highres') {
+            try {
+              event.target.setPlaybackQuality('hd2160');
+            } catch(e) {
+            }
+          }
+        }
+      }
+    });
+    
+    // Monitor to keep video playing and muted
+    setInterval(function() {
+      if (aboutOmayaMeetPlayer) {
+        try {
+          var state = aboutOmayaMeetPlayer.getPlayerState();
+          if (state === YT.PlayerState.PAUSED) {
+            aboutOmayaMeetPlayer.playVideo();
+          }
+          if (state === YT.PlayerState.ENDED) {
+            aboutOmayaMeetPlayer.playVideo();
+          }
+          aboutOmayaMeetPlayer.mute();
+        } catch(e) {}
+      }
+    }, 1000);
+    
+    // Enforce YouTube blocking
+    function enforceYouTubeBlocking() {
+      var container = document.getElementById('youtube-player-about-omayameet');
+      if (!container) return;
+      
+      var iframe = container.querySelector('iframe');
+      if (iframe) {
+        iframe.style.setProperty('pointer-events', 'none', 'important');
+        
+        var blocker = container.querySelector('.youtube-overlay-blocker');
+        if (!blocker) {
+          blocker = document.createElement('div');
+          blocker.className = 'youtube-overlay-blocker';
+          container.appendChild(blocker);
+        }
+        blocker.style.setProperty('display', 'block', 'important');
+        blocker.style.setProperty('z-index', '100000', 'important');
+        blocker.style.setProperty('pointer-events', 'auto', 'important');
+      }
+    }
+    
+    // Enforce blocking immediately and periodically
+    enforceYouTubeBlocking();
+    setTimeout(enforceYouTubeBlocking, 100);
+    setTimeout(enforceYouTubeBlocking, 500);
+    setTimeout(enforceYouTubeBlocking, 1000);
+    setInterval(enforceYouTubeBlocking, 2000);
+    
+    // Also enforce on window events
+    window.addEventListener('resize', enforceYouTubeBlocking);
+    window.addEventListener('scroll', enforceYouTubeBlocking);
+  } catch(e) {
+    console.error('Error initializing OmayaMeet YouTube video:', e);
+  }
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  initAbout360View();
+  initAboutAirBar360View();
+  initOmayaMeetYouTube();
+});
+
+// Also try on window load as backup
+window.addEventListener('load', function() {
+  if (!aboutPanoramaViewer) {
+    setTimeout(initAbout360View, 300);
+  }
+  if (!aboutAirBarViewer) {
+    setTimeout(initAboutAirBar360View, 300);
+  }
+  if (!aboutOmayaMeetPlayer) {
+    setTimeout(initOmayaMeetYouTube, 500);
+  }
+});
+
+// Add CSS for spinner and YouTube video (only if not already added)
+if (!document.getElementById('panorama-styles-homeabout')) {
+  const panoramaStyleAbout = document.createElement('style');
+  panoramaStyleAbout.id = 'panorama-styles-homeabout';
+  panoramaStyleAbout.textContent = `
+    .panorama-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .pnlm-container {
+      cursor: grab;
+    }
+    
+    .pnlm-container:active {
+      cursor: grabbing;
+    }
+    
+    .pnlm-controls {
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    
+    .pnlm-controls:hover {
+      opacity: 1;
+    }
+    
+    /* YouTube video container styles */
+    .youtube-video-container {
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .youtube-video-container .youtube-player-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    /* Block ALL interactions with iframe - no hover, no clicks, nothing */
+    .youtube-video-container .youtube-player-container iframe,
+    .youtube-video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none !important;
+      -webkit-touch-callout: none;
+      transform: translateZ(0) scale(1.45);
+      -webkit-transform: translateZ(0) scale(1.45);
+      transform-origin: center center;
+      -webkit-transform-origin: center center;
+      opacity: 1;
+      position: relative;
+      z-index: 1;
+      background-image: none !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      background-size: unset !important;
+      background-position: unset !important;
+      background-repeat: unset !important;
+    }
+    
+    /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
+    .youtube-video-container .youtube-player-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99999 !important;
+      pointer-events: auto !important;
+      background: transparent;
+      cursor: default !important;
+    }
+    
+    /* Additional overlay blocker element - ALWAYS ACTIVE */
+    .youtube-video-container .youtube-player-container .youtube-overlay-blocker {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 100000 !important;
+      pointer-events: auto !important;
+      background: transparent !important;
+      cursor: default !important;
+      display: block !important;
+    }
+    
+    /* Prevent any hover effects - overlays stay active on hover */
+    .youtube-video-container .youtube-player-container:hover::before {
+      pointer-events: auto !important;
+      z-index: 99999 !important;
+    }
+    
+    .youtube-video-container .youtube-player-container:hover .youtube-overlay-blocker {
+      pointer-events: auto !important;
+      z-index: 100000 !important;
+    }
+    
+    /* Ensure overlays are always on top, even when YouTube adds elements */
+    .youtube-video-container .youtube-player-container * {
+      z-index: auto;
+    }
+  `;
+  document.head.appendChild(panoramaStyleAbout);
+}
+</script>

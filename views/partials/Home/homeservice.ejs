@@ -16,7 +16,9 @@
         if (name.includes('water') || name.includes('hot') || name.includes('cold')) return 'toilet.png';
         
         // Parking
-        if (name.includes('parking') || name.includes('valet')) return 'valet-parking.png';
+        if (name.includes('ample parking')) return 'parking.png';
+        if (name.includes('valet')) return 'valet-parking.png';
+        if (name.includes('parking')) return 'parking.png';
         
         // Elevator/Lift
         if (name.includes('lift') || name.includes('elevator')) return 'apartment.png';
@@ -34,7 +36,7 @@
         if (name.includes('laundry') || name.includes('dry cleaning')) return 'ironing-board.png';
         
         // Fitness
-        if (name.includes('fitness') || name.includes('gym') || name.includes('center')) return 'weight-loss.png';
+        if (name.includes('fitness') || name.includes('gym') || name.includes('center')) return 'dumbell.png';
         
         // Room Service
         if (name.includes('room service') || name.includes('service')) return 'apartment.png';
@@ -115,8 +117,8 @@
 <section class="service-section-two">
     <div class="auto-container">
         <div class="sec-title text-center wow fadeInUp">
-            <span class="sub-title">Hotel Services</span>
-            <h2>Hotel Facilities</h2>
+            <span class="sub-title">GUEST COMFORTS</span>
+            <h2>Our Amenities</h2>
         </div>
         <div class="row">
             <% services.forEach((service, index) => { %>
