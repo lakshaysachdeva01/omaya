@@ -129,6 +129,11 @@
           -webkit-transform: translateZ(0) scale(3.8) !important;
           transform-origin: center center;
           -webkit-transform-origin: center center;
+          will-change: transform;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
       }
   }
   
@@ -336,32 +341,50 @@
   }, 6000);
 
   // Set optimal quality - prefer highest available, minimum 1440p
+  // On mobile, be more aggressive about quality enforcement
   function setOptimalQuality(player) {
       if (!player) return;
       
+      var isMobile = window.innerWidth <= 768;
+      
       try {
           // Try to get available quality levels
-          var availableQualities = ['highres', 'hd2160', 'hd1440'];
+          var availableQualities = ['highres', 'hd2160', 'hd1440', 'hd1080'];
           
-          // Try to set highest available quality
-          for (var i = 0; i < availableQualities.length; i++) {
-              try {
-                  player.setPlaybackQuality(availableQualities[i]);
-                  // If successful, break
-                  break;
-              } catch(e) {
-                  // Continue to next quality if this one fails
-                  continue;
+          // On mobile, try even harder to get high quality
+          if (isMobile) {
+              // Try multiple times with different approaches
+              for (var attempt = 0; attempt < 3; attempt++) {
+                  for (var i = 0; i < availableQualities.length; i++) {
+                      try {
+                          player.setPlaybackQuality(availableQualities[i]);
+                      } catch(e) {
+                          continue;
+                      }
+                  }
+              }
+          } else {
+              // Desktop: try highest available quality
+              for (var i = 0; i < availableQualities.length; i++) {
+                  try {
+                      player.setPlaybackQuality(availableQualities[i]);
+                      break;
+                  } catch(e) {
+                      continue;
+                  }
               }
           }
           
-          // Fallback: ensure minimum 1440p
+          // Fallback: ensure minimum quality (1080p on mobile, 1440p on desktop)
           try {
               var currentQuality = player.getPlaybackQuality();
+              var minQuality = isMobile ? 'hd1080' : 'hd1440';
+              
               if (currentQuality !== 'highres' && 
                   currentQuality !== 'hd2160' && 
-                  currentQuality !== 'hd1440') {
-                  player.setPlaybackQuality('hd1440');
+                  currentQuality !== 'hd1440' &&
+                  (!isMobile || currentQuality !== 'hd1080')) {
+                  player.setPlaybackQuality(minQuality);
               }
           } catch(e) {
               // Ignore errors
@@ -527,28 +550,29 @@
                       player.mute();
                       
                       // Load video but don't play yet
+                      // On mobile, use hd1080 as minimum, on desktop use highres
+                      var isMobile = window.innerWidth <= 768;
+                      var suggestedQuality = isMobile ? 'hd1080' : 'highres';
+                      
                       player.cueVideoById({
                           'videoId': bannerVideoId,
                           'startSeconds': 0,
-                          'suggestedQuality': 'highres'
+                          'suggestedQuality': suggestedQuality
                       });
                       
                       // Mark video as ready when enough data is loaded
                       checkVideoBuffered(player);
                       
                       // Set quality multiple times for reliability
-                      setTimeout(function() {
-                          setOptimalQuality(player);
-                      }, 50);
-                      setTimeout(function() {
-                          setOptimalQuality(player);
-                      }, 150);
-                      setTimeout(function() {
-                          setOptimalQuality(player);
-                      }, 300);
-                      setTimeout(function() {
-                          setOptimalQuality(player);
-                      }, 600);
+                      // On mobile, be even more aggressive
+                      var isMobile = window.innerWidth <= 768;
+                      var qualityAttempts = isMobile ? [50, 100, 150, 300, 500, 800, 1200, 2000] : [50, 150, 300, 600];
+                      
+                      for (var i = 0; i < qualityAttempts.length; i++) {
+                          setTimeout(function() {
+                              setOptimalQuality(player);
+                          }, qualityAttempts[i]);
+                      }
                       
                       if (iframe && iframe.parentElement) {
                           var container = iframe.parentElement;
@@ -641,23 +665,35 @@
                   }
               },
               'onPlaybackQualityChange': function(event) {
-                  // Ensure minimum 1440p quality
+                  // Ensure high quality - different thresholds for mobile vs desktop
                   var currentQuality = event.data;
                   var player = event.target;
+                  var isMobile = window.innerWidth <= 768;
                   
                   // Quality hierarchy: highres > hd2160 > hd1440 > hd1080 > hd720
-                  // Accept highres, hd2160, hd1440
-                  // Reject anything below 1440p
-                  if (currentQuality !== 'highres' && 
-                      currentQuality !== 'hd2160' && 
-                      currentQuality !== 'hd1440') {
+                  // Desktop: Accept highres, hd2160, hd1440 (minimum 1440p)
+                  // Mobile: Accept highres, hd2160, hd1440, hd1080 (minimum 1080p)
+                  var acceptableQualities = isMobile 
+                      ? ['highres', 'hd2160', 'hd1440', 'hd1080']
+                      : ['highres', 'hd2160', 'hd1440'];
+                  
+                  var isAcceptable = false;
+                  for (var i = 0; i < acceptableQualities.length; i++) {
+                      if (currentQuality === acceptableQualities[i]) {
+                          isAcceptable = true;
+                          break;
+                      }
+                  }
+                  
+                  if (!isAcceptable) {
                       try {
                           // Try to set to higher quality
                           setOptimalQuality(player);
                       } catch(e) {
-                          // If that fails, force minimum 1440p
+                          // If that fails, force minimum quality
                           try {
-                              player.setPlaybackQuality('hd1440');
+                              var minQuality = isMobile ? 'hd1080' : 'hd1440';
+                              player.setPlaybackQuality(minQuality);
                           } catch(e2) {
                               // Ignore errors
                           }
@@ -815,13 +851,18 @@
       youtubeIframe.style.setProperty('background-position', 'unset', 'important');
       youtubeIframe.style.setProperty('background-repeat', 'unset', 'important');
       
-      // Force scale on iframe - 2.5 for mobile, 1.6 for desktop
+      // Force scale on iframe - slightly reduced for mobile to improve quality, 1.6 for desktop
       var isMobile = window.innerWidth <= 768;
-      var scaleValue = isMobile ? 3.8 : 1.6;
+      var scaleValue = isMobile ? 3.8 : 1.6; // Reduced from 3.8 to 3.2 for better quality
       youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
       youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
       youtubeIframe.style.setProperty('transform-origin', 'center center', 'important');
       youtubeIframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
+      
+      // Force hardware acceleration for better rendering on mobile
+      youtubeIframe.style.setProperty('will-change', 'transform', 'important');
+      youtubeIframe.style.setProperty('-webkit-backface-visibility', 'hidden', 'important');
+      youtubeIframe.style.setProperty('backface-visibility', 'hidden', 'important');
   }
   
   // Update video scale on window resize
@@ -829,9 +870,14 @@
       var youtubeIframe = document.querySelector('.banner-youtube-container iframe');
       if (youtubeIframe) {
           var isMobile = window.innerWidth <= 768;
-          var scaleValue = isMobile ? 3.8 : 1.6;
+          var scaleValue = isMobile ? 3.8 : 1.6; // Reduced from 3.8 to 3.2 for better quality
           youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
           youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+          
+          // Also enforce quality when resizing
+          if (bannerYouTubePlayer) {
+              setOptimalQuality(bannerYouTubePlayer);
+          }
       }
   }
   
@@ -863,6 +909,11 @@
               // Ensure muted and optimal quality
               bannerYouTubePlayer.mute();
               setOptimalQuality(bannerYouTubePlayer);
+              
+              // On mobile, check quality more frequently
+              if (window.innerWidth <= 768) {
+                  setOptimalQuality(bannerYouTubePlayer);
+              }
           } catch(e) {
               // Ignore errors
           }

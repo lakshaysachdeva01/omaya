@@ -80,6 +80,16 @@
     background-repeat: unset !important;
   }
   
+  /* Mobile: Scale YouTube video to 2.9 */
+  @media (max-width: 768px) {
+    .video-section .bg-youtube-container iframe {
+      transform: translateZ(0) scale(2.9) !important;
+      -webkit-transform: translateZ(0) scale(2.9) !important;
+      transform-origin: center center !important;
+      -webkit-transform-origin: center center !important;
+    }
+  }
+  
   /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
   .video-section .bg-youtube-wrapper::before {
     content: '';
@@ -122,6 +132,27 @@
   /* Ensure overlays are always on top, even when YouTube adds elements */
   .video-section .bg-youtube-wrapper * {
     z-index: auto;
+  }
+  
+  /* Sticky header black background when fixed */
+  .sticky-header.fixed-header {
+    background-color: #000 !important;
+    background: #000 !important;
+  }
+  
+  .header-style-one .sticky-header.fixed-header {
+    background-color: #000 !important;
+    background: #000 !important;
+  }
+  
+  /* Ensure navigation links are visible on black background */
+  .header-style-one .sticky-header.fixed-header .main-menu .navigation > li > a {
+    color: #fff !important;
+  }
+  
+  .header-style-one .sticky-header.fixed-header .main-menu .navigation > li > a:hover,
+  .header-style-one .sticky-header.fixed-header .main-menu .navigation > li.current > a {
+    color: var(--theme-color1) !important;
   }
 </style>
 
@@ -237,9 +268,11 @@
                 iframe.style.setProperty('background-position', 'unset', 'important');
                 iframe.style.setProperty('background-repeat', 'unset', 'important');
                 
-                // Set scale to 2 - CRITICAL
-                iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
-                iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+                // Set scale - 2.9 for mobile, 2 for desktop
+                var isMobile = window.innerWidth <= 768;
+                var scaleValue = isMobile ? 2.9 : 2;
+                iframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+                iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
                 iframe.style.setProperty('transform-origin', 'center center', 'important');
                 iframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
               }
@@ -260,15 +293,19 @@
               // Force apply scale multiple times
               setTimeout(function() {
                 if (iframe) {
-                  iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
-                  iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+                  var isMobile = window.innerWidth <= 768;
+                  var scaleValue = isMobile ? 2.9 : 2;
+                  iframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+                  iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
                 }
                 enforceVideoSectionBlocking();
               }, 100);
               setTimeout(function() {
                 if (iframe) {
-                  iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
-                  iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+                  var isMobile = window.innerWidth <= 768;
+                  var scaleValue = isMobile ? 2.9 : 2;
+                  iframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+                  iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
                 }
                 enforceVideoSectionBlocking();
               }, 500);
@@ -417,9 +454,11 @@
     // Block all interactions
     iframe.style.setProperty('pointer-events', 'none', 'important');
     
-    // Set scale to 2
-    iframe.style.setProperty('transform', 'translateZ(0) scale(2)', 'important');
-    iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(2)', 'important');
+    // Set scale - 2.9 for mobile, 2 for desktop
+    var isMobile = window.innerWidth <= 768;
+    var scaleValue = isMobile ? 2.9 : 2;
+    iframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+    iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
     iframe.style.setProperty('transform-origin', 'center center', 'important');
     iframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
     

@@ -92,6 +92,19 @@
         background-repeat: unset !important;
     }
     
+    /* Mobile: Scale YouTube video to 2.2 */
+    @media (max-width: 768px) {
+        .feature-section .youtube-player-container iframe,
+        .feature-section iframe.youtube-player-container,
+        .feature-section iframe[id^="youtube-player"],
+        .feature-section .image-box iframe {
+            transform: translateZ(0) scale(2.2) !important;
+            -webkit-transform: translateZ(0) scale(2.2) !important;
+            transform-origin: center center;
+            -webkit-transform-origin: center center;
+        }
+    }
+    
     /* Full overlay to block ALL interactions including hover - ALWAYS ACTIVE */
     .feature-section .youtube-player-container::before {
         content: '';

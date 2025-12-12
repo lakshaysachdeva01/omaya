@@ -141,6 +141,16 @@
     .banner-section .content-box .page-breadcrumb li a:hover {
         color: var(--theme-color1);
     }
+    
+    /* Mobile: Scale YouTube video to 3.8 */
+    @media (max-width: 768px) {
+        .banner-section .banner-youtube-container iframe {
+            transform: translateZ(0) scale(3.8) !important;
+            -webkit-transform: translateZ(0) scale(3.8) !important;
+            transform-origin: center center !important;
+            -webkit-transform-origin: center center !important;
+        }
+    }
 </style>
 
 <!-- banner section -->

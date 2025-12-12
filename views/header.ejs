@@ -111,7 +111,7 @@
 
         <div class="outer-box">
           <% if (typeof itemType !== 'undefined' && itemType === 'stay') { %>
-            <button class="header-btn" onclick="openStayBookingModal(); return false;" style=" border: none; cursor: pointer;">Book Now</button>
+            <button class="header-btn stay-book-btn" onclick="openStayBookingModal(); return false;" style=" border: none; cursor: pointer;">Book Now</button>
           <% } else { %>
             <a href="/contact" class="header-btn">Book Now</a>
           <% } %>
@@ -131,38 +131,8 @@
           <ul class="navigation clearfix">
             <!--Keep This Empty / Menu will come through Javascript-->
           </ul>
-          <ul class="contact-list-one">
-            <li>
-              <!-- Contact Info Box -->
-              <div class="contact-info-box">
-                <i class="icon lnr-icon-phone-handset"></i>
-                <span class="title">Call Now</span>
-                <a href="tel:+92880098670">+92 (8800) - 98670</a>
-              </div>
-            </li>
-            <li>
-              <!-- Contact Info Box -->
-              <div class="contact-info-box">
-                <span class="icon lnr-icon-envelope1"></span>
-                <span class="title">Send Email</span>
-                <a href="https://html.kodesolution.com/cdn-cgi/l/email-protection#5f373a332f1f3c30322f3e3126713c3032"><span class="__cf_email__" data-cfemail="fc9499908cbc9f93918c9d9285d29f9391">[email&#160;protected]</span></a>
-              </div>
-            </li>
-            <li>
-              <!-- Contact Info Box -->
-              <div class="contact-info-box">
-                <span class="icon lnr-icon-clock"></span>
-                <span class="title">Send Email</span>
-                Mon - Sat 8:00 - 6:30, Sunday - CLOSED
-              </div>
-            </li>
-          </ul>
-          <ul class="social-links">
-            <li><a href="#"><i class="fa fa-x"></i></a></li>
-            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-            <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
-            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-          </ul>
+         
+        
         </nav>
       </div><!-- End Mobile Menu -->
 
@@ -205,6 +175,16 @@
     @media (max-width: 991px) {
       .sticky-header-book-btn {
         display: none;
+      }
+      
+      /* Hide Book Now button on mobile for stay pages */
+      .header-style-one .outer-box .header-btn[onclick],
+      .main-header .outer-box .header-btn[onclick],
+      .outer-box .header-btn[onclick],
+      .header-style-one .outer-box .stay-book-btn,
+      .main-header .outer-box .stay-book-btn,
+      .outer-box .stay-book-btn {
+        display: none !important;
       }
     }
     

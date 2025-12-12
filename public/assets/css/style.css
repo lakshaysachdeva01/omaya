@@ -4304,7 +4304,7 @@ Section Title
 }
 @media only screen and (max-width: 480px) {
   .banner-section .content-box h1 {
-    font-size: 22px;
+    font-size: 28px;
     line-height: 36px;
   }
   .banner-section-two .banner-slider .content-box h1 {
@@ -7468,7 +7468,7 @@ Section Title
 }
 
 .room-details__details-box {
-  background-color: #f5f6f7;
+  background-color: #fffefd;
   border: 1px solid var(--theme-color1);
   border-radius: 10px;
   padding: 43px 50px 30px 50px;
@@ -7758,9 +7758,17 @@ Section Title
   margin-right: 70px;
   margin-bottom: 32px;
 }
+@media (max-width: 768px) {
+  .feature-section-two .sec-title {
+    margin-right: 0;
+    height: auto;
+  }
+}
 @media (max-width: 575.98px) {
   .feature-section-two .sec-title {
+    margin-right: 0;
     margin-bottom: 30px;
+    height: auto;
   }
 }
 .feature-section-two .sec-title .sub-title:before {

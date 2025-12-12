@@ -247,11 +247,13 @@ function initializeSwiper() {
       },
       breakpoints: {
         320: {
-          slidesPerView: 1,
+          slidesPerView: 1.3,
+          spaceBetween: 20,
           loopedSlides: 2,
         },
         576: {
-          slidesPerView: 1,
+          slidesPerView: 1.3,
+          spaceBetween: 20,
           loopedSlides: 2,
         },
         768: {
@@ -372,7 +374,7 @@ function updateAutoRotation(swiper) {
   if (panoramaViewers[activeServiceId]) {
     try {
       const isMobile = 'ontouchstart' in window;
-      const rotateSpeed = isMobile ? 1.5 : 10;
+      const rotateSpeed = isMobile ? 8 : 10;
       const viewer = panoramaViewers[activeServiceId];
       
       // Clear any existing pitch lock interval
@@ -443,7 +445,7 @@ function updateAutoRotation(swiper) {
         if (panoramaViewers[activeServiceId]) {
           try {
             const isMobile = 'ontouchstart' in window;
-            const rotateSpeed = isMobile ? 1.5 : 10;
+            const rotateSpeed = isMobile ? 8 : 10;
             const viewer = panoramaViewers[activeServiceId];
             // Clear existing pitch lock
             if (viewer._pitchLockInterval) {
@@ -538,7 +540,7 @@ function initPannellumViewer(serviceId, panoramaPath) {
         const servicesData = JSON.parse(document.getElementById('services-data').textContent);
         const isFirstService = servicesData[0] && servicesData[0].id === serviceId;
         const isMobile = 'ontouchstart' in window;
-        const rotateSpeed = isMobile ? 1.5 : 10;
+        const rotateSpeed = isMobile ? 8 : 10;
         
         const viewerConfig = {
           "type": "equirectangular",
@@ -585,7 +587,7 @@ function initPannellumViewer(serviceId, panoramaPath) {
             setTimeout(() => {
               try {
                 const isMobile = 'ontouchstart' in window;
-                const rotateSpeed = isMobile ? 1.5 : 10;
+                const rotateSpeed = isMobile ? 8 : 10;
                 // Clear existing pitch lock
                 if (viewer._pitchLockInterval) {
                   clearInterval(viewer._pitchLockInterval);
@@ -639,7 +641,7 @@ function initPannellumViewer(serviceId, panoramaPath) {
                 setTimeout(() => {
                   try {
                     const isMobile = 'ontouchstart' in window;
-                    const rotateSpeed = isMobile ? 1.5 : 10;
+                    const rotateSpeed = isMobile ? 8 : 10;
                     // Clear existing pitch lock
                     if (viewer._pitchLockInterval) {
                       clearInterval(viewer._pitchLockInterval);
@@ -784,6 +786,15 @@ if (!document.getElementById('panorama-styles-homeproducts')) {
     
     .pnlm-controls:hover {
       opacity: 1;
+    }
+    
+    /* Mobile: Reduce height by 60px */
+    @media (max-width: 768px) {
+      .panorama-container,
+      .panorama-container > div[id^="panorama-360-"],
+      .service-block-three .image img {
+        height: 398px !important;
+      }
     }
   `;
   document.head.appendChild(panoramaStyle);

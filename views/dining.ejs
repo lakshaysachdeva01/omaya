@@ -36,7 +36,7 @@
                                         <h2><%= item.title %></h2>
                                         <div class="text"><%= item.description %></div>
                                     </div>
-                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <div style="display: flex; gap: 15px;">
                                         <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one read-more">More Details</a>
                                     </div>
 
@@ -107,7 +107,7 @@
                                         <h2><%= item.title %></h2>
                                         <div class="text"><%= item.description %></div>
                                     </div>
-                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <div style="display: flex; gap: 15px;">
                                         <a href="<%= item.link || '#' %>" class="theme-btn btn-style-one read-more">More Details</a>
                                     </div>
 
@@ -253,6 +253,19 @@
     /* Ensure overlays are always on top, even when YouTube adds elements */
     .feature-section .youtube-player-container * {
         z-index: auto;
+    }
+    
+    /* Mobile: Scale YouTube video to 2.2 */
+    @media (max-width: 768px) {
+        .feature-section .youtube-player-container iframe,
+        .feature-section iframe.youtube-player-container,
+        .feature-section iframe[id^="youtube-player"],
+        .feature-section .image-box iframe {
+            transform: translateZ(0) scale(2.2) !important;
+            -webkit-transform: translateZ(0) scale(2.2) !important;
+            transform-origin: center center;
+            -webkit-transform-origin: center center;
+        }
     }
 </style>
 

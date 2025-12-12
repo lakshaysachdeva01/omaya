@@ -45,7 +45,7 @@
                 const date = new Date(dateString);
                 const day = date.getDate().toString().padStart(2, '0');
                 const month = date.toLocaleDateString('en-GB', { month: 'short' });
-                return day + ' <br/> ' + month;
+                return day + ' <br style="display: block;"/> ' + month;
               } catch (e) {
                 return '';
               }

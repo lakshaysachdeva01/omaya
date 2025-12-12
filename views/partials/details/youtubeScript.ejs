@@ -90,9 +90,11 @@
                                     youtubeIframe.style.setProperty('background-position', 'unset', 'important');
                                     youtubeIframe.style.setProperty('background-repeat', 'unset', 'important');
                                     
-                                    // Force scale 1.6 on iframe
-                                    youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(1.6)', 'important');
-                                    youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(1.6)', 'important');
+                                    // Force scale on iframe - 3.8 for mobile, 1.6 for desktop
+                                    var isMobile = window.innerWidth <= 768;
+                                    var scaleValue = isMobile ? 3.8 : 1.6;
+                                    youtubeIframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+                                    youtubeIframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
                                     youtubeIframe.style.setProperty('transform-origin', 'center center', 'important');
                                     youtubeIframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
                                 }
@@ -211,9 +213,11 @@
             
             iframe.removeAttribute('data-background-image');
             
-            // Force scale 1.6 on iframe
-            iframe.style.setProperty('transform', 'translateZ(0) scale(1.6)', 'important');
-            iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(1.6)', 'important');
+            // Force scale on iframe - 3.8 for mobile, 1.6 for desktop
+            var isMobile = window.innerWidth <= 768;
+            var scaleValue = isMobile ? 3.8 : 1.6;
+            iframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+            iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
             iframe.style.setProperty('transform-origin', 'center center', 'important');
             iframe.style.setProperty('-webkit-transform-origin', 'center center', 'important');
             
@@ -242,5 +246,26 @@
             subtree: true
         });
     }
+    
+    // Update video scale on window resize
+    function updateDetailBannerVideoScale() {
+        var container = document.querySelector('#detail-banner-youtube-player');
+        if (!container) return;
+        
+        var iframe = container.querySelector('iframe');
+        if (iframe) {
+            var isMobile = window.innerWidth <= 768;
+            var scaleValue = isMobile ? 3.8 : 1.6;
+            iframe.style.setProperty('transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+            iframe.style.setProperty('-webkit-transform', 'translateZ(0) scale(' + scaleValue + ')', 'important');
+        }
+    }
+    
+    // Listen for window resize to update scale
+    var resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateDetailBannerVideoScale, 100);
+    });
 </script>
 <% } %>
